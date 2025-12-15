@@ -12,7 +12,7 @@ import { MessageService } from 'primeng/api';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-    selector: 'app-login',
+    selector: 'app-register',
     standalone: true,
     imports: [
         CommonModule,
@@ -26,11 +26,11 @@ import { AuthService } from '../../services/auth.service';
         ToastModule
     ],
     providers: [MessageService],
-    templateUrl: './login.component.html',
-    styleUrl: './login.component.css'
+    templateUrl: './register.html',
+    styleUrl: './register.css'
 })
-export class LoginComponent {
-    loginForm: FormGroup;
+export class Register {
+    registerForm: FormGroup;
     loading = false;
     error = '';
 
@@ -40,36 +40,36 @@ export class LoginComponent {
         private router: Router,
         private messageService: MessageService
     ) {
-        this.loginForm = this.fb.group({
+        this.registerForm = this.fb.group({
+            username: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
             password: ['', Validators.required]
         });
     }
 
     onSubmit() {
-        if (this.loginForm.valid) {
+        if (this.registerForm.valid) {
             this.loading = true;
             this.error = '';
 
-            this.authService.login(this.loginForm.value).subscribe({
+            this.authService.register(this.registerForm.value).subscribe({
                 next: (response) => {
-                    console.log('Login successful', response);
-                    this.messageService.add({ severity: 'success', summary: 'Successo', detail: 'Login effettuato con successo' });
+                    console.log('Registration successful', response);
+                    this.messageService.add({ severity: 'success', summary: 'Successo', detail: 'Registrazione completata!' });
                     this.loading = false;
-                    // Navigate to dashboard or home after a short delay to see the toast
                     setTimeout(() => {
                         this.router.navigate(['/home']);
                     }, 1000);
                 },
                 error: (err) => {
-                    console.error('Login error', err);
-                    this.error = 'Login fallito. Controlla le credenziali.';
-                    this.messageService.add({ severity: 'error', summary: 'Errore', detail: 'Credenziali non valide' });
+                    console.error('Registration error', err);
                     this.loading = false;
+                    this.error = 'Registrazione fallita. Riprova.';
+                    this.messageService.add({ severity: 'error', summary: 'Errore', detail: 'Impossibile completare la registrazione' });
                 }
             });
         } else {
-            this.loginForm.markAllAsTouched();
+            this.registerForm.markAllAsTouched();
             this.messageService.add({ severity: 'warn', summary: 'Attenzione', detail: 'Compila tutti i campi richiesti' });
         }
     }

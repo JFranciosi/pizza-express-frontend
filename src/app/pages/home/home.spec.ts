@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HomeComponent } from './home.component';
+import { Home } from './home';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 
-describe('HomeComponent', () => {
-    let component: HomeComponent;
-    let fixture: ComponentFixture<HomeComponent>;
+describe('Home', () => {
+    let component: Home;
+    let fixture: ComponentFixture<Home>;
     let authServiceSpy: jasmine.SpyObj<AuthService>;
     let routerSpy: jasmine.SpyObj<Router>;
 
@@ -16,7 +16,7 @@ describe('HomeComponent', () => {
         const rSpy = jasmine.createSpyObj('Router', ['navigate']);
 
         await TestBed.configureTestingModule({
-            imports: [HomeComponent, CardModule, ButtonModule],
+            imports: [Home, CardModule, ButtonModule],
             providers: [
                 { provide: AuthService, useValue: authSpy },
                 { provide: Router, useValue: rSpy }
@@ -25,7 +25,7 @@ describe('HomeComponent', () => {
 
         authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
         routerSpy = TestBed.inject(Router) as jasmine.SpyObj<Router>;
-        fixture = TestBed.createComponent(HomeComponent);
+        fixture = TestBed.createComponent(Home);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

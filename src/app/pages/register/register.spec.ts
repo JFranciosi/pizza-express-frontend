@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RegisterComponent } from './register.component';
+import { Register } from './register';
 import { AuthService } from '../../services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -8,9 +8,9 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
-describe('RegisterComponent', () => {
-    let component: RegisterComponent;
-    let fixture: ComponentFixture<RegisterComponent>;
+describe('Register', () => {
+    let component: Register;
+    let fixture: ComponentFixture<Register>;
     let authServiceSpy: jasmine.SpyObj<AuthService>;
     let routerSpy: jasmine.SpyObj<Router>;
 
@@ -19,7 +19,7 @@ describe('RegisterComponent', () => {
         const rSpy = jasmine.createSpyObj('Router', ['navigate']);
 
         await TestBed.configureTestingModule({
-            imports: [RegisterComponent, ReactiveFormsModule, NoopAnimationsModule],
+            imports: [Register, ReactiveFormsModule, NoopAnimationsModule],
             providers: [
                 { provide: AuthService, useValue: authSpy },
                 { provide: Router, useValue: rSpy },
@@ -31,7 +31,7 @@ describe('RegisterComponent', () => {
 
         authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
         routerSpy = TestBed.inject(Router) as jasmine.SpyObj<Router>;
-        fixture = TestBed.createComponent(RegisterComponent);
+        fixture = TestBed.createComponent(Register);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

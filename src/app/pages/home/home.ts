@@ -9,10 +9,10 @@ import { Router } from '@angular/router';
     selector: 'app-home',
     standalone: true,
     imports: [CommonModule, CardModule, ButtonModule],
-    templateUrl: './home.component.html',
-    styleUrl: './home.component.css'
+    templateUrl: './home.html',
+    styleUrl: './home.css'
 })
-export class HomeComponent {
+export class Home {
     constructor(private authService: AuthService, private router: Router) { }
 
     logout() {

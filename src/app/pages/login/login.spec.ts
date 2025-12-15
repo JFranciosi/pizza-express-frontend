@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { LoginComponent } from './login.component';
+import { Login } from './login';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -8,9 +8,9 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
-describe('LoginComponent', () => {
-    let component: LoginComponent;
-    let fixture: ComponentFixture<LoginComponent>;
+describe('Login', () => {
+    let component: Login;
+    let fixture: ComponentFixture<Login>;
     let authServiceSpy: jasmine.SpyObj<AuthService>;
     let routerSpy: jasmine.SpyObj<Router>;
 
@@ -19,7 +19,7 @@ describe('LoginComponent', () => {
         const rSpy = jasmine.createSpyObj('Router', ['navigate']);
 
         await TestBed.configureTestingModule({
-            imports: [LoginComponent, ReactiveFormsModule, NoopAnimationsModule],
+            imports: [Login, ReactiveFormsModule, NoopAnimationsModule],
             providers: [
                 { provide: AuthService, useValue: authSpy },
                 { provide: Router, useValue: rSpy },
@@ -30,7 +30,7 @@ describe('LoginComponent', () => {
 
         authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
         routerSpy = TestBed.inject(Router) as jasmine.SpyObj<Router>;
-        fixture = TestBed.createComponent(LoginComponent);
+        fixture = TestBed.createComponent(Login);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
