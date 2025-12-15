@@ -1,4 +1,5 @@
 <div class="login-container">
+    <p-toast></p-toast>
     <p-card header="Benvenuto" [style]="{ width: '100%', maxWidth: '400px' }">
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-4">
 
@@ -19,9 +20,11 @@
 
             <p-button label="Accedi" type="submit" [loading]="loading" styleClass="w-full"></p-button>
 
-            <div *ngIf="error" class="error-message">
+            @if (error) {
+            <div class="error-message">
                 {{ error }}
             </div>
+            }
 
             <div class="text-center mt-3">
                 <a routerLink="/register" class="text-primary no-underline">Non hai un account? Registrati</a>

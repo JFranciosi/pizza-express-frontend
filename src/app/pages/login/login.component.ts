@@ -7,6 +7,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
 import { FloatLabelModule } from 'primeng/floatlabel';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -20,8 +22,10 @@ import { AuthService } from '../../services/auth.service';
         ButtonModule,
         PasswordModule,
         FloatLabelModule,
-        RouterLink
+        RouterLink,
+        ToastModule
     ],
+    providers: [MessageService],
     templateUrl: './login.component.html',
     styleUrl: './login.component.css'
 })
@@ -33,7 +37,8 @@ export class LoginComponent {
     constructor(
         private fb: FormBuilder,
         private authService: AuthService,
-        private router: Router
+        private router: Router,
+        private messageService: MessageService
     ) {
         this.loginForm = this.fb.group({
             email: ['', [Validators.required, Validators.email]],
@@ -46,23 +51,26 @@ export class LoginComponent {
             this.loading = true;
             this.error = '';
 
-            const { email, password } = this.loginForm.value;
-
-            this.authService.login({ email, password }).subscribe({
+            this.authService.login(this.loginForm.value).subscribe({
                 next: (response) => {
                     console.log('Login successful', response);
+                    this.messageService.add({ severity: 'success', summary: 'Successo', detail: 'Login effettuato con successo' });
                     this.loading = false;
-                    // Navigate to dashboard or home
-                    this.router.navigate(['/home']);
+                    // Navigate to dashboard or home after a short delay to see the toast
+                    setTimeout(() => {
+                        this.router.navigate(['/home']);
+                    }, 1000);
                 },
                 error: (err) => {
                     console.error('Login error', err);
-                    this.loading = false;
                     this.error = 'Login fallito. Controlla le credenziali.';
+                    this.messageService.add({ severity: 'error', summary: 'Errore', detail: 'Credenziali non valide' });
+                    this.loading = false;
                 }
             });
         } else {
             this.loginForm.markAllAsTouched();
+            this.messageService.add({ severity: 'warn', summary: 'Attenzione', detail: 'Compila tutti i campi richiesti' });
         }
     }
 }
