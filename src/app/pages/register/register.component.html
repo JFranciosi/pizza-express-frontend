@@ -26,9 +26,11 @@
 
             <p-button label="Registrati" type="submit" [loading]="loading" styleClass="w-full"></p-button>
 
-            <div *ngIf="error" class="error-message">
+            @if (error) {
+            <div class="error-message">
                 {{ error }}
             </div>
+            }
 
             <div class="text-center mt-3">
                 <a routerLink="/login" class="text-primary no-underline">Hai già un account? Accedi</a>
