@@ -1,0 +1,70 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--background-color);
+    padding: 1rem;
+}
+
+:host ::ng-deep .p-card {
+    background: var(--card-bg);
+    box-shadow: var(--card-shadow);
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+
+.field {
+    margin-bottom: 2rem;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.gap-4 {
+    gap: 1.5rem;
+}
+
+.error-message {
+    color: var(--red-500);
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-3 {
+    margin-top: 1rem;
+}
+
+.text-primary {
+    color: var(--primary-color);
+}
+
+.no-underline {
+    text-decoration: none;
+}
+
+:host ::ng-deep .p-card-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0rem 0rem 2rem .5rem;
+}
+
+:host ::ng-deep .p-password input {
+    width: 100%;
+}
+
+:host ::ng-deep input {
+    width: 100%;
+}

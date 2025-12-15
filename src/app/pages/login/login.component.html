@@ -1,0 +1,31 @@
+<div class="login-container">
+    <p-card header="Benvenuto" [style]="{ width: '100%', maxWidth: '400px' }">
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-4">
+
+            <div class="field">
+                <p-floatLabel>
+                    <input pInputText id="email" formControlName="email" class="w-full" />
+                    <label for="email">Email</label>
+                </p-floatLabel>
+            </div>
+
+            <div class="field">
+                <p-floatLabel>
+                    <p-password id="password" formControlName="password" [feedback]="false" [toggleMask]="true"
+                        styleClass="w-full" inputStyleClass="w-full"></p-password>
+                    <label for="password">Password</label>
+                </p-floatLabel>
+            </div>
+
+            <p-button label="Accedi" type="submit" [loading]="loading" styleClass="w-full"></p-button>
+
+            <div *ngIf="error" class="error-message">
+                {{ error }}
+            </div>
+
+            <div class="text-center mt-3">
+                <a routerLink="/register" class="text-primary no-underline">Non hai un account? Registrati</a>
+            </div>
+        </form>
+    </p-card>
+</div>
