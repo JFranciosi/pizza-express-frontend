@@ -170,15 +170,13 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         const h = this.canvasRef.nativeElement.height;
         this.ctx.clearRect(0, 0, w, h);
 
-        // Background Italia (Sfumato)
         const gradient = this.ctx.createLinearGradient(0, 0, w, h);
-        gradient.addColorStop(0, 'rgba(0, 140, 69, 0.1)'); // Verde
-        gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.05)'); // Bianco
-        gradient.addColorStop(1, 'rgba(227, 27, 35, 0.1)'); // Rosso
+        gradient.addColorStop(0, 'rgba(0, 140, 69, 0.1)');
+        gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.05)');
+        gradient.addColorStop(1, 'rgba(227, 27, 35, 0.1)');
         this.ctx.fillStyle = gradient;
         this.ctx.fillRect(0, 0, w, h);
 
-        // Griglia/Assi
         this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
         this.ctx.lineWidth = 1;
         this.ctx.beginPath();
@@ -189,28 +187,22 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         }
         this.ctx.stroke();
 
-        // Safe Area (2rem approx 32px)
         const padding = 50;
         const drawingW = w - (padding * 2);
         const drawingH = h - (padding * 2);
 
-        // Parametri visualizzazione
-        const maxVisibleX = 15000; // Rallentiamo X: 15 secondi per attraversare
+        const maxVisibleX = 15000;
         const now = Date.now();
         const elapsed = Math.max(0, now - this.roundStartTime);
 
         const progressX = Math.min(1, elapsed / maxVisibleX);
 
-        // Y Scale: Rallentiamo la salita visuale
-        // Mostriamo un range dinamico ma più ampio così la vespa non schizza su subito
         const maxShownMult = Math.max(3, this.multiplier * 2);
         const normY = (this.multiplier - 1) / (maxShownMult - 1);
 
         const px = padding + (drawingW * progressX);
         const py = (h - padding) - (normY * drawingH);
 
-        // Disegna Scia (Curve) -> SOTTO il testo
-        // Gradient per effetto "cometa" (sfuma verso l'inizio)
         const trailGradient = this.ctx.createLinearGradient(0, h, px, py);
         trailGradient.addColorStop(0, 'rgba(233, 30, 99, 0)');
         trailGradient.addColorStop(1, '#e91e63');
@@ -220,28 +212,23 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         this.ctx.lineWidth = 4;
         this.ctx.lineCap = 'round';
 
-        // Effetto "Speed Lines" animato
-        // La velocità aumenta con il moltiplicatore (logaritmico)
         const speedFactor = Math.max(1, Math.log(this.multiplier) * 2);
         const dashOffset = (Date.now() / 10) * speedFactor;
 
-        this.ctx.setLineDash([20, 20]); // Tratteggio
-        this.ctx.lineDashOffset = -dashOffset; // Muove all'indietro per scia
+        this.ctx.setLineDash([20, 20]);
+        this.ctx.lineDashOffset = -dashOffset;
 
         this.ctx.moveTo(0, h);
         this.ctx.quadraticCurveTo(px * 0.5, h, px, py);
         this.ctx.stroke();
 
-        // Reset tratteggio per il resto
         this.ctx.setLineDash([]);
 
-        // Glow Scia
         this.ctx.shadowColor = '#e91e63';
-        this.ctx.shadowBlur = 10 + (speedFactor * 2); // Il glow aumenta con la velocità
+        this.ctx.shadowBlur = 10 + (speedFactor * 2);
         this.ctx.stroke();
         this.ctx.shadowBlur = 0;
 
-        // Disegna Vespa -> SOTTO il testo
         if (this.rocketImage.complete && this.rocketImage.naturalWidth > 0) {
             const scale = 140 / this.rocketImage.naturalWidth;
             const dWidth = 140;
