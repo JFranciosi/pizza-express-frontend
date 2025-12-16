@@ -126,7 +126,18 @@
 :host ::ng-deep p-floatLabel .p-inputwrapper-focus~label,
 :host ::ng-deep p-floatLabel .p-inputwrapper-filled~label,
 :host ::ng-deep .p-float-label .p-inputwrapper-focus~label,
-:host ::ng-deep .p-float-label .p-inputwrapper-filled~label {
+:host ::ng-deep .p-float-label .p-inputwrapper-filled~label,
+:host ::ng-deep p-floatLabel .p-inputwrapper-focus~label,
+:host ::ng-deep p-floatLabel .p-inputwrapper-filled~label,
+/* Robust Override for Password Label */
+:host ::ng-deep p-floatLabel p-password.ng-dirty.ng-valid~label,
+:host ::ng-deep p-floatLabel p-password.p-inputwrapper-filled~label,
+:host ::ng-deep p-floatLabel p-password~label {
+    color: #ffffff !important;
+}
+
+/* Ensure focus state is also white (redundant but safe) */
+:host ::ng-deep p-floatLabel p-password.p-inputwrapper-focus~label {
     color: #ffffff !important;
 }
 
