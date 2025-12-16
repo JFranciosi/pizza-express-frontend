@@ -1,13 +1,15 @@
 .top-bar {
-    height: 60px;
+    height: 80px;
     background: #1e1e1e;
     border-bottom: 1px solid #333;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 1rem;
+    padding: 0 1.5rem;
     color: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    position: relative;
 }
 
 .brand {
@@ -20,9 +22,14 @@
 }
 
 .brand-logo {
-    height: 40px;
+    height: 65px;
     width: auto;
-    filter: drop-shadow(0 0 2px rgba(227, 27, 35, 0.5));
+    filter: drop-shadow(0 0 5px rgba(227, 27, 35, 0.3));
+    transition: transform 0.2s;
+}
+
+.brand-logo:hover {
+    transform: scale(1.05);
 }
 
 .user-info {

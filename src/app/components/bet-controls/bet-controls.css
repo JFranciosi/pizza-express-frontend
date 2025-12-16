@@ -54,6 +54,8 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    height: 100%;
+    justify-content: space-between;
 }
 
 .input-group label {
@@ -61,28 +63,94 @@
     color: #aaa;
     font-weight: 500;
     font-family: 'Inter', sans-serif;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0;
 }
 
 .toggles-row {
     display: flex;
-    justify-content: flex-end;
-    gap: 1.5rem;
-    align-items: center;
+    justify-content: center;
+    /* Center Last Win */
     padding: 0 0.5rem;
 }
 
-.toggle-item {
+.toggles-row.centered {
+    justify-content: center;
+}
+
+.input-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.2rem;
+    flex: 1;
+    /* Occupy remaining space above input */
+}
+
+.input-header.vertical {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8rem;
+}
+
+.header-top-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    gap: 1rem;
+}
+
+.toggle-wrapper {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    font-size: 0.75rem;
+    color: #e0e0e0;
 }
 
-.toggle-label {
+.toggle-wrapper span {
     font-family: 'Inter', sans-serif;
-    font-size: 0.8rem;
-    color: #e0e0e0;
-    font-weight: 500;
+    opacity: 0.8;
+}
+
+.stats-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+/* Specific Last Win in Header */
+.last-win-box.small {
+    min-width: 80px;
+    /* Consistent width */
+    flex-direction: row;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2px 8px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    justify-content: center;
+}
+
+.last-win-box.small .win-value {
+    font-size: 0.75rem;
+    /* Slightly smaller to fit two */
+    margin-top: 0;
+}
+
+.last-win-box.small.info {
+    border-color: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.last-win-box.small.info .win-value {
+    color: #bbb;
+}
+
+.last-win-box.small .win-value.has-win {
+    color: #4caf50;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
 }
 
 /* Adjust PrimeNG InputNumber width */
@@ -149,4 +217,27 @@
     opacity: 0.8;
     margin-top: 4px;
     font-weight: normal;
+}
+
+/* Last Win Text Style */
+.last-win-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+}
+
+.win-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.1rem;
+    color: #666;
+    font-weight: bold;
+    margin-top: 4px;
+    transition: color 0.3s ease;
+}
+
+.win-value.has-win {
+    color: #4caf50;
+    text-shadow: 0 0 10px rgba(76, 175, 80, 0.4);
 }

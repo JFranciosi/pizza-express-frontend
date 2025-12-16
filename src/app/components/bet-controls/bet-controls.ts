@@ -28,6 +28,8 @@ export class BetControlsComponent {
     betPlaced: boolean = false;
     cashedOut: boolean = false;
     isAutoBetEnabled: boolean = false;
+    lastWin: number = 0;
+    lastBet: number = 0;
 
     constructor(
         private authService: AuthService,
@@ -37,6 +39,25 @@ export class BetControlsComponent {
         this.gameState = toSignal(this.gameSocket.gameState$, { initialValue: GameState.WAITING });
         this.currentMultiplier = toSignal(this.gameSocket.multiplier$, { initialValue: 1.00 });
         this.timeLeft = toSignal(this.gameSocket.timeLeft$, { initialValue: 0 });
+
+        // Listen for bets to update Last Win/Bet and sync state
+        this.gameSocket.bets$.subscribe(bets => {
+            const user = this.authService.getUser();
+            if (user) {
+                const myBet = bets.find(b => b.userId === user.id);
+                if (myBet) {
+                    // Update Last Bet when we see our bet in the list
+                    if (!this.betPlaced || this.lastBet !== myBet.amount) {
+                        this.lastBet = myBet.amount;
+                    }
+
+                    if (myBet.profit && myBet.profit > 0) {
+                        this.lastWin = myBet.profit;
+                        this.cashedOut = true;
+                    }
+                }
+            }
+        });
 
         effect(() => {
             const state = this.gameState();
