@@ -95,8 +95,8 @@ canvas {
     align-items: center;
     justify-content: center;
     position: absolute;
-    top: 1rem;
-    right: 1rem;
+    top: 1.4rem;
+    right: 2rem;
     width: 30px;
     height: 30px;
     background: rgba(255, 255, 255, 0.1);
@@ -105,6 +105,13 @@ canvas {
     color: white;
     cursor: pointer;
     z-index: 1001;
+    transition: all 0.2s ease;
+}
+
+.close-chat-btn:hover {
+    background: var(--logo-red);
+    box-shadow: 0 0 10px var(--logo-red-glow);
+    transform: rotate(90deg);
 }
 
 @media (min-width: 1600px) {

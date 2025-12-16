@@ -102,5 +102,20 @@
 }
 
 .chat-input-area input:focus {
-    border-color: #888;
+    border-color: #ffffff !important;
+    box-shadow: 0 0 0 1px #ffffff !important;
+    outline: none !important;
+}
+
+:host ::ng-deep .chat-input-area .p-button {
+    background: var(--logo-red);
+    border: 1px solid var(--logo-red);
+    color: white;
+}
+
+:host ::ng-deep .chat-input-area .p-button:enabled:hover {
+    background: #c0151c;
+    /* Darker red */
+    border-color: #c0151c;
+    box-shadow: 0 0 10px var(--logo-red-glow);
 }
