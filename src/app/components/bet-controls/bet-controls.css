@@ -1,4 +1,16 @@
 /* Glass Panel Style */
+.cancel-button {
+    background: #ff4444 !important;
+    /* Red color for cancel */
+    color: white !important;
+    border-color: #ff4444 !important;
+}
+
+.cancel-button:hover {
+    background: #cc0000 !important;
+    box-shadow: 0 0 15px rgba(255, 68, 68, 0.4);
+}
+
 .controls-panel {
     background: linear-gradient(135deg, #1e1e1e 0%, #252525 100%);
     border-radius: 12px;
@@ -89,6 +101,25 @@
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
 }
+
+.bet-button.cashout {
+    background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+    box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3);
+}
+
+.bet-button.cashout:hover {
+    box-shadow: 0 6px 20px rgba(255, 152, 0, 0.4);
+}
+
+.bet-button:disabled,
+.bet-button.disabled {
+    background: #555;
+    color: #888;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
 
 .sub-text {
     font-size: 0.7rem;

@@ -21,6 +21,7 @@ export class BetControlsComponent {
 
     gameState: Signal<GameState>;
     currentMultiplier: Signal<number>;
+    timeLeft: Signal<number>;
 
     betPlaced: boolean = false;
     cashedOut: boolean = false;
@@ -32,9 +33,11 @@ export class BetControlsComponent {
     ) {
         this.gameState = toSignal(this.gameSocket.gameState$, { initialValue: GameState.WAITING });
         this.currentMultiplier = toSignal(this.gameSocket.multiplier$, { initialValue: 1.00 });
+        this.timeLeft = toSignal(this.gameSocket.timeLeft$, { initialValue: 0 });
 
         effect(() => {
-            if (this.gameState() === GameState.WAITING) {
+            // Reset state when game crashes (prepared for next round)
+            if (this.gameState() === GameState.CRASHED) {
                 this.betPlaced = false;
                 this.cashedOut = false;
             }
@@ -52,15 +55,38 @@ export class BetControlsComponent {
         }
         if (this.betPlaced) return;
 
+        // Optimistic update: Prevent double clicks immediately
+        this.betPlaced = true;
+
         this.gameApi.placeBet(this.betAmount).subscribe({
             next: () => {
-                this.betPlaced = true;
+                // Success: Update balance
                 const user = this.authService.getUser();
                 if (user) {
                     this.authService.updateBalance(user.balance - this.betAmount);
                 }
             },
-            error: (err: any) => console.error('Bet failed', err)
+            error: (err: any) => {
+                console.error('Bet failed', err);
+                // Revert state on failure
+                this.betPlaced = false;
+                alert('Bet failed: ' + (err.error?.error || 'Unknown error'));
+            }
+        });
+    }
+
+    cancelBet() {
+        if (!this.betPlaced) return;
+
+        this.gameApi.cancelBet().subscribe({
+            next: () => {
+                this.betPlaced = false;
+                const user = this.authService.getUser();
+                if (user) {
+                    this.authService.updateBalance(user.balance + this.betAmount);
+                }
+            },
+            error: (err: any) => console.error('Cancel bet failed', err)
         });
     }
 
@@ -68,13 +94,14 @@ export class BetControlsComponent {
         if (!this.betPlaced || this.cashedOut) return;
 
         this.gameApi.cashOut().subscribe({
-            next: () => {
+            next: (response: any) => {
                 this.cashedOut = true;
-                const winAmount = this.betAmount * this.currentMultiplier();
-                const user = this.authService.getUser();
-                if (user) {
-                    this.authService.updateBalance(user.balance + winAmount);
-                }
+                // Use authoritative data from backend
+                const winAmount = response.winAmount;
+                const newBalance = response.newBalance;
+
+                this.authService.updateBalance(newBalance);
+                console.log(`Cashout success: Won ${winAmount} at ${response.multiplier}x. New Balance: ${newBalance}`);
             },
             error: (err: any) => console.error('Cashout failed', err)
         });

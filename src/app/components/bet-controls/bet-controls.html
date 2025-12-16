@@ -10,8 +10,8 @@
         <div class="input-group">
             <label>Bet Amount (€)</label>
             <p-inputNumber [(ngModel)]="betAmount" mode="currency" currency="EUR" locale="it-IT" [min]="0.10"
-                [max]="1000" [showButtons]="true" buttonLayout="horizontal" incrementButtonIcon="pi pi-plus"
-                decrementButtonIcon="pi pi-minus">
+                [max]="1000" [step]="0.10" [showButtons]="true" buttonLayout="horizontal"
+                incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus">
             </p-inputNumber>
         </div>
         <div class="input-group">
@@ -24,20 +24,37 @@
     </div>
 
     <div class="action-row">
-        @if (!betPlaced || gameState() === 'WAITING') {
-        <button class="bet-button" (click)="placeBet()" [disabled]="isBettingDisabled"
-            [class.disabled]="isBettingDisabled">
-            @if (betPlaced) {
-            BET PLACED
-            } @else {
-            BET
-            <span class="sub-text">NOW</span>
-            }
+        @if (gameState() === 'WAITING') {
+        @if (betPlaced) {
+        <button class="bet-button cancel-button" (click)="cancelBet()">
+            CANCEL
+            <span class="sub-text">({{ timeLeft() | number:'1.1-1' }}s)</span>
         </button>
         } @else {
-        <button class="bet-button cashout" (click)="cashOut()" [disabled]="isCashoutDisabled">
+        <button class="bet-button" (click)="placeBet()">
+            BET
+            <span class="sub-text">NOW</span>
+        </button>
+        }
+        } @else if (gameState() === 'FLYING') {
+        @if (betPlaced && !cashedOut) {
+        <button class="bet-button cashout" (click)="cashOut()">
             CASHOUT
             <span class="sub-text">{{ (betAmount * currentMultiplier()) | currency:'EUR' }}</span>
+        </button>
+        } @else if (betPlaced && cashedOut) {
+        <button class="bet-button" disabled [style.background]="'#4CAF50'" [style.color]="'white'">
+            CASHED OUT
+            <span class="sub-text">WIN</span>
+        </button>
+        } @else {
+        <button class="bet-button disabled" disabled>
+            ROUND IN PROGRESS
+        </button>
+        }
+        } @else {
+        <button class="bet-button disabled" disabled>
+            CRASHED
         </button>
         }
     </div>

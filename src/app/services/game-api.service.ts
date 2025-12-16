@@ -22,6 +22,10 @@ export class GameApiService {
         return this.http.post(`${this.BASE_URL}/bet/place`, { amount });
     }
 
+    cancelBet(): Observable<any> {
+        return this.http.post(`${this.BASE_URL}/bet/cancel`, {});
+    }
+
     cashOut(): Observable<any> {
         return this.http.post(`${this.BASE_URL}/bet/cashout`, {});
     }
