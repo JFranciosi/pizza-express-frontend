@@ -210,16 +210,34 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         const py = (h - padding) - (normY * drawingH);
 
         // Disegna Scia (Curve) -> SOTTO il testo
+        // Gradient per effetto "cometa" (sfuma verso l'inizio)
+        const trailGradient = this.ctx.createLinearGradient(0, h, px, py);
+        trailGradient.addColorStop(0, 'rgba(233, 30, 99, 0)');
+        trailGradient.addColorStop(1, '#e91e63');
+
         this.ctx.beginPath();
-        this.ctx.strokeStyle = '#e91e63';
+        this.ctx.strokeStyle = trailGradient;
         this.ctx.lineWidth = 4;
         this.ctx.lineCap = 'round';
+
+        // Effetto "Speed Lines" animato
+        // La velocità aumenta con il moltiplicatore (logaritmico)
+        const speedFactor = Math.max(1, Math.log(this.multiplier) * 2);
+        const dashOffset = (Date.now() / 10) * speedFactor;
+
+        this.ctx.setLineDash([20, 20]); // Tratteggio
+        this.ctx.lineDashOffset = -dashOffset; // Muove all'indietro per scia
+
         this.ctx.moveTo(0, h);
         this.ctx.quadraticCurveTo(px * 0.5, h, px, py);
         this.ctx.stroke();
 
+        // Reset tratteggio per il resto
+        this.ctx.setLineDash([]);
+
+        // Glow Scia
         this.ctx.shadowColor = '#e91e63';
-        this.ctx.shadowBlur = 10;
+        this.ctx.shadowBlur = 10 + (speedFactor * 2); // Il glow aumenta con la velocità
         this.ctx.stroke();
         this.ctx.shadowBlur = 0;
 
