@@ -1,9 +1,9 @@
 <div class="bets-container">
     <div class="bets-header">
-        <span>Giocatore</span>
-        <span>Puntata</span>
-        <span>Moltiplicatore</span>
-        <span>Profitto</span>
+        <span>User</span>
+        <span>Bet</span>
+        <span>Multiplier</span>
+        <span>Profit</span>
     </div>
     <div class="bets-list">
         @for (bet of bets; track bet.user) {
@@ -30,6 +30,6 @@
         }
     </div>
     <div class="total-bets">
-        {{ bets.length }} Giocatori in gara
+        {{ bets.length }} Players present
     </div>
 </div>

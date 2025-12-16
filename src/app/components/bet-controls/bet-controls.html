@@ -8,7 +8,7 @@
 
     <div class="inputs-row">
         <div class="input-group">
-            <label>Puntata (€)</label>
+            <label>Bet Amount (€)</label>
             <p-inputNumber [(ngModel)]="betAmount" mode="currency" currency="EUR" locale="it-IT" [min]="0.10"
                 [max]="1000" [showButtons]="true" buttonLayout="horizontal" incrementButtonIcon="pi pi-plus"
                 decrementButtonIcon="pi pi-minus">
@@ -25,8 +25,8 @@
 
     <div class="action-row">
         <button class="bet-button" (click)="placeBet()">
-            SCOMMETTI
-            <span class="sub-text">ORA</span>
+            BET
+            <span class="sub-text">NOW</span>
         </button>
     </div>
 </div>

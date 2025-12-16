@@ -260,7 +260,7 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         // Stato
         this.ctx.font = 'bold 24px Inter, sans-serif';
         this.ctx.fillStyle = '#008C45';
-        this.ctx.fillText('IN CONSEGNA...', w / 2, h / 2 + 30);
+        this.ctx.fillText('DELIVERING...', w / 2, h / 2 + 30);
     }
 
     drawCrash() {

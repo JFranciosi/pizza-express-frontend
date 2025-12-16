@@ -1,6 +1,6 @@
 <div class="register-container">
     <p-toast></p-toast>
-    <p-card header="Registrazione" [style]="{ width: '100%', maxWidth: '400px' }">
+    <p-card header="Registration" [style]="{ width: '100%', maxWidth: '400px' }">
         <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-4">
 
             <div class="field">
@@ -25,7 +25,7 @@
                 </p-floatLabel>
             </div>
 
-            <p-button label="Registrati" type="submit" [loading]="loading" styleClass="w-full"></p-button>
+            <p-button label="Register" type="submit" [loading]="loading" styleClass="w-full"></p-button>
 
             @if (error) {
             <div class="error-message">
@@ -34,7 +34,7 @@
             }
 
             <div class="text-center mt-3">
-                <a routerLink="/login" class="text-primary no-underline">Hai già un account? Accedi</a>
+                <a routerLink="/login" class="text-primary no-underline">Already have an account? Login</a>
             </div>
         </form>
     </p-card>

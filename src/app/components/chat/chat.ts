@@ -17,9 +17,9 @@ export class ChatComponent implements OnInit {
 
     ngOnInit() {
         this.messages = [
-            { user: 'Mario', text: 'Buona fortuna a tutti! 🍀', time: '11:30' },
-            { user: 'Luigi', text: 'Vado per il 2x!', time: '11:31' },
-            { user: 'Admin', text: 'Benvenuti su Pizza Express Crash!', time: '11:32', type: 'system' }
+            { user: 'Mario', text: 'Good luck everyone! 🍀', time: '11:30' },
+            { user: 'Luigi', text: 'Going for 2x!', time: '11:31' },
+            { user: 'Admin', text: 'Welcome to Pizza Express Crash!', time: '11:32', type: 'system' }
         ];
     }
 
