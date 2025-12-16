@@ -1,0 +1,21 @@
+<div class="top-bar">
+    <div class="brand">
+        <img src="/assets/logo_full.png" alt="Pizza Express Logo" class="brand-logo" width="130" height="65"
+            fetchpriority="high" loading="eager" />
+    </div>
+
+    <div class="actions">
+        @if (user) {
+        <div class="user-info mr-3">
+            <span class="user-balance">{{ user.balance | currency:'EUR' }}</span>
+            <span class="username">{{ user.username }}</span>
+        </div>
+        }
+
+        <p-button styleClass="chat-toggle p-button-text p-button-rounded" icon="pi pi-comments"
+            (onClick)="onToggleChat()"></p-button>
+
+        <p-button icon="pi pi-sign-out" styleClass="p-button-danger p-button-text p-button-rounded p-button-sm ml-2"
+            (onClick)="onLogout()"></p-button>
+    </div>
+</div>

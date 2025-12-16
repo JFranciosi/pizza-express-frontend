@@ -1,0 +1,32 @@
+<div class="main-container">
+    <app-top-bar (toggleChat)="isChatOpen = !isChatOpen"></app-top-bar>
+
+    <div class="dashboard-layout">
+        <!-- Left Column: Player Bets -->
+        <div class="column left-col">
+            <app-player-bets></app-player-bets>
+        </div>
+
+        <!-- Center Column: Game Area -->
+        <div class="column center-col">
+            <!-- Top: Crash History -->
+            <app-crash-history></app-crash-history>
+
+            <!-- Middle: Game Canvas -->
+            <div class="canvas-wrapper">
+                <canvas #gameCanvas></canvas>
+            </div>
+
+            <!-- Bottom: Betting Controls -->
+            <app-bet-controls></app-bet-controls>
+        </div>
+
+        <!-- Right Column: Chat -->
+        <div class="column right-col" [class.chat-active]="isChatOpen">
+            <app-chat></app-chat>
+            <button class="close-chat-btn" (click)="isChatOpen = false">
+                <i class="pi pi-times"></i>
+            </button>
+        </div>
+    </div>
+</div>

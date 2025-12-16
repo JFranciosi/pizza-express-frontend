@@ -1,0 +1,121 @@
+/* Glass Panel Style */
+.chat-container {
+    background: linear-gradient(135deg, #1e1e1e 0%, #252525 100%);
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    border: 1px solid #333;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.chat-header {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #e0e0e0;
+}
+
+.messages-list {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    padding-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    /* Custom Scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: #444 #222;
+}
+
+.messages-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.messages-list::-webkit-scrollbar-track {
+    background: #222;
+}
+
+.messages-list::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 3px;
+}
+
+.message-row {
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.message-row.system {
+    color: #ffd700;
+    font-style: italic;
+    opacity: 0.8;
+    text-align: center;
+    font-size: 0.8rem;
+    background: rgba(255, 215, 0, 0.05);
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.message-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2px;
+}
+
+.username {
+    font-weight: 600;
+    color: #aaa;
+    font-size: 0.8rem;
+}
+
+.time {
+    color: #666;
+    font-size: 0.75rem;
+}
+
+.message-text {
+    color: #eee;
+    word-break: break-word;
+}
+
+.chat-input-area {
+    display: flex;
+    gap: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chat-input-area input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.chat-input-area input:focus {
+    border-color: #ffffff !important;
+    box-shadow: 0 0 0 1px #ffffff !important;
+    outline: none !important;
+}
+
+:host ::ng-deep .chat-input-area .p-button {
+    background: var(--logo-red);
+    border: 1px solid var(--logo-red);
+    color: white;
+}
+
+:host ::ng-deep .chat-input-area .p-button:enabled:hover {
+    background: #c0151c;
+    /* Darker red */
+    border-color: #c0151c;
+    box-shadow: 0 0 10px var(--logo-red-glow);
+}

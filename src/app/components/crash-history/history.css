@@ -1,0 +1,85 @@
+.history-container {
+    width: 100%;
+    overflow: hidden;
+    padding: 6px 0;
+    position: relative;
+    mask-image: linear-gradient(to right, transparent, black 2%, black 98%, transparent);
+}
+
+.history-badge.plus-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 50px;
+    border: 1px dashed rgba(255, 255, 255, 0.3);
+}
+
+.history-badge.plus-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #fff;
+}
+
+.history-scroll {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 5px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.history-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.history-badge {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    min-width: 70px;
+    text-align: center;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.history-badge.low {
+    background: rgba(0, 140, 69, 0.2);
+    color: #4caf50;
+    border-color: rgba(0, 140, 69, 0.5);
+    box-shadow: 0 0 10px rgba(0, 140, 69, 0.4);
+}
+
+.history-badge.medium {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.history-badge.high {
+    background: rgba(227, 27, 35, 0.15);
+    color: #ff5252;
+    border-color: rgba(227, 27, 35, 0.3);
+    box-shadow: 0 0 15px rgba(227, 27, 35, 0.2);
+    transform: scale(1.05);
+    font-weight: 800;
+}
+
+.history-badge:hover {
+    transform: translateY(-2px);
+    cursor: default;
+}
+
+.history-badge.high:hover {
+    transform: scale(1.1) translateY(-2px);
+}

@@ -1,0 +1,39 @@
+<div class="login-container">
+    <p-toast></p-toast>
+    <p-card header="Welcome" [style]="{ width: '100%', maxWidth: '400px' }">
+        <div class="logo-container">
+            <img src="/assets/logo_full.png" alt="Pizza Express Logo" width="160" height="80" loading="eager" />
+        </div>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-4">
+
+            <div class="field">
+                <p-floatLabel>
+                    <input pInputText id="email" formControlName="email" class="w-full" />
+                    <label for="email">Email</label>
+                </p-floatLabel>
+            </div>
+
+            <div class="field">
+                <p-floatLabel>
+                    <p-password id="password" formControlName="password" [feedback]="false" [toggleMask]="true"
+                        styleClass="w-full" inputStyleClass="w-full"></p-password>
+                    <label for="password">Password</label>
+                </p-floatLabel>
+            </div>
+
+            <div class="button-container">
+                <p-button label="Login" type="submit" [loading]="loading"></p-button>
+            </div>
+
+            @if (error) {
+            <div class="error-message">
+                {{ error }}
+            </div>
+            }
+
+            <div class="text-center mt-3">
+                <a routerLink="/register" class="text-primary no-underline">Don't have an account? Register</a>
+            </div>
+        </form>
+    </p-card>
+</div>

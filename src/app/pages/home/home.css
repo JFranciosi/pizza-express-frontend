@@ -1,0 +1,161 @@
+.main-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.dashboard-layout {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 1rem;
+    padding: 1rem;
+    flex: 1;
+    background-color: #121212;
+    color: white;
+    overflow: hidden;
+    position: relative;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    height: 100%;
+}
+
+app-player-bets,
+app-chat {
+    display: block;
+    height: 100%;
+}
+
+.center-col {
+    gap: 1rem;
+    justify-content: flex-start;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+.canvas-wrapper {
+    background: linear-gradient(135deg, #1e1e1e 0%, #252525 100%);
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    flex: 1;
+    min-height: 250px;
+    width: 100%;
+    position: relative;
+    border: 1px solid #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
+}
+
+.right-col {
+    position: fixed;
+    top: 60px;
+    right: -100%;
+    bottom: 0;
+    width: 350px;
+    height: auto;
+    background: #121212;
+    z-index: 1000;
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-left: 1px solid #333;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+    padding: 1rem;
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.right-col.chat-active {
+    right: 0;
+}
+
+.close-chat-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 1.4rem;
+    right: 2rem;
+    width: 30px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    z-index: 1001;
+    transition: all 0.2s ease;
+}
+
+.close-chat-btn:hover {
+    background: var(--logo-red);
+    box-shadow: 0 0 10px var(--logo-red-glow);
+    transform: rotate(90deg);
+}
+
+@media (min-width: 1600px) {
+    .dashboard-layout {
+        grid-template-columns: 400px 1fr;
+    }
+}
+
+@media (max-width: 1400px) {
+    .dashboard-layout {
+        grid-template-columns: 300px 1fr;
+    }
+
+    .canvas-wrapper {
+        height: 400px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .dashboard-layout {
+        grid-template-columns: 260px 1fr;
+    }
+}
+
+@media (max-width: 992px) {
+    .dashboard-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+        overflow-y: auto;
+        padding-bottom: 80px;
+        display: block;
+    }
+
+    .column {
+        height: auto;
+        margin-bottom: 1rem;
+    }
+
+    .left-col {
+        height: 400px;
+        order: 2;
+    }
+
+    .center-col {
+        order: 1;
+    }
+
+    .right-col {
+        width: 85%;
+        max-width: 350px;
+    }
+
+    .canvas-wrapper {
+        height: 350px;
+    }
+}
