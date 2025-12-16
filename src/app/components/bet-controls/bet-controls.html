@@ -1,9 +1,10 @@
 <div class="controls-panel">
     <div class="quick-bets">
-        <button class="pizza-btn" (click)="setBet(1)">1€</button>
-        <button class="pizza-btn" (click)="setBet(2)">2€</button>
-        <button class="pizza-btn" (click)="setBet(5)">5€</button>
-        <button class="pizza-btn" (click)="setBet(10)">10€</button>
+        <button class="pizza-btn" (click)="addToBet(1)">+1€</button>
+        <button class="pizza-btn" (click)="addToBet(2)">+2€</button>
+        <button class="pizza-btn" (click)="addToBet(5)">+5€</button>
+        <button class="pizza-btn" (click)="addToBet(10)">+10€</button>
+        <button class="pizza-btn transparent" (click)="setBet(0)">CLR</button>
     </div>
 
     <div class="inputs-row">
@@ -15,10 +16,13 @@
             </p-inputNumber>
         </div>
         <div class="input-group">
-            <label>Auto Cashout (x)</label>
+            <div class="label-row">
+                <label>Auto Cashout</label>
+                <p-toggleSwitch [(ngModel)]="isAutoCashoutEnabled"></p-toggleSwitch>
+            </div>
             <p-inputNumber [(ngModel)]="autoCashout" [min]="1.01" [max]="100" [step]="0.1" [showButtons]="true"
-                buttonLayout="horizontal" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"
-                suffix=" x">
+                buttonLayout="horizontal" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" suffix=" x"
+                [disabled]="!isAutoCashoutEnabled">
             </p-inputNumber>
         </div>
     </div>

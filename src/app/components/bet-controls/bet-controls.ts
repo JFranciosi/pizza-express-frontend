@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { AuthService } from '../../services/auth.service';
 import { GameApiService } from '../../services/game-api.service';
 import { GameSocketService, GameState } from '../../services/game-socket.service';
@@ -11,13 +12,14 @@ import { toSignal } from '@angular/core/rxjs-interop';
 @Component({
     selector: 'app-bet-controls',
     standalone: true,
-    imports: [CommonModule, FormsModule, ButtonModule, InputNumberModule],
+    imports: [CommonModule, FormsModule, ButtonModule, InputNumberModule, ToggleSwitchModule],
     templateUrl: './bet-controls.html',
     styleUrl: './bet-controls.css'
 })
 export class BetControlsComponent {
     betAmount: number = 5.00;
-    autoCashout: number | null = 2.00;
+    autoCashout: number = 2.00;
+    isAutoCashoutEnabled: boolean = false;
 
     gameState: Signal<GameState>;
     currentMultiplier: Signal<number>;
@@ -44,6 +46,10 @@ export class BetControlsComponent {
         });
     }
 
+    addToBet(amount: number) {
+        this.betAmount = Math.min(this.betAmount + amount, 100);
+    }
+
     setBet(amount: number) {
         this.betAmount = amount;
     }
@@ -58,7 +64,10 @@ export class BetControlsComponent {
         // Optimistic update: Prevent double clicks immediately
         this.betPlaced = true;
 
-        this.gameApi.placeBet(this.betAmount).subscribe({
+        // Send autoCashout only if enabled
+        const autoCashoutValue = this.isAutoCashoutEnabled ? this.autoCashout : 0;
+
+        this.gameApi.placeBet(this.betAmount, autoCashoutValue).subscribe({
             next: () => {
                 // Success: Update balance
                 const user = this.authService.getUser();

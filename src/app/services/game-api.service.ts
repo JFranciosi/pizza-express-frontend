@@ -18,8 +18,8 @@ export class GameApiService {
         );
     }
 
-    placeBet(amount: number): Observable<any> {
-        return this.http.post(`${this.BASE_URL}/bet/place`, { amount });
+    placeBet(amount: number, autoCashout: number = 0): Observable<any> {
+        return this.http.post(`${this.BASE_URL}/bet/place`, { amount, autoCashout });
     }
 
     cancelBet(): Observable<any> {
