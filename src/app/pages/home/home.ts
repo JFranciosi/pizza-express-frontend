@@ -30,6 +30,8 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
 
     // Tempo di avvio virtuale del round corrente (per sincronizzare la curva)
     private roundStartTime: number = 0;
+    // Tempo di fine attesa (per smooth countdown)
+    private waitingEndTime: number = 0;
 
     constructor(
         private authService: AuthService,
@@ -42,38 +44,31 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
             this.gameSocket.gameState$.subscribe(state => {
                 this.gameState = state;
                 if (state === GameState.FLYING) {
-                    // Se non abbiamo ancora un tempo di start (es. join in ritardo), lo stimiamo
-                    // Ma idealmente 'startDrawing' lo gestisce
                     this.startDrawing();
                 } else if (state === GameState.CRASHED) {
                     this.stopDrawing();
                     this.drawCrash();
                 } else {
-                    this.stopDrawing();
-                    this.drawWaiting();
+                    this.startDrawing(); // WAITING: avvia loop per animazione fluida
                 }
             }),
             this.gameSocket.multiplier$.subscribe(serverMultiplier => {
-                // Sincronizziamo il moltiplicatore.
-                // Se stiamo volando, calcoliamo il roundStartTime basato su questo tick
-                // per correggere eventuali drift, ma usiamo la predizione per il render.
-
-                // t = ln(m) / k
-                // startTime = now - t
                 if (serverMultiplier > 1.0) {
                     const timeElapsed = Math.log(serverMultiplier) / this.GROWTH_RATE;
-                    // Aggiorniamo il tempo di start stimato, usando una media mobile o direttamente
-                    // Per semplicità, ci fidiamo dell'ultimo tick del server per ri-allineare la curva
                     this.roundStartTime = Date.now() - timeElapsed;
                 } else {
                     this.roundStartTime = Date.now();
                 }
-
-                // Backup nel caso il loop grafico non stia girando o per stato crash
                 this.multiplier = serverMultiplier;
             }),
             this.gameSocket.timeLeft$.subscribe(t => {
                 this.timeLeft = t;
+                // Sincronizza il tempo di fine attesa
+                const estimatedEnd = Date.now() + t * 1000;
+                // Aggiorna solo se drift significativo (>500ms) o non impostato
+                if (Math.abs(estimatedEnd - this.waitingEndTime) > 500 || this.waitingEndTime === 0) {
+                    this.waitingEndTime = estimatedEnd;
+                }
             })
         );
     }
@@ -84,8 +79,12 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         this.resizeCanvas();
         window.addEventListener('resize', () => this.resizeCanvas());
 
-        // Disegno iniziale
-        this.drawWaiting();
+        // Avvia loop se siamo già in waiting
+        if (this.gameState === GameState.WAITING) {
+            this.startDrawing();
+        } else {
+            this.drawWaiting();
+        }
     }
 
     resizeCanvas() {
@@ -108,18 +107,15 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
 
         const draw = () => {
-            // Loop grafico sempre attivo in FLYING
             if (this.gameState === GameState.FLYING) {
-                // Calcola moltiplicatore "smooth" basato sul tempo
                 const now = Date.now();
                 const elapsed = now - this.roundStartTime;
-                // m = e^(k*t)
                 const predictedMultiplier = Math.exp(this.GROWTH_RATE * elapsed);
-
-                // Usiamo il massimo tra quello predetto e quello del server
                 this.multiplier = Math.max(this.multiplier, predictedMultiplier);
-
                 this.drawGame();
+                this.animationFrameId = requestAnimationFrame(draw);
+            } else if (this.gameState === GameState.WAITING) {
+                this.drawWaiting();
                 this.animationFrameId = requestAnimationFrame(draw);
             }
         };
@@ -208,21 +204,47 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         const h = this.canvasRef.nativeElement.height;
         this.ctx.clearRect(0, 0, w, h);
 
+        const centerX = w / 2;
+        const centerY = h / 2;
+        // Calcolo fluido del tempo rimanente
+        const now = Date.now();
+        const remainingMs = Math.max(0, this.waitingEndTime - now);
+        const remainingSecs = Math.ceil(remainingMs / 1000);
+        const maxTimeMs = 10000;
+        const progress = Math.min(1, Math.max(0, remainingMs / maxTimeMs));
+
+        // Testo "WAITING"
         this.ctx.fillStyle = '#fff';
         this.ctx.font = '24px Inter, sans-serif';
         this.ctx.textAlign = 'center';
-        this.ctx.fillText('WAITING FOR NEXT ROUND', w / 2, h / 2);
+        this.ctx.textBaseline = 'middle';
+        this.ctx.fillText('WAITING FOR NEXT ROUND', centerX, centerY - 40);
 
-        if (this.timeLeft > 0) {
-            this.ctx.font = 'bold 48px Inter, sans-serif';
-            this.ctx.fillText(this.timeLeft.toString(), w / 2, h / 2 + 50);
-        }
+        // Numero secondi grande
+        this.ctx.font = 'bold 64px Inter, sans-serif';
+        this.ctx.fillText(remainingSecs.toString(), centerX, centerY + 20);
 
-        // Loading bar
-        const barWidth = 200;
-        const barHeight = 4;
-        this.ctx.fillStyle = '#333';
-        this.ctx.fillRect(w / 2 - barWidth / 2, h / 2 + 70, barWidth, barHeight);
+        // Progress Bar Lineare
+        const barWidth = 300;
+        const barHeight = 6;
+        const barX = centerX - barWidth / 2;
+        const barY = centerY + 80;
+
+        // Background bar
+        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+        this.ctx.fillRect(barX, barY, barWidth, barHeight);
+
+        // Foreground bar (progress)
+        const currentBarWidth = barWidth * progress;
+        this.ctx.fillStyle = '#e91e63'; // Theme color
+
+        // Shadow/Glow per effetto neon
+        this.ctx.shadowColor = '#e91e63';
+        this.ctx.shadowBlur = 10;
+        this.ctx.fillRect(barX, barY, currentBarWidth, barHeight);
+
+        // Reset shadow
+        this.ctx.shadowBlur = 0;
     }
 
     logout() {
