@@ -60,6 +60,29 @@
     font-size: 0.8rem;
     color: #aaa;
     font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    margin-bottom: 0.5rem;
+}
+
+.toggles-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1.5rem;
+    align-items: center;
+    padding: 0 0.5rem;
+}
+
+.toggle-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.toggle-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    color: #e0e0e0;
+    font-weight: 500;
 }
 
 /* Adjust PrimeNG InputNumber width */

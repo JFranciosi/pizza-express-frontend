@@ -7,6 +7,17 @@
         <button class="pizza-btn transparent" (click)="setBet(0)">CLR</button>
     </div>
 
+    <div class="toggles-row">
+        <div class="toggle-item">
+            <span class="toggle-label">Auto Bet</span>
+            <p-toggleSwitch [(ngModel)]="isAutoBetEnabled"></p-toggleSwitch>
+        </div>
+        <div class="toggle-item">
+            <span class="toggle-label">Auto Cashout</span>
+            <p-toggleSwitch [(ngModel)]="isAutoCashoutEnabled"></p-toggleSwitch>
+        </div>
+    </div>
+
     <div class="inputs-row">
         <div class="input-group">
             <label>Bet Amount (€)</label>
@@ -16,10 +27,7 @@
             </p-inputNumber>
         </div>
         <div class="input-group">
-            <div class="label-row">
-                <label>Auto Cashout</label>
-                <p-toggleSwitch [(ngModel)]="isAutoCashoutEnabled"></p-toggleSwitch>
-            </div>
+            <label>Cashout At (x)</label>
             <p-inputNumber [(ngModel)]="autoCashout" [min]="1.01" [max]="100" [step]="0.1" [showButtons]="true"
                 buttonLayout="horizontal" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" suffix=" x"
                 [disabled]="!isAutoCashoutEnabled">

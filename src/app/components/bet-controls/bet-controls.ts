@@ -27,6 +27,7 @@ export class BetControlsComponent {
 
     betPlaced: boolean = false;
     cashedOut: boolean = false;
+    isAutoBetEnabled: boolean = false;
 
     constructor(
         private authService: AuthService,
@@ -38,12 +39,26 @@ export class BetControlsComponent {
         this.timeLeft = toSignal(this.gameSocket.timeLeft$, { initialValue: 0 });
 
         effect(() => {
-            // Reset state when game crashes (prepared for next round)
-            if (this.gameState() === GameState.CRASHED) {
+            const state = this.gameState();
+
+            // Reset state when game crashes
+            if (state === GameState.CRASHED) {
                 this.betPlaced = false;
                 this.cashedOut = false;
             }
-        });
+
+            // Handle Auto Bet when entering Waiting state
+            if (state === GameState.WAITING) {
+                if (this.isAutoBetEnabled && !this.betPlaced) {
+                    // Small delay to ensure state stability and UX
+                    setTimeout(() => {
+                        if (!this.betPlaced && this.gameState() === GameState.WAITING && this.isAutoBetEnabled) {
+                            this.placeBet();
+                        }
+                    }, 500);
+                }
+            }
+        }, { allowSignalWrites: true });
     }
 
     addToBet(amount: number) {
