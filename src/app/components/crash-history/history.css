@@ -45,6 +45,9 @@
 }
 
 .history-badge {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 6px 16px;
     border-radius: 999px;
     font-weight: 700;
