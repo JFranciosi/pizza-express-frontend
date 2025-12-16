@@ -14,6 +14,8 @@ export interface AuthResponse {
     refreshToken: string;
     userId: string;
     username: string;
+    email: string;
+    balance: number;
 }
 
 export interface User {

@@ -15,7 +15,7 @@ export class AuthService {
     login(request: LoginRequest): Observable<AuthResponse> {
         return this.http.post<AuthResponse>(`${this.apiUrl}/login`, request).pipe(
             tap(response => {
-                this.saveToken(response.accessToken);
+                this.saveSession(response);
             })
         );
     }
@@ -23,20 +23,35 @@ export class AuthService {
     register(request: RegisterRequest): Observable<AuthResponse> {
         return this.http.post<AuthResponse>(`${this.apiUrl}/register`, request).pipe(
             tap(response => {
-                this.saveToken(response.accessToken);
+                this.saveSession(response);
             })
         );
     }
 
-    private saveToken(token: string): void {
-        localStorage.setItem('accessToken', token);
+    private saveSession(response: AuthResponse): void {
+        localStorage.setItem('accessToken', response.accessToken);
+        localStorage.setItem('refreshToken', response.refreshToken); // Good practice to save this too
+        const user = {
+            id: response.userId,
+            username: response.username,
+            email: response.email,
+            balance: response.balance
+        };
+        localStorage.setItem('user_data', JSON.stringify(user));
     }
 
     getToken(): string | null {
         return localStorage.getItem('accessToken');
     }
 
+    getUser(): any | null {
+        const userStr = localStorage.getItem('user_data');
+        return userStr ? JSON.parse(userStr) : null;
+    }
+
     logout(): void {
         localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('user_data');
     }
 }

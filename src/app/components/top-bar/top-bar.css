@@ -28,6 +28,26 @@
     filter: drop-shadow(0 0 2px rgba(227, 27, 35, 0.5));
 }
 
+.user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    color: #fff;
+    font-size: 0.9rem;
+    line-height: 1.2;
+}
+
+.user-balance {
+    font-weight: bold;
+    color: #4caf50;
+    /* Green for money */
+}
+
+.username {
+    font-size: 0.8rem;
+    color: #aaa;
+}
+
 .brand span {
     color: white;
 }

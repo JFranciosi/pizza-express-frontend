@@ -5,6 +5,13 @@
     </div>
 
     <div class="actions">
+        @if (user) {
+        <div class="user-info mr-3">
+            <span class="user-balance">{{ user.balance | currency:'EUR' }}</span>
+            <span class="username">{{ user.username }}</span>
+        </div>
+        }
+
         <!-- Chat Toggle Button (Mobile/Tablet only via CSS) -->
         <p-button styleClass="chat-toggle p-button-text p-button-rounded" icon="pi pi-comments"
             (onClick)="onToggleChat()"></p-button>

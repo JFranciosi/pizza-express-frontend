@@ -13,8 +13,11 @@ import { Router } from '@angular/router';
 })
 export class TopBarComponent {
     @Output() toggleChat = new EventEmitter<void>();
+    user: any | null = null;
 
-    constructor(private authService: AuthService, private router: Router) { }
+    constructor(private authService: AuthService, private router: Router) {
+        this.user = this.authService.getUser();
+    }
 
     onLogout() {
         this.authService.logout();
