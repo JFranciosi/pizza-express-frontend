@@ -2,9 +2,7 @@
     width: 100%;
     overflow: hidden;
     padding: 6px 0;
-    /* Removed margin-bottom to fix spacing */
     position: relative;
-    /* Reduced mask to make it look full width */
     mask-image: linear-gradient(to right, transparent, black 2%, black 98%, transparent);
 }
 
@@ -27,15 +25,10 @@
 .history-scroll {
     display: flex;
     gap: 10px;
-    /* Align to end so Newest (and + btn) allow standard reading flow LTR but prioritized? 
-       Actually with 50 items and Old->New order, flex-start is fine, user scrolls to see old.
-       But user wants "Space for screen size". With 50, it fills.
-    */
     justify-content: flex-end;
     flex-direction: row;
     overflow-x: auto;
     padding: 5px;
-    /* Hide scrollbar */
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
@@ -59,7 +52,6 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* LOW (< 2.0x) - Green (Basilico) */
 .history-badge.low {
     background: rgba(0, 140, 69, 0.2);
     color: #4caf50;
@@ -67,7 +59,6 @@
     box-shadow: 0 0 10px rgba(0, 140, 69, 0.4);
 }
 
-/* MEDIUM (2.0x - 10.0x) - White (Mozzarella) */
 .history-badge.medium {
     background: rgba(255, 255, 255, 0.15);
     color: #ffffff;
@@ -75,18 +66,15 @@
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
 }
 
-/* HIGH (>= 10.0x) - Red (Rosso Pomodoro) */
 .history-badge.high {
     background: rgba(227, 27, 35, 0.15);
     color: #ff5252;
     border-color: rgba(227, 27, 35, 0.3);
     box-shadow: 0 0 15px rgba(227, 27, 35, 0.2);
-    /* Extra Pop for high wins */
     transform: scale(1.05);
     font-weight: 800;
 }
 
-/* Hover effects */
 .history-badge:hover {
     transform: translateY(-2px);
     cursor: default;

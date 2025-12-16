@@ -8,7 +8,6 @@
 .dashboard-layout {
     display: grid;
     grid-template-columns: 350px 1fr;
-    /* 2 Columns: Bets + Game */
     gap: 1rem;
     padding: 1rem;
     flex: 1;
@@ -18,16 +17,13 @@
     position: relative;
 }
 
-
 .column {
     display: flex;
     flex-direction: column;
     min-height: 0;
     height: 100%;
-    /* Ensure column takes full available height */
 }
 
-/* Ensure components fill the column */
 app-player-bets,
 app-chat {
     display: block;
@@ -41,7 +37,6 @@ app-chat {
     flex-direction: column;
     height: 100%;
     overflow: hidden;
-    /* Ensure it contains its children */
 }
 
 .canvas-wrapper {
@@ -49,10 +44,8 @@ app-chat {
     border-radius: 12px;
     padding: 1rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
-    /* height: 480px; Removed fixed height */
     flex: 1;
     min-height: 250px;
-    /* Prevent collapse */
     width: 100%;
     position: relative;
     border: 1px solid #333;
@@ -66,11 +59,9 @@ canvas {
     height: 100%;
 }
 
-/* Chat Drawer - Always Fixed */
 .right-col {
     position: fixed;
     top: 60px;
-    /* Below TopBar */
     right: -100%;
     bottom: 0;
     width: 350px;
@@ -127,7 +118,6 @@ canvas {
 
     .canvas-wrapper {
         height: 400px;
-        /* Reduce height on smaller laptops */
     }
 }
 
@@ -143,9 +133,7 @@ canvas {
         height: auto;
         overflow-y: auto;
         padding-bottom: 80px;
-        /* Space for bottom interaction if needed */
         display: block;
-        /* Switch to block for flow layout */
     }
 
     .column {
@@ -153,7 +141,6 @@ canvas {
         margin-bottom: 1rem;
     }
 
-    /* Side panels (Bets) stack normally */
     .left-col {
         height: 400px;
         order: 2;
@@ -165,7 +152,6 @@ canvas {
 
     .right-col {
         width: 85%;
-        /* Wider on mobile */
         max-width: 350px;
     }
 

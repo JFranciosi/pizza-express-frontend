@@ -12,10 +12,8 @@
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     border-radius: 1rem;
     border: 1px solid rgba(227, 27, 35, 0.2);
-    /* Red subtle border */
 }
 
-/* Add a glow effect to the card on hover */
 :host ::ng-deep .p-card:hover {
     border-color: var(--logo-red);
     box-shadow: 0 0 30px var(--logo-red-glow);
@@ -61,7 +59,6 @@
 
 .text-primary:hover {
     color: #ff4d4d;
-    /* lighter red on hover */
 }
 
 .no-underline {
@@ -107,7 +104,6 @@
 
 :host ::ng-deep .p-button:enabled:hover {
     background: #c0151c;
-    /* Darker red */
     border-color: #c0151c;
     box-shadow: 0 0 10px var(--logo-red-glow);
 }
@@ -126,19 +122,12 @@
 :host ::ng-deep .p-float-label textarea.p-filled~label,
 :host ::ng-deep p-floatLabel input:focus+label,
 :host ::ng-deep p-floatLabel input.p-filled+label,
-/* Fix for p-password and other wrapped inputs */
 :host ::ng-deep p-floatLabel .p-inputwrapper-focus~label,
 :host ::ng-deep p-floatLabel .p-inputwrapper-filled~label,
 :host ::ng-deep .p-float-label .p-inputwrapper-focus~label,
 :host ::ng-deep .p-float-label .p-inputwrapper-filled~label,
-/* Robust Override for Password Label */
 :host ::ng-deep p-floatLabel p-password.ng-dirty.ng-valid~label,
 :host ::ng-deep p-floatLabel p-password.p-inputwrapper-filled~label,
-:host ::ng-deep p-floatLabel p-password~label {
-    color: #ffffff !important;
-}
-
-/* Ensure focus state is also white (redundant but safe) */
 :host ::ng-deep p-floatLabel p-password.p-inputwrapper-focus~label {
     color: #ffffff !important;
 }
