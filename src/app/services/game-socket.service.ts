@@ -13,6 +13,8 @@ export interface Bet {
     userId: string;
     username: string;
     amount: number;
+    multiplier?: number | null;
+    profit?: number | null;
 }
 
 @Injectable({
@@ -67,13 +69,49 @@ export class GameSocketService implements OnDestroy {
     }
 
     private handleMessage(message: string) {
-        if (message.startsWith('STATE:')) {
+        if (message.startsWith('BET:') && !message.startsWith('BET_OK')) {
+            const parts = message.split(':');
+            const bet: Bet = {
+                userId: parts[1],
+                username: parts[2],
+                amount: parseFloat(parts[3]),
+                multiplier: null,
+                profit: null
+            };
+            const currentBets = this.betsSub.getValue();
+            this.betsSub.next([...currentBets, bet]);
+
+        } else if (message.startsWith('CASHOUT:') && !message.startsWith('CASHOUT_OK')) {
+            const parts = message.split(':');
+            const userId = parts[1];
+            const multiplier = parseFloat(parts[2]);
+            const profit = parseFloat(parts[3]);
+
+            const currentBets = this.betsSub.getValue();
+            const updatedBets = currentBets.map(b => {
+                if (b.userId === userId) {
+                    return { ...b, multiplier, profit };
+                }
+                return b;
+            });
+            this.betsSub.next(updatedBets);
+
+        } else if (message.startsWith('CANCEL_BET:')) {
+            const userId = message.split(':')[1];
+            const currentBets = this.betsSub.getValue();
+            this.betsSub.next(currentBets.filter(b => b.userId !== userId));
+
+        } else if (message.startsWith('STATE:')) {
             const parts = message.split(':');
             let statusStr = parts[1];
             if (statusStr === 'RUNNING') statusStr = 'FLYING';
 
             const state = statusStr as GameState;
             this.gameStateSub.next(state);
+
+            if (state === GameState.WAITING) {
+                this.betsSub.next([]);
+            }
 
             if (parts.length > 2) {
                 const mult = parseFloat(parts[2]);
@@ -91,9 +129,10 @@ export class GameSocketService implements OnDestroy {
             this.gameStateSub.next(GameState.CRASHED);
             this.multiplierSub.next(mult);
 
-            // Aggiungi il nuovo crash alla history locale
             const currentHistory = this.historySub.getValue();
-            this.historySub.next([mult, ...currentHistory].slice(0, 50)); // Mantieni ultimi 50
+            this.historySub.next([mult, ...currentHistory].slice(0, 50));
+
+            this.betsSub.next([]);
 
         } else if (message.startsWith('TIMER:')) {
             const seconds = parseInt(message.split(':')[1], 10);
@@ -102,8 +141,7 @@ export class GameSocketService implements OnDestroy {
             this.gameStateSub.next(GameState.FLYING);
             this.multiplierSub.next(1.00);
         } else if (message.startsWith('HISTORY:')) {
-            // HISTORY:1.20,5.50,1.00
-            const csv = message.substring(8); // Rimuovi "HISTORY:"
+            const csv = message.substring(8);
             if (csv.length > 0) {
                 const numbers = csv.split(',').map(s => parseFloat(s));
                 this.historySub.next(numbers);

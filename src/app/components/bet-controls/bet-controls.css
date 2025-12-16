@@ -150,28 +150,3 @@
     margin-top: 4px;
     font-weight: normal;
 }
-
-.controls-footer {
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.balance-display {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #e0e0e0;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.9rem;
-}
-
-.balance-display .label {
-    opacity: 0.7;
-}
-
-.balance-display .value {
-    color: #4caf50;
-    font-weight: bold;
-    font-family: 'JetBrains Mono', monospace;
-}

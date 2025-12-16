@@ -1,35 +1,31 @@
-<div class="bets-container">
-    <div class="bets-header">
-        <span>User</span>
-        <span>Bet</span>
-        <span>Multiplier</span>
-        <span>Profit</span>
+<p-card styleClass="players-panel h-full">
+    <div class="players-header">
+        <span>{{ bets().length }} Players</span>
+        <span>Total {{ totalBetsAmount() | currency:'EUR' }}</span>
     </div>
-    <div class="bets-list">
-        @for (bet of bets; track bet.user) {
-        <div class="bet-row" [class.winner]="bet.profit > 0">
-            <div class="user-cell">
-                <i class="pi pi-user"></i> {{ bet.user }}
+
+    <div class="players-list">
+        @for (bet of bets(); track bet.userId) {
+        <div class="player-row" [class.cashed-out]="bet.multiplier">
+            <div class="player-info">
+                <span class="player-avatar">{{ bet.username.substring(0,2).toUpperCase() }}</span>
+                <span class="player-name">{{ bet.username }}</span>
             </div>
-            <div class="amount-cell">{{ bet.amount | currency:'EUR':'symbol' }}</div>
-            <div class="multiplier-cell">
+            <div class="player-stats">
                 @if (bet.multiplier) {
-                <span class="badge-multiplier">{{ bet.multiplier.toFixed(2) }}x</span>
+                <span class="cashout-pill">
+                    {{ bet.multiplier.toFixed(2) }}x
+                </span>
+                <span class="profit-amount">
+                    +{{ bet.profit | currency:'EUR' }}
+                </span>
                 } @else {
-                <span>-</span>
-                }
-            </div>
-            <div class="profit-cell">
-                @if (bet.profit) {
-                <span class="profit-value">+{{ bet.profit | currency:'EUR':'symbol' }}</span>
-                } @else {
-                <span>-</span>
+                <span class="bet-amount">
+                    {{ bet.amount | currency:'EUR' }}
+                </span>
                 }
             </div>
         </div>
         }
     </div>
-    <div class="total-bets">
-        {{ bets.length }} Players present
-    </div>
-</div>
+</p-card>

@@ -1,22 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CardModule } from 'primeng/card';
+import { GameSocketService } from '../../services/game-socket.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'app-player-bets',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, CardModule],
     templateUrl: './player-bets.html',
     styleUrl: './player-bets.css'
 })
-export class PlayerBetsComponent implements OnInit {
-    bets: any[] = [];
+export class PlayerBetsComponent {
+    bets: Signal<any[]>;
+    totalBetsAmount = computed(() => this.bets().reduce((acc, bet) => acc + bet.amount, 0));
 
-    ngOnInit() {
-        this.bets = [
-            { user: 'Mario Rossi', amount: 5.00, multiplier: null, profit: null },
-            { user: 'Luigi Verdi', amount: 10.00, multiplier: 2.50, profit: 25.00 },
-            { user: 'Giulia Bianchi', amount: 2.00, multiplier: null, profit: null },
-            { user: 'PizzaLover99', amount: 100.00, multiplier: 1.10, profit: 110.00 }
-        ];
+    constructor(private gameSocket: GameSocketService) {
+        this.bets = toSignal(this.gameSocket.bets$, { initialValue: [] });
     }
 }
