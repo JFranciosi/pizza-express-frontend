@@ -1,0 +1,32 @@
+<div class="controls-panel">
+    <div class="quick-bets">
+        <button class="pizza-btn" (click)="setBet(1)">1€</button>
+        <button class="pizza-btn" (click)="setBet(2)">2€</button>
+        <button class="pizza-btn" (click)="setBet(5)">5€</button>
+        <button class="pizza-btn" (click)="setBet(10)">10€</button>
+    </div>
+
+    <div class="inputs-row">
+        <div class="input-group">
+            <label>Puntata (€)</label>
+            <p-inputNumber [(ngModel)]="betAmount" mode="currency" currency="EUR" locale="it-IT" [min]="0.10"
+                [max]="1000" [showButtons]="true" buttonLayout="horizontal" incrementButtonIcon="pi pi-plus"
+                decrementButtonIcon="pi pi-minus">
+            </p-inputNumber>
+        </div>
+        <div class="input-group">
+            <label>Auto Cashout (x)</label>
+            <p-inputNumber [(ngModel)]="autoCashout" [min]="1.01" [max]="100" [step]="0.1" [showButtons]="true"
+                buttonLayout="horizontal" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"
+                suffix=" x">
+            </p-inputNumber>
+        </div>
+    </div>
+
+    <div class="action-row">
+        <button class="bet-button" (click)="placeBet()">
+            SCOMMETTI
+            <span class="sub-text">ORA</span>
+        </button>
+    </div>
+</div>

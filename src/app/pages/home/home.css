@@ -1,29 +1,36 @@
-.home-container {
-    display: flex;
+.dashboard-layout {
+    display: grid;
+    grid-template-columns: 350px 1fr 350px;
     gap: 1rem;
     padding: 1rem;
-    min-height: 100vh;
+    height: 100vh;
     background-color: #121212;
-    /* Dark theme bg */
     color: white;
+    overflow: hidden;
 }
 
-.game-wrapper {
-    flex: 3;
+.column {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    min-height: 0;
 }
 
-.canvas-container {
+.center-col {
+    gap: 1rem;
+    justify-content: center;
+}
+
+.canvas-wrapper {
     background: linear-gradient(135deg, #1e1e1e 0%, #252525 100%);
     border-radius: 12px;
     padding: 1rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
-    height: 440px;
-    /* Altezza fissa per coerenza */
+    height: 480px;
     position: relative;
     border: 1px solid #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 canvas {
@@ -31,17 +38,36 @@ canvas {
     height: 100%;
 }
 
-.sidebar {
-    flex: 1;
+.logout-btn-container {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 100;
 }
 
-/* Primeng Overrides per dark mode integrata se necessario */
-:host ::ng-deep .p-card {
-    background-color: #1e1e1e;
-    color: white;
-    border: 1px solid #333;
+@media (max-width: 1200px) {
+    .dashboard-layout {
+        grid-template-columns: 280px 1fr 280px;
+    }
 }
 
-:host ::ng-deep .p-card .p-card-title {
-    color: #fff;
+@media (max-width: 992px) {
+    .dashboard-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+        overflow-y: auto;
+    }
+
+    .column {
+        height: auto;
+    }
+
+    .canvas-wrapper {
+        height: 350px;
+    }
+
+    .right-col,
+    .left-col {
+        height: 400px;
+    }
 }

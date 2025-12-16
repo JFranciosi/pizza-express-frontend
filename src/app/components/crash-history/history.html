@@ -1,0 +1,10 @@
+<div class="history-container">
+    <div class="history-scroll">
+        @for (multiplier of history; track $index) {
+        <div class="history-badge"
+            [ngClass]="{'high': multiplier >= 10, 'medium': multiplier >= 2 && multiplier < 10, 'low': multiplier < 2}">
+            {{ multiplier.toFixed(2) }}x
+        </div>
+        }
+    </div>
+</div>

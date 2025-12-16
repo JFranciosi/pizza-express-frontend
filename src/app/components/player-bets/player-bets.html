@@ -1,0 +1,35 @@
+<div class="bets-container">
+    <div class="bets-header">
+        <span>Giocatore</span>
+        <span>Puntata</span>
+        <span>Moltiplicatore</span>
+        <span>Profitto</span>
+    </div>
+    <div class="bets-list">
+        @for (bet of bets; track bet.user) {
+        <div class="bet-row" [class.winner]="bet.profit > 0">
+            <div class="user-cell">
+                <i class="pi pi-user"></i> {{ bet.user }}
+            </div>
+            <div class="amount-cell">{{ bet.amount | currency:'EUR':'symbol' }}</div>
+            <div class="multiplier-cell">
+                @if (bet.multiplier) {
+                <span class="badge-multiplier">{{ bet.multiplier.toFixed(2) }}x</span>
+                } @else {
+                <span>-</span>
+                }
+            </div>
+            <div class="profit-cell">
+                @if (bet.profit) {
+                <span class="profit-value">+{{ bet.profit | currency:'EUR':'symbol' }}</span>
+                } @else {
+                <span>-</span>
+                }
+            </div>
+        </div>
+        }
+    </div>
+    <div class="total-bets">
+        {{ bets.length }} Giocatori in gara
+    </div>
+</div>
