@@ -34,6 +34,9 @@ export class GameSocketService implements OnDestroy {
     private betsSub = new BehaviorSubject<Bet[]>([]);
     public bets$ = this.betsSub.asObservable();
 
+    private historySub = new BehaviorSubject<number[]>([]);
+    public history$ = this.historySub.asObservable();
+
     constructor() {
         this.connect();
     }
@@ -87,12 +90,24 @@ export class GameSocketService implements OnDestroy {
             const mult = parseFloat(message.split(':')[1]);
             this.gameStateSub.next(GameState.CRASHED);
             this.multiplierSub.next(mult);
+
+            // Aggiungi il nuovo crash alla history locale
+            const currentHistory = this.historySub.getValue();
+            this.historySub.next([mult, ...currentHistory].slice(0, 10)); // Mantieni ultimi 10
+
         } else if (message.startsWith('TIMER:')) {
             const seconds = parseInt(message.split(':')[1], 10);
             this.timeLeftSub.next(seconds);
         } else if (message === 'TAKEOFF') {
             this.gameStateSub.next(GameState.FLYING);
             this.multiplierSub.next(1.00);
+        } else if (message.startsWith('HISTORY:')) {
+            // HISTORY:1.20,5.50,1.00
+            const csv = message.substring(8); // Rimuovi "HISTORY:"
+            if (csv.length > 0) {
+                const numbers = csv.split(',').map(s => parseFloat(s));
+                this.historySub.next(numbers);
+            }
         }
     }
 

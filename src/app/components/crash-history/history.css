@@ -1,0 +1,97 @@
+.history-container {
+    width: 100%;
+    overflow: hidden;
+    padding: 10px 0;
+    margin-bottom: 1rem;
+    /* Requested margin */
+    position: relative;
+    /* Reduced mask to make it look full width */
+    mask-image: linear-gradient(to right, transparent, black 2%, black 98%, transparent);
+}
+
+.history-badge.plus-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 50px;
+    border: 1px dashed rgba(255, 255, 255, 0.3);
+}
+
+.history-badge.plus-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #fff;
+}
+
+.history-scroll {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    /* Centered initial items */
+    flex-direction: row-reverse;
+    /* Newest items first (leftmost if justified flex-start, but centered works differently usually) */
+    /* Actually for history, usually newest is on the far right or far left. 
+       Let's stick to simple flex row.
+    */
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 5px;
+    /* Hide scrollbar */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.history-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.history-badge {
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    min-width: 70px;
+    text-align: center;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* LOW (< 2.0x) - Red (Rosso Pomodoro) */
+.history-badge.low {
+    background: rgba(227, 27, 35, 0.15);
+    color: #ff5252;
+    border-color: rgba(227, 27, 35, 0.3);
+    box-shadow: 0 0 10px rgba(227, 27, 35, 0.2);
+}
+
+/* MEDIUM (2.0x - 10.0x) - White (Mozzarella) */
+.history-badge.medium {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+/* HIGH (>= 10.0x) - Green (Basilico) */
+.history-badge.high {
+    background: rgba(0, 140, 69, 0.2);
+    color: #4caf50;
+    border-color: rgba(0, 140, 69, 0.5);
+    box-shadow: 0 0 15px rgba(0, 140, 69, 0.4);
+    /* Extra Pop for high wins */
+    transform: scale(1.05);
+    font-weight: 800;
+}
+
+/* Hover effects */
+.history-badge:hover {
+    transform: translateY(-2px);
+    cursor: default;
+}
+
+.history-badge.high:hover {
+    transform: scale(1.1) translateY(-2px);
+}

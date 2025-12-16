@@ -6,5 +6,10 @@
             {{ multiplier.toFixed(2) }}x
         </div>
         }
+
+        <button class="history-badge plus-btn" (click)="openFullHistory()">
+            <i class="pi pi-plus"></i>
+        </button>
     </div>
+    <app-history-modal></app-history-modal>
 </div>

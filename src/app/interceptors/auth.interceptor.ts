@@ -4,7 +4,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     const token = localStorage.getItem('accessToken');
 
     // Exclude auth endpoints from requiring a token
-    if (req.url.includes('/auth/login') || req.url.includes('/auth/register')) {
+    if (req.url.includes('/auth/login') || req.url.includes('/auth/register') || req.url.includes('/game/history')) {
         return next(req);
     }
 

@@ -1,20 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GameSocketService } from '../../services/game-socket.service';
+import { HistoryModalComponent } from '../history-modal/history-modal';
 
 @Component({
     selector: 'app-crash-history',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, HistoryModalComponent],
     templateUrl: './history.html',
     styleUrl: './history.css'
 })
 export class CrashHistoryComponent implements OnInit {
+    @ViewChild(HistoryModalComponent) modal!: HistoryModalComponent;
     history: number[] = [];
 
     constructor(public gameSocket: GameSocketService) { }
 
     ngOnInit() {
-        this.history = [1.20, 5.43, 1.05, 22.10, 2.30, 1.10, 1.98, 100.00, 1.00, 3.50];
+        this.gameSocket.history$.subscribe(h => {
+            this.history = h;
+        });
+    }
+
+    openFullHistory() {
+        this.modal.show();
     }
 }
