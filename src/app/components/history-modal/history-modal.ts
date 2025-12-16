@@ -34,18 +34,16 @@ import { GameApiService } from '../../services/game-api.service';
                     </ng-template>
                 </p-table>
             </div>
-            <ng-template pTemplate="footer">
-                <p-button icon="pi pi-check" (click)="visible = false" label="Close" styleClass="p-button-text"></p-button>
-            </ng-template>
+
         </p-dialog>
     `,
     styles: [`
         .multiplier-val {
             font-weight: bold;
         }
-        .high { color: #4caf50; }
+        .high { color: #e31b23; text-shadow: 0 0 10px rgba(227, 27, 35, 0.4); }
         .medium { color: #ffffff; }
-        .low { color: #ff5252; }
+        .low { color: #4caf50; }
     `]
 })
 export class HistoryModalComponent {
