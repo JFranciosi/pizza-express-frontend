@@ -254,13 +254,13 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         this.ctx.textBaseline = 'middle';
         this.ctx.shadowColor = 'rgba(0,0,0,0.8)';
         this.ctx.shadowBlur = 15;
-        this.ctx.fillText(this.multiplier.toFixed(2) + 'x', w / 2, h / 2);
+        this.ctx.fillText(this.multiplier.toFixed(2) + 'x', w / 2, h / 2 - 50);
         this.ctx.shadowBlur = 0;
 
         // Stato
         this.ctx.font = 'bold 24px Inter, sans-serif';
         this.ctx.fillStyle = '#008C45';
-        this.ctx.fillText('IN CONSEGNA...', w / 2, h / 2 + 60);
+        this.ctx.fillText('IN CONSEGNA...', w / 2, h / 2 + 30);
     }
 
     drawCrash() {
