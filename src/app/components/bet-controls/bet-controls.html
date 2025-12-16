@@ -24,10 +24,22 @@
     </div>
 
     <div class="action-row">
-        <button class="bet-button" (click)="placeBet()">
+        @if (!betPlaced || gameState() === 'WAITING') {
+        <button class="bet-button" (click)="placeBet()" [disabled]="isBettingDisabled"
+            [class.disabled]="isBettingDisabled">
+            @if (betPlaced) {
+            BET PLACED
+            } @else {
             BET
             <span class="sub-text">NOW</span>
+            }
         </button>
+        } @else {
+        <button class="bet-button cashout" (click)="cashOut()" [disabled]="isCashoutDisabled">
+            CASHOUT
+            <span class="sub-text">{{ (betAmount * currentMultiplier()) | currency:'EUR' }}</span>
+        </button>
+        }
     </div>
 
 </div>

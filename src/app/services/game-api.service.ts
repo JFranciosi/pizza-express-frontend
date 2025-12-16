@@ -7,7 +7,8 @@ import { map } from 'rxjs/operators';
     providedIn: 'root'
 })
 export class GameApiService {
-    private readonly API_URL = 'http://localhost:8080/game';
+    private readonly BASE_URL = 'http://localhost:8080';
+    private readonly API_URL = `${this.BASE_URL}/game`;
 
     constructor(private http: HttpClient) { }
 
@@ -15,5 +16,13 @@ export class GameApiService {
         return this.http.get<string[]>(`${this.API_URL}/history`).pipe(
             map(list => (list || []).map(item => parseFloat(item)))
         );
+    }
+
+    placeBet(amount: number): Observable<any> {
+        return this.http.post(`${this.BASE_URL}/bet/place`, { amount });
+    }
+
+    cashOut(): Observable<any> {
+        return this.http.post(`${this.BASE_URL}/bet/cashout`, {});
     }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { LoginRequest, AuthResponse, RegisterRequest } from '../models/auth.models';
 
@@ -9,6 +9,8 @@ import { LoginRequest, AuthResponse, RegisterRequest } from '../models/auth.mode
 })
 export class AuthService {
     private apiUrl = 'http://localhost:8080/auth';
+    private userSubject = new BehaviorSubject<any | null>(this.getUserFromStorage());
+    public user$ = this.userSubject.asObservable();
 
     constructor(private http: HttpClient) { }
 
@@ -30,7 +32,7 @@ export class AuthService {
 
     private saveSession(response: AuthResponse): void {
         localStorage.setItem('accessToken', response.accessToken);
-        localStorage.setItem('refreshToken', response.refreshToken); // Good practice to save this too
+        localStorage.setItem('refreshToken', response.refreshToken);
         const user = {
             id: response.userId,
             username: response.username,
@@ -38,20 +40,35 @@ export class AuthService {
             balance: response.balance
         };
         localStorage.setItem('user_data', JSON.stringify(user));
+        this.userSubject.next(user);
     }
 
     getToken(): string | null {
         return localStorage.getItem('accessToken');
     }
 
-    getUser(): any | null {
+    private getUserFromStorage(): any | null {
         const userStr = localStorage.getItem('user_data');
         return userStr ? JSON.parse(userStr) : null;
+    }
+
+    getUser(): any | null {
+        return this.userSubject.value;
     }
 
     logout(): void {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('user_data');
+        this.userSubject.next(null);
+    }
+
+    updateBalance(newBalance: number): void {
+        const user = this.getUser();
+        if (user) {
+            user.balance = newBalance;
+            localStorage.setItem('user_data', JSON.stringify(user));
+            this.userSubject.next({ ...user });
+        }
     }
 }

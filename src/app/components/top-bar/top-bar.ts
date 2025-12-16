@@ -16,7 +16,9 @@ export class TopBarComponent {
     user: any | null = null;
 
     constructor(private authService: AuthService, private router: Router) {
-        this.user = this.authService.getUser();
+        this.authService.user$.subscribe(user => {
+            this.user = user;
+        });
     }
 
     onLogout() {
