@@ -3,11 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { environment } from '../../environments/environment';
+
 @Injectable({
     providedIn: 'root'
 })
 export class GameApiService {
-    private readonly BASE_URL = 'http://localhost:8080';
+    private readonly BASE_URL = environment.apiUrl;
     private readonly API_URL = `${this.BASE_URL}/game`;
 
     constructor(private http: HttpClient) { }

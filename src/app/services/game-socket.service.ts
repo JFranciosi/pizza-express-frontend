@@ -17,12 +17,14 @@ export interface Bet {
     profit?: number | null;
 }
 
+import { environment } from '../../environments/environment';
+
 @Injectable({
     providedIn: 'root'
 })
 export class GameSocketService implements OnDestroy {
     private socket$: WebSocketSubject<any> | undefined;
-    private readonly WS_ENDPOINT = 'ws://localhost:8080/game';
+    private readonly WS_ENDPOINT = `${environment.wsUrl}/game`;
 
     private gameStateSub = new BehaviorSubject<GameState>(GameState.WAITING);
     public gameState$ = this.gameStateSub.asObservable();
