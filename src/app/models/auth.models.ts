@@ -15,3 +15,10 @@ export interface AuthResponse {
     userId: string;
     username: string;
 }
+
+export interface User {
+    id: string;
+    username: string;
+    email: string;
+    balance: number;
+}

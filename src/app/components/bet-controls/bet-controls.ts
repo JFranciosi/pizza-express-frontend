@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
     selector: 'app-bet-controls',
@@ -14,6 +15,9 @@ import { InputNumberModule } from 'primeng/inputnumber';
 export class BetControlsComponent {
     betAmount: number = 5.00;
     autoCashout: number | null = 2.00;
+
+    constructor(private authService: AuthService) {
+    }
 
     setBet(amount: number) {
         this.betAmount = amount;

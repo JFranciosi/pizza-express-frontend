@@ -93,7 +93,7 @@ export class GameSocketService implements OnDestroy {
 
             // Aggiungi il nuovo crash alla history locale
             const currentHistory = this.historySub.getValue();
-            this.historySub.next([mult, ...currentHistory].slice(0, 10)); // Mantieni ultimi 10
+            this.historySub.next([mult, ...currentHistory].slice(0, 50)); // Mantieni ultimi 50
 
         } else if (message.startsWith('TIMER:')) {
             const seconds = parseInt(message.split(':')[1], 10);

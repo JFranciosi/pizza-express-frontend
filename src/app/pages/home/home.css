@@ -1,12 +1,21 @@
+.main-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
 .dashboard-layout {
     display: grid;
-    grid-template-columns: 350px 1fr 350px;
+    grid-template-columns: 350px 1fr;
+    /* 2 Columns: Bets + Game */
     gap: 1rem;
     padding: 1rem;
-    height: 100vh;
+    flex: 1;
     background-color: #121212;
     color: white;
     overflow: hidden;
+    position: relative;
 }
 
 
@@ -27,7 +36,12 @@ app-chat {
 
 .center-col {
     gap: 1rem;
-    justify-content: center;
+    justify-content: flex-start;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    /* Ensure it contains its children */
 }
 
 .canvas-wrapper {
@@ -35,7 +49,11 @@ app-chat {
     border-radius: 12px;
     padding: 1rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
-    height: 480px;
+    /* height: 480px; Removed fixed height */
+    flex: 1;
+    min-height: 250px;
+    /* Prevent collapse */
+    width: 100%;
     position: relative;
     border: 1px solid #333;
     display: flex;
@@ -48,16 +66,67 @@ canvas {
     height: 100%;
 }
 
-.logout-btn-container {
+/* Chat Drawer - Always Fixed */
+.right-col {
     position: fixed;
+    top: 60px;
+    /* Below TopBar */
+    right: -100%;
+    bottom: 0;
+    width: 350px;
+    height: auto;
+    background: #121212;
+    z-index: 1000;
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-left: 1px solid #333;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+    padding: 1rem;
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.right-col.chat-active {
+    right: 0;
+}
+
+.close-chat-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
     top: 1rem;
     right: 1rem;
-    z-index: 100;
+    width: 30px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+@media (min-width: 1600px) {
+    .dashboard-layout {
+        grid-template-columns: 400px 1fr;
+    }
+}
+
+@media (max-width: 1400px) {
+    .dashboard-layout {
+        grid-template-columns: 300px 1fr;
+    }
+
+    .canvas-wrapper {
+        height: 400px;
+        /* Reduce height on smaller laptops */
+    }
 }
 
 @media (max-width: 1200px) {
     .dashboard-layout {
-        grid-template-columns: 280px 1fr 280px;
+        grid-template-columns: 260px 1fr;
     }
 }
 
@@ -66,18 +135,34 @@ canvas {
         grid-template-columns: 1fr;
         height: auto;
         overflow-y: auto;
+        padding-bottom: 80px;
+        /* Space for bottom interaction if needed */
+        display: block;
+        /* Switch to block for flow layout */
     }
 
     .column {
         height: auto;
+        margin-bottom: 1rem;
+    }
+
+    /* Side panels (Bets) stack normally */
+    .left-col {
+        height: 400px;
+        order: 2;
+    }
+
+    .center-col {
+        order: 1;
+    }
+
+    .right-col {
+        width: 85%;
+        /* Wider on mobile */
+        max-width: 350px;
     }
 
     .canvas-wrapper {
         height: 350px;
-    }
-
-    .right-col,
-    .left-col {
-        height: 400px;
     }
 }

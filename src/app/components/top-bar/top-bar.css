@@ -1,0 +1,49 @@
+.top-bar {
+    height: 60px;
+    background: #1e1e1e;
+    border-bottom: 1px solid #333;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+
+
+.brand {
+    font-weight: 800;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #e31b23;
+    /* Pizza Red */
+}
+
+.brand-logo {
+    height: 40px;
+    width: auto;
+    filter: drop-shadow(0 0 2px rgba(227, 27, 35, 0.5));
+}
+
+.brand span {
+    color: white;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.chat-toggle {
+    display: block;
+    color: #aaa;
+    transition: color 0.2s;
+}
+
+.chat-toggle:hover {
+    color: white;
+}

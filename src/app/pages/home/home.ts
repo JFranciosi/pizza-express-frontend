@@ -11,6 +11,7 @@ import { CrashHistoryComponent } from '../../components/crash-history/history';
 import { PlayerBetsComponent } from '../../components/player-bets/player-bets';
 import { BetControlsComponent } from '../../components/bet-controls/bet-controls';
 import { ChatComponent } from '../../components/chat/chat';
+import { TopBarComponent } from '../../components/top-bar/top-bar';
 
 @Component({
     selector: 'app-home',
@@ -22,7 +23,8 @@ import { ChatComponent } from '../../components/chat/chat';
         CrashHistoryComponent,
         PlayerBetsComponent,
         BetControlsComponent,
-        ChatComponent
+        ChatComponent,
+        TopBarComponent
     ],
     templateUrl: './home.html',
     styleUrl: './home.css'
@@ -34,6 +36,7 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
     gameState: GameState = GameState.WAITING;
     multiplier: number = 1.00;
     timeLeft: number = 0;
+    isChatOpen: boolean = false;
 
     private subs: Subscription[] = [];
     private animationFrameId: number | null = null;
@@ -129,9 +132,10 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         const parent = canvas.parentElement;
         if (parent) {
             canvas.width = parent.clientWidth;
-            canvas.height = 400;
+            canvas.height = parent.clientHeight;
         }
         if (this.gameState === GameState.FLYING) {
+            this.drawGame();
         } else if (this.gameState === GameState.CRASHED) {
             this.drawCrash();
         } else {
