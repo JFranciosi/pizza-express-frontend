@@ -1,6 +1,9 @@
 <div class="register-container">
     <p-toast></p-toast>
     <p-card header="Registration" [style]="{ width: '100%', maxWidth: '400px' }">
+        <div class="logo-container">
+            <img src="/logo_red.png" alt="Pizza Express Logo" height="80" />
+        </div>
         <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-4">
 
             <div class="field">
@@ -25,7 +28,9 @@
                 </p-floatLabel>
             </div>
 
-            <p-button label="Register" type="submit" [loading]="loading" styleClass="w-full"></p-button>
+            <div class="button-container">
+                <p-button label="Register" type="submit" [loading]="loading"></p-button>
+            </div>
 
             @if (error) {
             <div class="error-message">

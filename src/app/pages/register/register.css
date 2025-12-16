@@ -3,17 +3,22 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: var(--background-color);
+    background: var(--graph-gradient);
     padding: 1rem;
 }
 
 :host ::ng-deep .p-card {
     background: var(--card-bg);
-    box-shadow: var(--card-shadow);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     border-radius: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(227, 27, 35, 0.2);
 }
 
+:host ::ng-deep .p-card:hover {
+    border-color: var(--logo-red);
+    box-shadow: 0 0 30px var(--logo-red-glow);
+    transition: all 0.3s ease;
+}
 
 .field {
     margin-bottom: 2rem;
@@ -33,9 +38,10 @@
 }
 
 .error-message {
-    color: var(--red-500);
+    color: var(--logo-red);
     text-align: center;
     margin-top: 1rem;
+    font-weight: bold;
 }
 
 .text-center {
@@ -47,7 +53,12 @@
 }
 
 .text-primary {
-    color: var(--primary-color);
+    color: var(--logo-red);
+    transition: color 0.2s;
+}
+
+.text-primary:hover {
+    color: #ff4d4d;
 }
 
 .no-underline {
@@ -58,7 +69,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0rem 0rem 2rem .5rem;
+    margin: 0 0 2rem 0;
+    color: var(--logo-red);
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 :host ::ng-deep .p-password input {
@@ -66,5 +82,64 @@
 }
 
 :host ::ng-deep input {
+    width: 100%;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    color: white;
+}
+
+:host ::ng-deep input:enabled:focus,
+:host ::ng-deep .p-inputtext:enabled:focus,
+:host ::ng-deep .p-password-input:enabled:focus,
+:host ::ng-deep input.p-inputtext:enabled:focus {
+    border-color: #ffffff !important;
+    box-shadow: 0 0 0 1px #ffffff !important;
+    outline: none !important;
+}
+
+:host ::ng-deep .p-button {
+    background: var(--logo-red);
+    border: 1px solid var(--logo-red);
+}
+
+:host ::ng-deep .p-button:enabled:hover {
+    background: #c0151c;
+    border-color: #c0151c;
+    box-shadow: 0 0 10px var(--logo-red-glow);
+}
+
+:host ::ng-deep .p-float-label label {
+    color: #aaa;
+}
+
+:host ::ng-deep .p-input-icon-right>i:last-of-type {
+    color: #aaa;
+}
+
+:host ::ng-deep .p-float-label input:focus~label,
+:host ::ng-deep .p-float-label input.p-filled~label,
+:host ::ng-deep .p-float-label textarea:focus~label,
+:host ::ng-deep .p-float-label textarea.p-filled~label,
+:host ::ng-deep p-floatLabel input:focus+label,
+:host ::ng-deep p-floatLabel input.p-filled+label,
+/* Fix for p-password and other wrapped inputs */
+:host ::ng-deep p-floatLabel .p-inputwrapper-focus~label,
+:host ::ng-deep p-floatLabel .p-inputwrapper-filled~label,
+:host ::ng-deep .p-float-label .p-inputwrapper-focus~label,
+:host ::ng-deep .p-float-label .p-inputwrapper-filled~label {
+    color: #ffffff !important;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
     width: 100%;
 }

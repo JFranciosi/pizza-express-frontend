@@ -14,4 +14,7 @@ body {
     --card-bg: #1e1e1e;
     --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     --background-color: #0f0f0f;
+    --logo-red: #e31b23;
+    --logo-red-glow: rgba(227, 27, 35, 0.5);
+    --graph-gradient: linear-gradient(135deg, rgba(0, 140, 69, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(227, 27, 35, 0.1) 100%), linear-gradient(135deg, #1e1e1e 0%, #252525 100%);
 }
