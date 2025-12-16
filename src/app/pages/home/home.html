@@ -1,9 +1,25 @@
 <div class="home-container">
-    <p-card header="Dashboard">
-        <div class="flex flex-column align-items-center gap-4">
-            <p class="text-xl">Home works! Benvenuto nella Pizza Express.</p>
-            <p-button label="Gioca ad Aviator" routerLink="/game" severity="success"></p-button>
-            <p-button label="Logout" severity="secondary" (onClick)="logout()"></p-button>
+    <div class="game-wrapper">
+        <div class="canvas-container">
+            <canvas #gameCanvas></canvas>
         </div>
-    </p-card>
+
+        <div class="controls-container">
+            <p-card header="Comandi">
+                <div class="flex gap-2">
+                    <p-button label="Scommetti (Coming Soon)" styleClass="p-button-outlined"
+                        [disabled]="true"></p-button>
+                </div>
+            </p-card>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <p-card header="Dashboard Utente">
+            <div class="flex flex-column gap-3">
+                <p>Benvenuto!</p>
+                <p-button label="Logout" severity="secondary" (onClick)="logout()"></p-button>
+            </div>
+        </p-card>
+    </div>
 </div>

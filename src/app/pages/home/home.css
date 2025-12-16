@@ -1,23 +1,47 @@
 .home-container {
-    padding: 2rem;
     display: flex;
-    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+    min-height: 100vh;
+    background-color: #121212;
+    /* Dark theme bg */
+    color: white;
 }
 
-.text-xl {
-    font-size: 1.25rem;
-    font-weight: 500;
-}
-
-.flex-column {
+.game-wrapper {
+    flex: 3;
     display: flex;
     flex-direction: column;
+    gap: 1rem;
 }
 
-.align-items-center {
-    align-items: center;
+.canvas-container {
+    background: linear-gradient(135deg, #1e1e1e 0%, #252525 100%);
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    height: 440px;
+    /* Altezza fissa per coerenza */
+    position: relative;
+    border: 1px solid #333;
 }
 
-.gap-4 {
-    gap: 1.5rem;
+canvas {
+    width: 100%;
+    height: 100%;
+}
+
+.sidebar {
+    flex: 1;
+}
+
+/* Primeng Overrides per dark mode integrata se necessario */
+:host ::ng-deep .p-card {
+    background-color: #1e1e1e;
+    color: white;
+    border: 1px solid #333;
+}
+
+:host ::ng-deep .p-card .p-card-title {
+    color: #fff;
 }
