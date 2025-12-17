@@ -93,10 +93,13 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
                     // Sincronizza solo se non l'abbiamo ancora fatto o se c'è drift eccessivo (>100ms)
                     if (this.roundStartTime === 0 || Math.abs(this.roundStartTime - calculatedStartTime) > 100) {
                         this.roundStartTime = calculatedStartTime;
-                        // Aggiorniamo il moltiplicatore solo se il server è avanti significativamente
-                        // altrimenti lasciamo fare all'interpolazione locale
-                        if (serverMultiplier > this.multiplier) {
-                            this.multiplier = serverMultiplier;
+                    }
+
+                    // Always sync multiplier if server is ahead or if CRASHED (to fix overshoot)
+                    if (serverMultiplier > this.multiplier || this.gameState === GameState.CRASHED) {
+                        this.multiplier = serverMultiplier;
+                        if (this.gameState === GameState.CRASHED) {
+                            this.drawCrash(); // Redraw with precise server value
                         }
                     }
                 } else {
