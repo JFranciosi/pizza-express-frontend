@@ -55,7 +55,7 @@ describe('Register', () => {
     });
 
     it('should call authService.register on valid submit', () => {
-        const mockResponse = { accessToken: 'token', refreshToken: 'ref', userId: '1', username: 'user' };
+        const mockResponse = { accessToken: 'token', refreshToken: 'ref', userId: '1', username: 'user', email: 'test@example.com', balance: 0 };
         authServiceSpy.register.and.returnValue(of(mockResponse));
 
         component.registerForm.patchValue({ username: 'testuser', email: 'test@example.com', password: 'password' });
