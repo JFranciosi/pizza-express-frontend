@@ -14,6 +14,8 @@
     gap: 0.5rem;
     /* Reduced gap */
     transition: all 0.3s ease;
+    box-shadow: var(--glass-shadow), 0 0 100px rgba(0, 230, 118, 0.1);
+    border: 1px solid rgba(0, 230, 118, 0.1);
 }
 
 .controls-panel:hover {
@@ -46,11 +48,16 @@
 }
 
 .pizza-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: var(--accent-orange);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
     color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+    box-shadow: 0 0 15px var(--success-green-glow), 0 4px 12px rgba(226, 246, 226, 0.3);
+}
+
+.pizza-btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 0 8px var(--accent-orange-glow);
 }
 
 .inputs-row {
@@ -286,4 +293,19 @@
         font-size: 1.1rem;
         padding: 0.75rem;
     }
+}
+
+.error-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.error-icon {
+    font-size: 3rem;
+    color: var(--primary-red);
+    text-shadow: 0 0 15px var(--primary-red-glow);
 }

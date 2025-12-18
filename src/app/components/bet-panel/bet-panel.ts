@@ -2,6 +2,7 @@
 import { Component, effect, computed, Signal, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
@@ -13,7 +14,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 @Component({
     selector: 'app-bet-panel',
     standalone: true,
-    imports: [CommonModule, FormsModule, ButtonModule, InputNumberModule, ToggleSwitchModule],
+    imports: [CommonModule, FormsModule, ButtonModule, InputNumberModule, ToggleSwitchModule, DialogModule],
     templateUrl: './bet-panel.html',
     styleUrl: './bet-panel.css'
 })
@@ -23,6 +24,10 @@ export class BetPanelComponent {
     betAmount: number = 5.00;
     autoCashout: number = 2.00;
     isAutoCashoutEnabled: boolean = false;
+
+    // Error Modal State
+    errorVisible: boolean = false;
+    errorMessage: string = '';
 
     gameState: Signal<GameState>;
     currentMultiplier: Signal<number>;
@@ -95,7 +100,7 @@ export class BetPanelComponent {
 
     placeBet() {
         if (this.betAmount > 100) {
-            alert('Max bet is 100€');
+            this.showError('Max bet is 100€');
             return;
         }
         if (this.betPlaced) return;
@@ -115,7 +120,7 @@ export class BetPanelComponent {
             error: (err: any) => {
                 console.error('Bet failed', err);
                 this.betPlaced = false;
-                alert('Bet failed: ' + (err.error?.error || 'Unknown error'));
+                this.showError((err.error?.error || 'Bet Failed'));
             }
         });
     }
@@ -153,6 +158,11 @@ export class BetPanelComponent {
 
     get isBettingDisabled(): boolean {
         return this.gameState() !== GameState.WAITING || this.betPlaced;
+    }
+
+    showError(msg: string) {
+        this.errorMessage = msg;
+        this.errorVisible = true;
     }
 
     get isCashoutDisabled(): boolean {

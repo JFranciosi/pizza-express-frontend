@@ -48,10 +48,10 @@ app-player-bets {
     background: var(--surface-glass);
     backdrop-filter: var(--blur-strength);
     -webkit-backdrop-filter: var(--blur-strength);
-    border: var(--glass-border);
+    border: 1px solid rgba(0, 230, 118, 0.1);
     border-radius: 20px;
     padding: 1rem;
-    box-shadow: var(--glass-shadow);
+    box-shadow: var(--glass-shadow), 0 0 100px rgba(0, 230, 118, 0.1);
 
     /* Strict Flex Behavior */
     flex: 1;

@@ -477,8 +477,8 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         this.ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
         this.ctx.fillRect(barX, barY, barWidth, barHeight);
 
-        this.ctx.fillStyle = '#ff3d00';
-        this.ctx.shadowColor = '#ff3d00';
+        this.ctx.fillStyle = '#ff0000';
+        this.ctx.shadowColor = '#ff0000';
         this.ctx.shadowBlur = 10;
         this.ctx.fillRect(barX, barY, barWidth * progress, barHeight);
         this.ctx.shadowBlur = 0;
