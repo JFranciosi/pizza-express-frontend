@@ -1,0 +1,52 @@
+<p-dialog header="Account Settings" [(visible)]="visible" [modal]="true" [style]="{width: '500px'}" [draggable]="false"
+    [resizable]="false" appendTo="body" styleClass="settings-dialog">
+
+    <div class="settings-content" *ngIf="user">
+        <div class="profile-section">
+            <h3>Profile</h3>
+            <div class="field-group">
+                <label>Username</label>
+                <input pInputText [value]="user.username" readonly class="readonly-input">
+            </div>
+            <div class="field-group">
+                <label>Email</label>
+                <input pInputText [value]="user.email" readonly class="readonly-input">
+            </div>
+            <div class="field-group">
+                <label>Current Balance</label>
+                <div class="balance-display">{{ user.balance | currency:'EUR' }}</div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="security-section">
+            <h3>Security</h3>
+            <div class="field-group">
+                <label>Current Password</label>
+                <p-password [(ngModel)]="oldPassword" [toggleMask]="true" [feedback]="false"></p-password>
+            </div>
+
+            <div class="field-group">
+                <label>New Password</label>
+                <p-password [(ngModel)]="newPassword" [toggleMask]="true" [feedback]="true"></p-password>
+            </div>
+
+            <div class="field-group">
+                <label>Confirm New Password</label>
+                <p-password [(ngModel)]="confirmPassword" [toggleMask]="true" [feedback]="false"></p-password>
+            </div>
+
+            <div class="message-box error" *ngIf="error">
+                <i class="pi pi-exclamation-circle"></i> {{ error }}
+            </div>
+
+            <div class="message-box success" *ngIf="success">
+                <i class="pi pi-check-circle"></i> {{ success }}
+            </div>
+
+            <button pButton label="UPDATE PASSWORD" class="update-btn" [loading]="loading"
+                (click)="changePassword()"></button>
+        </div>
+    </div>
+</p-dialog>

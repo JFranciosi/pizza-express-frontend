@@ -23,6 +23,11 @@
                     }
                 </div>
                 <div class="divider"></div>
+
+                <button class="settings-icon-btn" (click)="openSettings()">
+                    <i class="pi pi-cog"></i>
+                </button>
+
                 <span class="user-balance">{{ user.balance | currency:'EUR' }}</span>
                 <div class="divider"></div>
                 <button class="logout-icon-btn" (click)="onLogout()">
@@ -32,4 +37,5 @@
         </div>
         }
     </div>
+    <app-settings-modal></app-settings-modal>
 </div>

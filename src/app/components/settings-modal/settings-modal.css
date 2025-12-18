@@ -1,0 +1,117 @@
+:host ::ng-deep .settings-dialog .p-dialog-content {
+    background: #121212;
+    color: white;
+    padding: 0;
+}
+
+:host ::ng-deep .settings-dialog .p-dialog-header {
+    background: #121212;
+    color: white;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 0rem 1rem 0rem 1.4rem;
+}
+
+:host ::ng-deep .settings-dialog .p-dialog-title {
+    margin: 0rem 0rem 0rem 1.4rem;
+}
+
+.settings-content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+    color: #22c55e;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.field-group label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.readonly-input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    width: 100%;
+}
+
+.balance-display {
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    color: var(--success-green);
+    font-weight: 800;
+}
+
+.divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    width: 100%;
+}
+
+:host ::ng-deep .p-password,
+:host ::ng-deep .p-password input {
+    width: 100%;
+}
+
+:host ::ng-deep .p-password input {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: white;
+}
+
+:host ::ng-deep .p-password input:focus,
+:host ::ng-deep .p-inputtext:focus {
+    border-color: #22c55e;
+    box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.3);
+}
+
+.update-btn {
+    width: 100%;
+    margin-top: 1rem;
+    background: #22c55e;
+    border: none;
+    font-weight: 800;
+}
+
+.update-btn:hover {
+    background: #16a34a;
+    /* Darker Green */
+}
+
+.message-box {
+    padding: 0.8rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.message-box.error {
+    background: rgba(255, 23, 68, 0.1);
+    border: 1px solid rgba(255, 23, 68, 0.3);
+    color: #ff1744;
+}
+
+.message-box.success {
+    background: rgba(0, 230, 118, 0.1);
+    border: 1px solid rgba(0, 230, 118, 0.3);
+    color: #00e676;
+}

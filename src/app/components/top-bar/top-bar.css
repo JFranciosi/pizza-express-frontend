@@ -12,6 +12,7 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     z-index: 100;
     position: relative;
+    width: 162%;
 }
 
 .brand {
@@ -163,6 +164,27 @@
     color: white;
     box-shadow: 0 0 15px var(--primary-red-glow);
     transform: scale(1.05);
+}
+
+.settings-icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-right: 10px;
+}
+
+.settings-icon-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    transform: rotate(30deg);
 }
 
 /* Mobile Responsiveness */

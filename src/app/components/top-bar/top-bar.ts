@@ -1,19 +1,21 @@
-import { Component, EventEmitter, Output, OnInit, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule, AsyncPipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { GameSocketService, Bet } from '../../services/game-socket.service';
 import { Subscription } from 'rxjs';
+import { SettingsModalComponent } from '../settings-modal/settings-modal';
 
 @Component({
     selector: 'app-top-bar',
     standalone: true,
-    imports: [CommonModule, ButtonModule],
+    imports: [CommonModule, ButtonModule, SettingsModalComponent],
     templateUrl: './top-bar.html',
     styleUrl: './top-bar.css'
 })
 export class TopBarComponent implements OnInit, OnDestroy {
+    @ViewChild(SettingsModalComponent) settingsModal!: SettingsModalComponent;
     user: any | null = null;
     lastBet: number = 0;
     lastWin: number = 0;
@@ -62,6 +64,10 @@ export class TopBarComponent implements OnInit, OnDestroy {
     onLogout() {
         this.authService.logout();
         this.router.navigate(['/login']);
+    }
+
+    openSettings() {
+        this.settingsModal.show();
     }
 
     ngOnDestroy() {
