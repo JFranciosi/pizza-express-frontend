@@ -7,30 +7,29 @@
     <div class="actions">
         @if (user) {
         <div class="user-info mr-3">
-            <div class="username-container">
+            <div class="user-bar">
                 <span class="username">{{ user.username }}</span>
-            </div>
-
-            <div class="stats-container">
-                <div class="stat-pill neutral">
-                    <span class="label">BET</span>
-                    <span class="value">{{ lastBet | currency:'EUR' }}</span>
+                <div class="divider"></div>
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <span class="label">LAST</span>
+                        <span class="value">{{ lastBet | currency:'EUR':'symbol':'1.0-0' }}</span>
+                    </div>
+                    @if (lastWin > 0) {
+                    <div class="stat-item success">
+                        <span class="label">WIN</span>
+                        <span class="value">+{{ lastWin | currency:'EUR':'symbol':'1.0-0' }}</span>
+                    </div>
+                    }
                 </div>
-                <!-- Only show Last Win if > 0 -->
-                <div class="stat-pill success" [style.opacity]="lastWin > 0 ? 1 : 0.3">
-                    <span class="label">WIN</span>
-                    <span class="value">+{{ lastWin | currency:'EUR' }}</span>
-                </div>
-            </div>
-
-            <div class="balance-container">
+                <div class="divider"></div>
                 <span class="user-balance">{{ user.balance | currency:'EUR' }}</span>
+                <div class="divider"></div>
+                <button class="logout-icon-btn" (click)="onLogout()">
+                    <i class="pi pi-sign-out"></i>
+                </button>
             </div>
         </div>
         }
-
-        <p-button icon="pi pi-sign-out"
-            styleClass="logout-btn p-button-danger p-button-text p-button-rounded p-button-sm ml-2"
-            (onClick)="onLogout()"></p-button>
     </div>
 </div>
