@@ -1,20 +1,65 @@
 @import "primeicons/primeicons.css";
 
+:root {
+    /* Color Palette - Cyber Pizza Express */
+    --background-color: #050505;
+    --surface-card: rgba(20, 20, 20, 0.95);
+    --surface-glass: rgba(25, 25, 25, 0.75);
+
+    --primary-red: #ff1744;
+    /* Crash / Action */
+    --primary-red-glow: rgba(255, 23, 68, 0.4);
+
+    --accent-orange: #ff3d00;
+    /* Brand / Speed */
+    --accent-orange-glow: rgba(255, 61, 0, 0.4);
+
+    --success-green: #00e676;
+    /* Win / Profit */
+    --success-green-glow: rgba(0, 230, 118, 0.4);
+
+    --text-primary: #ffffff;
+    --text-secondary: #b0b0b0;
+
+    /* Typography */
+    --font-main: 'Outfit', sans-serif;
+    --font-pro: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    /* Effects */
+    --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    --blur-strength: blur(12px);
+}
+
 body {
     margin: 0;
     padding: 0;
-    font-family: var(--font-family);
+    font-family: var(--font-main);
+    background-color: var(--background-color);
+    color: var(--text-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: var(--background-color);
-    color: #ffffff;
+    background-image:
+        radial-gradient(circle at 15% 50%, rgba(255, 23, 68, 0.03) 0%, transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(0, 230, 118, 0.03) 0%, transparent 25%);
+    min-height: 100vh;
 }
 
-:root {
-    --card-bg: #1e1e1e;
-    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --background-color: #0f0f0f;
-    --logo-red: #e31b23;
-    --logo-red-glow: rgba(227, 27, 35, 0.5);
-    --graph-gradient: linear-gradient(135deg, rgba(0, 140, 69, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(227, 27, 35, 0.1) 100%), linear-gradient(135deg, #1e1e1e 0%, #252525 100%);
+/* Global Utilities */
+.glass-panel {
+    background: var(--surface-glass);
+    backdrop-filter: var(--blur-strength);
+    -webkit-backdrop-filter: var(--blur-strength);
+    border: var(--glass-border);
+    border-radius: 20px;
+    box-shadow: var(--glass-shadow);
+}
+
+.glow-text-red {
+    text-shadow: 0 0 10px var(--primary-red-glow);
+}
+
+.glow-text-green {
+    text-shadow: 0 0 10px var(--success-green-glow);
 }

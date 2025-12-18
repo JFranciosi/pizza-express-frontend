@@ -15,7 +15,7 @@ export class GameApiService {
     constructor(private http: HttpClient) { }
 
     getFullHistory(): Observable<number[]> {
-        return this.http.get<string[]>(`${this.API_URL}/history`).pipe(
+        return this.http.get<string[]>(`${this.API_URL}/history?limit=200`).pipe(
             map(list => (list || []).map(item => parseFloat(item)))
         );
     }

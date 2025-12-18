@@ -9,12 +9,12 @@
 
     <div class="inputs-row">
         <div class="input-group">
-            <div class="input-header vertical">
+            <div class="input-header">
+                <label>Bet Amount (€)</label>
                 <div class="toggle-wrapper">
-                    <span>Auto Bet</span>
+                    <span>Auto</span>
                     <p-toggleSwitch [(ngModel)]="isAutoBetEnabled"></p-toggleSwitch>
                 </div>
-                <label>Bet Amount (€)</label>
             </div>
             <p-inputNumber [(ngModel)]="betAmount" mode="currency" currency="EUR" locale="it-IT" [min]="0.10"
                 [max]="1000" [step]="0.10" [showButtons]="true" buttonLayout="horizontal"
@@ -22,26 +22,21 @@
             </p-inputNumber>
         </div>
         <div class="input-group">
-            <div class="input-header vertical">
-                <div class="header-top-row">
+            <div class="input-header">
+                <label>Cashout At (x)</label>
+                <div class="right-controls">
+                    <div class="stats-stack">
+                        @if(lastWin > 0) {
+                        <div class="last-win-box small">
+                            <span class="win-value has-win">+{{ lastWin | currency:'EUR' }}</span>
+                        </div>
+                        }
+                    </div>
                     <div class="toggle-wrapper">
-                        <span>Auto Cashout</span>
+                        <span>Auto</span>
                         <p-toggleSwitch [(ngModel)]="isAutoCashoutEnabled"></p-toggleSwitch>
                     </div>
-                    <div class="stats-stack">
-                        <div class="last-win-box small">
-                            <span class="win-value" [class.has-win]="lastWin > 0">
-                                @if(lastWin > 0) { +{{ lastWin | currency:'EUR' }} } @else { Last Win }
-                            </span>
-                        </div>
-                        <div class="last-win-box small info">
-                            <span class="win-value">
-                                @if(lastBet > 0) { -{{ lastBet | currency:'EUR' }} } @else { Last Bet }
-                            </span>
-                        </div>
-                    </div>
                 </div>
-                <label>Cashout At (x)</label>
             </div>
             <p-inputNumber [(ngModel)]="autoCashout" [min]="1.01" [max]="100" [step]="0.1" [showButtons]="true"
                 buttonLayout="horizontal" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" suffix=" x"

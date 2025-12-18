@@ -3,16 +3,18 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    background: transparent;
+    /* Background handled by body */
 }
 
 .dashboard-layout {
     display: grid;
     grid-template-columns: 350px 1fr;
-    gap: 1rem;
-    padding: 1rem;
+    gap: 1.5rem;
+    padding: 1.5rem;
     flex: 1;
-    background-color: #121212;
-    color: white;
+    background-color: transparent;
+    color: var(--text-primary);
     overflow: hidden;
     position: relative;
 }
@@ -27,35 +29,49 @@
 app-player-bets {
     display: block;
     height: 100%;
+    /* Glass effect will be inside the component */
 }
 
 .center-col {
     gap: 1rem;
-    justify-content: flex-start;
+    justify-content: space-between;
+    /* Distribute space */
     display: flex;
     flex-direction: column;
     height: 100%;
     overflow: hidden;
+    /* Strict no scroll */
+    padding-bottom: 0;
 }
 
 .canvas-wrapper {
-    background: linear-gradient(135deg, #1e1e1e 0%, #252525 100%);
-    border-radius: 12px;
+    background: var(--surface-glass);
+    backdrop-filter: var(--blur-strength);
+    -webkit-backdrop-filter: var(--blur-strength);
+    border: var(--glass-border);
+    border-radius: 20px;
     padding: 1rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    box-shadow: var(--glass-shadow);
+
+    /* Strict Flex Behavior */
     flex: 1;
-    min-height: 250px;
+    /* Take remaining space */
+    height: auto;
+    min-height: 200px;
+    /* Don't shrink to 0, but allow shrinking */
     width: 100%;
     position: relative;
-    border: 1px solid #333;
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
 }
 
 canvas {
     width: 100%;
     height: 100%;
+    border-radius: 16px;
+    /* Inner radius */
 }
 
 
@@ -97,7 +113,8 @@ canvas {
     }
 
     .left-col {
-        height: 400px;
+        height: auto;
+        /* Let content dictate height */
         order: 2;
     }
 

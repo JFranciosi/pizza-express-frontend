@@ -178,13 +178,13 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         this.ctx.clearRect(0, 0, w, h);
 
         const gradient = this.ctx.createLinearGradient(0, 0, w, h);
-        gradient.addColorStop(0, 'rgba(0, 140, 69, 0.1)');
-        gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.05)');
-        gradient.addColorStop(1, 'rgba(227, 27, 35, 0.1)');
+        gradient.addColorStop(0, 'rgba(0, 230, 118, 0.05)');
+        gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.02)');
+        gradient.addColorStop(1, 'rgba(255, 23, 68, 0.05)');
         this.ctx.fillStyle = gradient;
         this.ctx.fillRect(0, 0, w, h);
 
-        this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+        this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
         this.ctx.lineWidth = 1;
         this.ctx.beginPath();
         for (let i = 1; i < 5; i++) {
@@ -211,8 +211,8 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         const py = (h - padding) - (normY * drawingH);
 
         const trailGradient = this.ctx.createLinearGradient(0, h, px, py);
-        trailGradient.addColorStop(0, 'rgba(233, 30, 99, 0)');
-        trailGradient.addColorStop(1, '#e91e63');
+        trailGradient.addColorStop(0, 'rgba(255, 61, 0, 0)');
+        trailGradient.addColorStop(1, '#ff3d00');
 
         this.ctx.beginPath();
         this.ctx.strokeStyle = trailGradient;
@@ -231,7 +231,7 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
 
         this.ctx.setLineDash([]);
 
-        this.ctx.shadowColor = '#e91e63';
+        this.ctx.shadowColor = '#ff3d00';
         this.ctx.shadowBlur = 10 + (speedFactor * 2);
         this.ctx.stroke();
         this.ctx.shadowBlur = 0;
@@ -256,32 +256,40 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
 
         // Testo Moltiplicatore Centrale -> SOPRA tutto
         this.ctx.fillStyle = '#fff';
-        this.ctx.font = 'bold 80px Inter, sans-serif'; // Più grande
+        this.ctx.font = '800 90px "JetBrains Mono", monospace';
         this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
-        this.ctx.shadowColor = 'rgba(0,0,0,0.8)';
-        this.ctx.shadowBlur = 15;
+        this.ctx.shadowColor = 'rgba(255, 61, 0, 0.4)';
+        this.ctx.shadowBlur = 20;
         this.ctx.fillText(this.multiplier.toFixed(2) + 'x', w / 2, h / 2 - 50);
         this.ctx.shadowBlur = 0;
 
         // Stato
-        this.ctx.font = 'bold 24px Inter, sans-serif';
-        this.ctx.fillStyle = '#008C45';
-        this.ctx.fillText('DELIVERING...', w / 2, h / 2 + 30);
+        this.ctx.font = '700 24px "Outfit", sans-serif';
+        this.ctx.fillStyle = '#00e676';
+        this.ctx.shadowColor = 'rgba(0, 230, 118, 0.4)';
+        this.ctx.shadowBlur = 10;
+        this.ctx.fillText('DELIVERING...', w / 2, h / 2 + 40);
+        this.ctx.shadowBlur = 0;
     }
 
     drawCrash() {
         const w = this.canvasRef.nativeElement.width;
         const h = this.canvasRef.nativeElement.height;
         this.ctx.clearRect(0, 0, w, h);
-        this.ctx.fillStyle = 'rgba(233, 30, 99, 0.1)';
+        this.ctx.fillStyle = 'rgba(255, 23, 68, 0.05)';
         this.ctx.fillRect(0, 0, w, h);
-        this.ctx.fillStyle = '#e91e63';
-        this.ctx.font = 'bold 48px Inter, sans-serif';
+        this.ctx.fillStyle = '#ff1744';
+        this.ctx.shadowColor = 'rgba(255, 23, 68, 0.5)';
+        this.ctx.shadowBlur = 20;
+        this.ctx.font = '800 60px "JetBrains Mono", monospace';
         this.ctx.textAlign = 'center';
         this.ctx.fillText(this.multiplier.toFixed(2) + 'x', w / 2, h / 2);
-        this.ctx.font = 'bold 24px Inter, sans-serif';
-        this.ctx.fillText('CRASHED', w / 2, h / 2 + 40);
+        this.ctx.shadowBlur = 0;
+
+        this.ctx.font = '700 28px "Outfit", sans-serif';
+        this.ctx.fillStyle = '#ff1744';
+        this.ctx.fillText('CRASHED', w / 2, h / 2 + 50);
     }
 
     drawWaiting() {
@@ -297,17 +305,18 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         const maxTimeMs = 10000;
         const progress = Math.min(1, Math.max(0, remainingMs / maxTimeMs));
 
-        this.ctx.fillStyle = '#fff';
-        this.ctx.font = '24px Inter, sans-serif';
+        this.ctx.fillStyle = '#b0b0b0';
+        this.ctx.font = '500 24px "Outfit", sans-serif';
         this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
-        this.ctx.fillText('WAITING FOR NEXT ROUND', centerX, centerY - 40);
+        this.ctx.fillText('NEXT ROUND IN', centerX, centerY - 50);
 
-        this.ctx.font = 'bold 64px Inter, sans-serif';
+        this.ctx.font = '800 80px "JetBrains Mono", monospace';
+        this.ctx.fillStyle = '#fff';
         this.ctx.fillText(remainingSecs.toString(), centerX, centerY + 20);
 
         const barWidth = 300;
-        const barHeight = 6;
+        const barHeight = 4;
         const barX = centerX - barWidth / 2;
         const barY = centerY + 80;
 
@@ -315,9 +324,9 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         this.ctx.fillRect(barX, barY, barWidth, barHeight);
 
         const currentBarWidth = barWidth * progress;
-        this.ctx.fillStyle = '#e91e63';
+        this.ctx.fillStyle = '#ff3d00';
 
-        this.ctx.shadowColor = '#e91e63';
+        this.ctx.shadowColor = '#ff3d00';
         this.ctx.shadowBlur = 10;
         this.ctx.fillRect(barX, barY, currentBarWidth, barHeight);
 
