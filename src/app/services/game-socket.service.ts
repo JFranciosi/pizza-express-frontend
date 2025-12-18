@@ -140,7 +140,7 @@ export class GameSocketService implements OnDestroy {
             this.multiplierSub.next(mult);
 
             const currentHistory = this.historySub.getValue();
-            this.historySub.next([mult, ...currentHistory].slice(0, 50));
+            this.historySub.next([mult, ...currentHistory].slice(0, 200));
 
             this.betsSub.next([]);
 

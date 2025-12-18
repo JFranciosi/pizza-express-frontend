@@ -24,17 +24,23 @@
 
 .history-scroll {
     display: flex;
-    gap: 10px;
-    justify-content: flex-end;
+    gap: 8px;
+    justify-content: flex-start;
+    /* Start from left (Newest) */
     flex-direction: row;
     overflow-x: auto;
-    padding: 5px;
+    padding: 5px 15px;
+    /* Add side padding for mask */
     scrollbar-width: none;
+    /* Firefox */
     -ms-overflow-style: none;
+    /* IE/Edge */
+    width: 100%;
 }
 
 .history-scroll::-webkit-scrollbar {
     display: none;
+    /* Chrome/Safari */
 }
 
 .history-badge {
@@ -46,7 +52,7 @@
     font-weight: 700;
     font-family: 'Inter', sans-serif;
     font-size: 0.9rem;
-    min-width: 70px;
+    min-width: 60px;
     text-align: center;
     transition: all 0.2s ease;
     border: 1px solid rgba(255, 255, 255, 0.1);
