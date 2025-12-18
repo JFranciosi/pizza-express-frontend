@@ -51,7 +51,14 @@ describe('Login', () => {
     });
 
     it('should call authService.login on valid submit', () => {
-        const mockResponse = { accessToken: 'token', refreshToken: 'ref', userId: '1', username: 'user' };
+        const mockResponse = {
+            accessToken: 'token',
+            refreshToken: 'ref',
+            userId: '1',
+            username: 'user',
+            email: 'test@example.com',
+            balance: 1000
+        };
         authServiceSpy.login.and.returnValue(of(mockResponse));
 
         component.loginForm.patchValue({ email: 'test@example.com', password: 'password' });

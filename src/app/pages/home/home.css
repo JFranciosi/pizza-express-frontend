@@ -24,8 +24,7 @@
     height: 100%;
 }
 
-app-player-bets,
-app-chat {
+app-player-bets {
     display: block;
     height: 100%;
 }
@@ -59,51 +58,7 @@ canvas {
     height: 100%;
 }
 
-.right-col {
-    position: fixed;
-    top: 60px;
-    right: -100%;
-    bottom: 0;
-    width: 350px;
-    height: auto;
-    background: #121212;
-    z-index: 1000;
-    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border-left: 1px solid #333;
-    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
-    padding: 1rem;
-    margin-bottom: 0;
-    display: flex;
-    flex-direction: column;
-}
 
-.right-col.chat-active {
-    right: 0;
-}
-
-.close-chat-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 1.4rem;
-    right: 2rem;
-    width: 30px;
-    height: 30px;
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
-    border-radius: 50%;
-    color: white;
-    cursor: pointer;
-    z-index: 1001;
-    transition: all 0.2s ease;
-}
-
-.close-chat-btn:hover {
-    background: var(--logo-red);
-    box-shadow: 0 0 10px var(--logo-red-glow);
-    transform: rotate(90deg);
-}
 
 @media (min-width: 1600px) {
     .dashboard-layout {
@@ -150,10 +105,7 @@ canvas {
         order: 1;
     }
 
-    .right-col {
-        width: 85%;
-        max-width: 350px;
-    }
+
 
     .canvas-wrapper {
         height: 350px;

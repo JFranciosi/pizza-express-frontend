@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
 import { CrashHistoryComponent } from '../../components/crash-history/history';
 import { PlayerBetsComponent } from '../../components/player-bets/player-bets';
 import { BetControlsComponent } from '../../components/bet-controls/bet-controls';
-import { ChatComponent } from '../../components/chat/chat';
+
 import { TopBarComponent } from '../../components/top-bar/top-bar';
 
 @Component({
@@ -23,7 +23,7 @@ import { TopBarComponent } from '../../components/top-bar/top-bar';
         CrashHistoryComponent,
         PlayerBetsComponent,
         BetControlsComponent,
-        ChatComponent,
+
         TopBarComponent
     ],
     templateUrl: './home.html',
@@ -36,7 +36,7 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
     gameState: GameState = GameState.WAITING;
     multiplier: number = 1.00;
     timeLeft: number = 0;
-    isChatOpen: boolean = false;
+
 
     private subs: Subscription[] = [];
     private animationFrameId: number | null = null;

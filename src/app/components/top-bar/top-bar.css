@@ -34,11 +34,12 @@
 
 .user-info {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+    flex-direction: row;
+    align-items: center;
     color: #fff;
     font-size: 0.9rem;
     line-height: 1.2;
+    gap: 0.5rem;
 }
 
 .user-balance {
@@ -69,4 +70,50 @@
 
 .chat-toggle:hover {
     color: white;
+}
+
+.username-container {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+}
+
+.username {
+    font-size: 0.9rem;
+    color: #fff;
+    font-weight: 500;
+}
+
+.balance-container {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+}
+
+.user-balance {
+    font-weight: 700;
+    color: #4caf50;
+    font-size: 1rem;
+    text-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+}
+
+::ng-deep .logout-btn {
+    border: 2px solid #e31b23 !important;
+    box-shadow: 0 0 0 2px rgba(227, 27, 35, 0.1);
+    transition: all 0.3s ease;
+}
+
+::ng-deep .logout-btn:hover {
+    box-shadow: 0 0 10px rgba(227, 27, 35, 0.5), 0 0 0 2px #e31b23;
+    background: rgba(227, 27, 35, 0.1) !important;
 }

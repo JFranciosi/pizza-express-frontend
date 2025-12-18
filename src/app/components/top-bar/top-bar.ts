@@ -12,7 +12,6 @@ import { Router } from '@angular/router';
     styleUrl: './top-bar.css'
 })
 export class TopBarComponent {
-    @Output() toggleChat = new EventEmitter<void>();
     user: any | null = null;
 
     constructor(private authService: AuthService, private router: Router) {
@@ -24,9 +23,5 @@ export class TopBarComponent {
     onLogout() {
         this.authService.logout();
         this.router.navigate(['/login']);
-    }
-
-    onToggleChat() {
-        this.toggleChat.emit();
     }
 }
