@@ -1,0 +1,289 @@
+/* Glass Panel Style */
+.controls-panel {
+    background: var(--surface-glass);
+    backdrop-filter: var(--blur-strength);
+    -webkit-backdrop-filter: var(--blur-strength);
+    border-radius: 16px;
+    /* Slightly smaller radius */
+    padding: 0.75rem;
+    /* Reduced padding */
+    box-shadow: var(--glass-shadow);
+    border: var(--glass-border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    /* Reduced gap */
+    transition: all 0.3s ease;
+}
+
+.controls-panel:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.quick-bets {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+    /* Smaller min-width */
+    gap: 0.25rem;
+    /* Tighter gap */
+}
+
+.pizza-btn {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+    padding: 0.4rem;
+    /* Compact padding */
+    border-radius: 8px;
+    /* Smaller radius */
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 600;
+    font-size: 0.8rem;
+    /* Smaller text */
+    font-family: var(--font-mono);
+}
+
+.pizza-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--accent-orange);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.inputs-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    /* Tighter gap */
+}
+
+/* New Header Structure */
+.input-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 2px;
+    /* Less breathe */
+}
+
+.label-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.input-header label {
+    font-size: 0.75rem;
+    /* Smaller label */
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-family: var(--font-pro);
+    margin-bottom: 0;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    /* Tighter vertical gap */
+    height: 100%;
+}
+
+/* Toggles & Headers */
+.toggle-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    background: rgba(0, 0, 0, 0.2);
+    padding: 2px 6px;
+    border-radius: 12px;
+}
+
+/* Stat Boxes */
+.stat-box {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1px 6px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    height: 18px;
+    /* Slimmer stats */
+}
+
+.stat-box.success {
+    background: rgba(0, 230, 118, 0.1);
+    border-color: rgba(0, 230, 118, 0.3);
+}
+
+.stat-value {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    /* Smaller text */
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.stat-box.success .stat-value {
+    color: var(--success-green);
+    text-shadow: 0 0 5px rgba(0, 230, 118, 0.3);
+}
+
+.stat-value.neutral {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.stat-box.faded {
+    opacity: 0.5;
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+.stat-box.faded .stat-value {
+    color: rgba(255, 255, 255, 0.3);
+    text-shadow: none;
+}
+
+/* PrimeNG Overrides */
+::ng-deep .p-inputnumber {
+    width: 100%;
+}
+
+::ng-deep .p-inputnumber-input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+    border-radius: 10px !important;
+    padding: 0.5rem !important;
+    /* Compact padding */
+    font-family: var(--font-mono) !important;
+    font-size: 0.9rem !important;
+    /* Smaller text */
+    transition: all 0.2s !important;
+    height: 38px;
+    /* Fixed smaller height */
+}
+
+::ng-deep .p-inputnumber-input:focus {
+    border-color: var(--accent-orange) !important;
+    box-shadow: 0 0 0 2px var(--accent-orange-glow) !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Big Action Button */
+.action-row {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.25rem;
+}
+
+.bet-button {
+    width: 100%;
+    background: linear-gradient(135deg, var(--success-green) 0%, #00c853 100%);
+    color: #000;
+    border: none;
+    padding: 0.8rem;
+    /* Reduced padding */
+    border-radius: 12px;
+    font-size: 1.2rem;
+    /* Reduced font size */
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 20px var(--success-green-glow);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ... existing button styles for hover, cancel, etc ... */
+.bet-button::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.4), transparent);
+    transform: rotate(45deg) translateY(-100%);
+    transition: transform 0.6s;
+}
+
+.bet-button:hover::after {
+    transform: rotate(45deg) translateY(0);
+}
+
+.bet-button:hover {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 6px 25px var(--success-green-glow);
+}
+
+/* Cancel State (Red) */
+.cancel-button {
+    background: linear-gradient(135deg, var(--primary-red) 0%, #d50000 100%) !important;
+    color: white !important;
+    box-shadow: 0 4px 20px var(--primary-red-glow);
+}
+
+.cancel-button:hover {
+    box-shadow: 0 8px 30px var(--primary-red-glow);
+    transform: translateY(-2px) scale(1.01);
+}
+
+/* Cashout State (Orange/Yellow - Gold) */
+.bet-button.cashout {
+    background: linear-gradient(135deg, #FFD740 0%, #FF6D00 100%) !important;
+    color: #000 !important;
+    box-shadow: 0 44px 20px rgba(255, 109, 0, 0.4);
+    text-shadow: none;
+}
+
+.bet-button.cashout:hover {
+    box-shadow: 0 8px 30px rgba(255, 109, 0, 0.6);
+    transform: translateY(-2px) scale(1.01);
+    filter: brightness(1.1);
+}
+
+.bet-button:disabled,
+.bet-button.disabled {
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.2);
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sub-text {
+    font-size: 0.7rem;
+    opacity: 0.9;
+    margin-top: 4px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+@media (max-width: 480px) {
+    .inputs-row {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .bet-button {
+        font-size: 1.1rem;
+        padding: 0.75rem;
+    }
+}

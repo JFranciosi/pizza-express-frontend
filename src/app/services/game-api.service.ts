@@ -20,15 +20,15 @@ export class GameApiService {
         );
     }
 
-    placeBet(amount: number, autoCashout: number = 0): Observable<any> {
-        return this.http.post(`${this.BASE_URL}/bet/place`, { amount, autoCashout });
+    placeBet(amount: number, autoCashout: number, index: number = 0): Observable<any> {
+        return this.http.post(`${this.BASE_URL}/bet/place`, { amount, autoCashout, index });
     }
 
-    cancelBet(): Observable<any> {
-        return this.http.post(`${this.BASE_URL}/bet/cancel`, {});
+    cancelBet(index: number = 0): Observable<any> {
+        return this.http.post(`${this.BASE_URL}/bet/cancel?index=${index}`, {});
     }
 
-    cashOut(): Observable<any> {
-        return this.http.post(`${this.BASE_URL}/bet/cashout`, {});
+    cashOut(index: number = 0): Observable<any> {
+        return this.http.post(`${this.BASE_URL}/bet/cashout?index=${index}`, {});
     }
 }

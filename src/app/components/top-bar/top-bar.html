@@ -10,6 +10,19 @@
             <div class="username-container">
                 <span class="username">{{ user.username }}</span>
             </div>
+
+            <div class="stats-container">
+                <div class="stat-pill neutral">
+                    <span class="label">BET</span>
+                    <span class="value">{{ lastBet | currency:'EUR' }}</span>
+                </div>
+                <!-- Only show Last Win if > 0 -->
+                <div class="stat-pill success" [style.opacity]="lastWin > 0 ? 1 : 0.3">
+                    <span class="label">WIN</span>
+                    <span class="value">+{{ lastWin | currency:'EUR' }}</span>
+                </div>
+            </div>
+
             <div class="balance-container">
                 <span class="user-balance">{{ user.balance | currency:'EUR' }}</span>
             </div>
