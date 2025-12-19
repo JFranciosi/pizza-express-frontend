@@ -1,0 +1,118 @@
+.legal-container {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+    background: transparent;
+    overflow-y: auto;
+    /* Enable scrolling if needed here */
+}
+
+/* Ensure global scroll */
+:host {
+    display: block;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.legal-content {
+    max-width: 800px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding-bottom: 2rem;
+    /* Add padding for scroll space */
+}
+
+.header-section {
+    text-align: center;
+    color: white;
+    position: relative;
+    padding-top: 1rem;
+}
+
+.back-arrow {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 0.5rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.back-arrow:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin: 0 0 0.5rem 0;
+    text-shadow: 0 0 20px rgba(0, 230, 118, 0.4);
+    color: var(--success-green);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+:host ::ng-deep .legal-card {
+    background: var(--surface-glass) !important;
+    backdrop-filter: var(--blur-strength) !important;
+    -webkit-backdrop-filter: var(--blur-strength) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 20px !important;
+    color: var(--text-primary);
+}
+
+:host ::ng-deep .legal-card .p-card-body {
+    padding: 2rem;
+}
+
+.policy-section {
+    margin: 1.5rem 0;
+}
+
+h2 {
+    color: var(--accent-orange);
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+p,
+li {
+    line-height: 1.6;
+    color: #ddd;
+    font-size: 1rem;
+}
+
+ul {
+    margin: 0.5rem 0 0.5rem 1.5rem;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 0.5rem;
+}
+
+.divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    width: 100%;
+    margin: 1.5rem 0;
+}

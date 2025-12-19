@@ -10,6 +10,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { AuthService } from '../../services/auth.service';
+import { FooterComponent } from '../../components/footer/footer';
 
 @Component({
     selector: 'app-register',
@@ -23,7 +24,8 @@ import { AuthService } from '../../services/auth.service';
         PasswordModule,
         FloatLabelModule,
         RouterLink,
-        ToastModule
+        ToastModule,
+        FooterComponent
     ],
     providers: [MessageService],
     templateUrl: './register.html',

@@ -8,11 +8,7 @@
     background: #121212;
     color: white;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    margin: 0rem 1rem 0rem 1.4rem;
-}
-
-:host ::ng-deep .settings-dialog .p-dialog-title {
-    margin: 0rem 0rem 0rem 1.4rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .settings-content {
@@ -118,12 +114,11 @@ h3 {
 
 @media (max-width: 640px) {
     :host ::ng-deep .settings-dialog .p-dialog-header {
-        margin: 0rem 0.5rem 0rem 0.5rem;
+        padding: 1rem;
     }
 
     :host ::ng-deep .settings-dialog .p-dialog-title {
-        margin: 0rem;
-        font-size: 1rem;
+        font-size: 1.1rem;
     }
 
     .settings-content {
@@ -134,4 +129,16 @@ h3 {
     .field-group {
         margin-bottom: 0.8rem;
     }
+}
+
+.info-icon {
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: color 0.2s;
+    margin-left: 0.5rem;
+}
+
+.info-icon:hover {
+    color: var(--accent-orange);
 }

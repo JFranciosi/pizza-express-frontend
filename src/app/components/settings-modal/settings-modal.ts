@@ -9,6 +9,8 @@ import { PasswordModule } from 'primeng/password';
 import { AuthService } from '../../services/auth.service';
 import { MessageService } from 'primeng/api';
 
+import { Router } from '@angular/router';
+
 @Component({
     selector: 'app-settings-modal',
     standalone: true,
@@ -29,7 +31,7 @@ export class SettingsModalComponent implements OnInit {
     error: string = '';
     success: string = '';
 
-    constructor(private authService: AuthService) { }
+    constructor(private authService: AuthService, private router: Router) { }
 
     ngOnInit() {
         this.authService.user$.subscribe(user => {
@@ -40,6 +42,11 @@ export class SettingsModalComponent implements OnInit {
     show() {
         this.visible = true;
         this.resetForm();
+    }
+
+    openLegal() {
+        this.visible = false;
+        this.router.navigate(['/legal']);
     }
 
     resetForm() {

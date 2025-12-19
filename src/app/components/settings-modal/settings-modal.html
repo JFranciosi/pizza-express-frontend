@@ -1,6 +1,12 @@
-<p-dialog header="Account Settings" [(visible)]="visible" [modal]="true" [style]="{width: '500px'}"
+<p-dialog [(visible)]="visible" [modal]="true" [style]="{width: '500px'}"
     [breakpoints]="{'960px': '75vw', '640px': '95vw'}" [draggable]="false" [resizable]="false" appendTo="body"
     styleClass="settings-dialog">
+    <ng-template pTemplate="header">
+        <div class="flex align-items-center gap-2">
+            <span class="p-dialog-title">Account Settings</span>
+            <i class="pi pi-info-circle info-icon" (click)="openLegal()"></i>
+        </div>
+    </ng-template>
 
     <div class="settings-content" *ngIf="user">
         <div class="profile-section">
