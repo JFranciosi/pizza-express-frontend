@@ -115,3 +115,23 @@ h3 {
     border: 1px solid rgba(0, 230, 118, 0.3);
     color: #00e676;
 }
+
+@media (max-width: 640px) {
+    :host ::ng-deep .settings-dialog .p-dialog-header {
+        margin: 0rem 0.5rem 0rem 0.5rem;
+    }
+
+    :host ::ng-deep .settings-dialog .p-dialog-title {
+        margin: 0rem;
+        font-size: 1rem;
+    }
+
+    .settings-content {
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .field-group {
+        margin-bottom: 0.8rem;
+    }
+}
