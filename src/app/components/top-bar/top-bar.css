@@ -239,3 +239,22 @@
         height: 32px;
     }
 }
+
+@media (max-width: 480px) {
+    .username {
+        display: none;
+    }
+
+    .user-bar {
+        gap: 8px;
+        padding: 0 4px 0 4px;
+    }
+
+    .user-balance {
+        font-size: 0.9rem;
+    }
+
+    .settings-icon-btn {
+        margin-right: 5px;
+    }
+}

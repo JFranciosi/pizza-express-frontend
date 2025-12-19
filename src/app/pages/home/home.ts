@@ -327,7 +327,14 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         this.ctx.fillRect(0, 0, w, h);
     }
 
-    drawVespa(x: number, y: number, angle: number, scaleFactor: number) {
+    getScaleFactor(): number {
+        const w = this.canvasRef.nativeElement.width;
+        // Base width for desktop is around 1200px
+        // We clamp the scale between 0.5 (mobile) and 1.2 (large screens)
+        return Math.min(1.2, Math.max(0.5, w / 1200));
+    }
+
+    drawVespa(x: number, y: number, angle: number, baseScale: number) {
         if (!this.rocketImage.complete) {
             this.ctx.fillStyle = 'white';
             this.ctx.beginPath();
@@ -336,28 +343,30 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
             return;
         }
 
+        const responsiveScale = this.getScaleFactor();
+        const finalScale = baseScale * responsiveScale;
+
         this.ctx.save();
         this.ctx.translate(x, y);
         this.ctx.rotate(angle);
 
         const baseWidth = 140;
-        const renderWidth = baseWidth * scaleFactor;
+        const renderWidth = baseWidth * finalScale;
         const ratio = this.rocketImage.naturalHeight / this.rocketImage.naturalWidth;
         const renderHeight = renderWidth * ratio;
 
         this.ctx.shadowColor = 'rgba(0, 230, 118, 0.6)';
-        this.ctx.shadowBlur = 20;
+        this.ctx.shadowBlur = 20 * responsiveScale;
 
         if (this.gameState === GameState.FLYING || this.crashStartTime > 0) {
-            const baseScale = 1.0;
-            const scaledOffsetX = 22.4 * scaleFactor;
-            const scaledOffsetY = 15 * scaleFactor;
+            const scaledOffsetX = 22.4 * finalScale;
+            const scaledOffsetY = 15 * finalScale;
 
             const mufflerX = -renderWidth / 2 + scaledOffsetX;
             const mufflerY = scaledOffsetY;
 
             const pulse = 1 + Math.sin(Date.now() / 60) * 0.15;
-            const flameScale = scaleFactor * (.9 + Math.sin(Date.now() / 60) * 0.1);
+            const flameScale = finalScale * (.9 + Math.sin(Date.now() / 60) * 0.1);
 
             const flameCenterY = mufflerY + (1.5 * flameScale);
 
@@ -369,7 +378,7 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
 
             this.ctx.fillStyle = flameGrad;
             this.ctx.shadowColor = '#FF8C00';
-            this.ctx.shadowBlur = 40;
+            this.ctx.shadowBlur = 40 * responsiveScale;
             this.ctx.beginPath();
 
             this.ctx.moveTo(mufflerX, flameCenterY - 9 * flameScale);
@@ -417,69 +426,74 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
     }
 
     drawHUD(w: number, h: number, isFlying: boolean) {
+        const scale = this.getScaleFactor();
+
         this.ctx.fillStyle = '#fff';
-        this.ctx.font = '800 100px "JetBrains Mono", monospace';
+        this.ctx.font = `800 ${100 * scale}px "JetBrains Mono", monospace`;
         this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
         this.ctx.shadowColor = 'rgba(0,0,0,0.5)';
-        this.ctx.shadowBlur = 10;
-        this.ctx.fillText(this.multiplier.toFixed(2) + 'x', w / 2, h / 2 - 50);
+        this.ctx.shadowBlur = 10 * scale;
+        this.ctx.fillText(this.multiplier.toFixed(2) + 'x', w / 2, h / 2 - (50 * scale));
         this.ctx.shadowBlur = 0;
 
         if (isFlying) {
-            this.ctx.font = '700 24px "Outfit", sans-serif';
+            this.ctx.font = `700 ${24 * scale}px "Outfit", sans-serif`;
             this.ctx.fillStyle = '#00e676';
             this.ctx.shadowColor = 'rgba(0, 230, 118, 0.4)';
-            this.ctx.shadowBlur = 15;
-            this.ctx.fillText('DELIVERING...', w / 2, h / 2 + 20);
+            this.ctx.shadowBlur = 15 * scale;
+            this.ctx.fillText('DELIVERING...', w / 2, h / 2 + (20 * scale));
             this.ctx.shadowBlur = 0;
         }
     }
 
     drawCrashUI(w: number, h: number) {
+        const scale = this.getScaleFactor();
+
         this.ctx.save();
         this.ctx.translate(w / 2, h / 2);
 
-        this.ctx.font = '800 50px "Outfit", sans-serif';
+        this.ctx.font = `800 ${50 * scale}px "Outfit", sans-serif`;
         this.ctx.fillStyle = '#f44336';
         this.ctx.shadowColor = 'rgba(244, 67, 54, 0.5)';
-        this.ctx.shadowBlur = 20;
+        this.ctx.shadowBlur = 20 * scale;
         this.ctx.textAlign = 'center';
-        this.ctx.fillText('FLEW AWAY', 0, -80);
+        this.ctx.fillText('FLEW AWAY', 0, -(80 * scale));
 
-        this.ctx.font = '800 100px "JetBrains Mono", monospace';
+        this.ctx.font = `800 ${100 * scale}px "JetBrains Mono", monospace`;
         this.ctx.fillStyle = '#f44336';
-        this.ctx.fillText(this.multiplier.toFixed(2) + 'x', 0, 20);
+        this.ctx.fillText(this.multiplier.toFixed(2) + 'x', 0, (20 * scale));
 
         this.ctx.restore();
     }
 
     drawWaitingUI(w: number, h: number, now: number) {
+        const scale = this.getScaleFactor();
         const remainingMs = Math.max(0, this.waitingEndTime - now);
         const remainingSecs = Math.ceil(remainingMs / 1000);
         const maxTimeMs = 10000;
         const progress = Math.min(1, Math.max(0, remainingMs / maxTimeMs));
 
         this.ctx.fillStyle = '#b0b0b0';
-        this.ctx.font = '500 24px "Outfit", sans-serif';
+        this.ctx.font = `500 ${24 * scale}px "Outfit", sans-serif`;
         this.ctx.textAlign = 'center';
-        this.ctx.fillText('NEXT ROUND IN', w / 2, h / 2 - 50);
+        this.ctx.fillText('NEXT ROUND IN', w / 2, h / 2 - (50 * scale));
 
-        this.ctx.font = '800 80px "JetBrains Mono", monospace';
+        this.ctx.font = `800 ${80 * scale}px "JetBrains Mono", monospace`;
         this.ctx.fillStyle = '#fff';
-        this.ctx.fillText(remainingSecs.toString(), w / 2, h / 2 + 20);
+        this.ctx.fillText(remainingSecs.toString(), w / 2, h / 2 + (20 * scale));
 
-        const barWidth = 300;
-        const barHeight = 4;
+        const barWidth = 300 * scale;
+        const barHeight = 4 * scale;
         const barX = w / 2 - barWidth / 2;
-        const barY = h / 2 + 80;
+        const barY = h / 2 + (80 * scale);
 
         this.ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
         this.ctx.fillRect(barX, barY, barWidth, barHeight);
 
         this.ctx.fillStyle = '#ff0000';
         this.ctx.shadowColor = '#ff0000';
-        this.ctx.shadowBlur = 10;
+        this.ctx.shadowBlur = 10 * scale;
         this.ctx.fillRect(barX, barY, barWidth * progress, barHeight);
         this.ctx.shadowBlur = 0;
     }
