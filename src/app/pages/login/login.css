@@ -212,8 +212,10 @@
 :host ::ng-deep .remember-me {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    width: 100%;
     margin-bottom: 2rem;
-    padding-left: 0.2rem;
+    padding-left: 0;
 
     --p-checkbox-hover-border-color: var(--primary-red);
     --p-checkbox-checked-background: var(--primary-red);
@@ -221,6 +223,12 @@
     --p-checkbox-checked-hover-background: #ff5252;
     --p-checkbox-checked-hover-border-color: #ff5252;
     --p-focus-ring-color: var(--primary-red-glow);
+}
+
+:host ::ng-deep .remember-me-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 :host ::ng-deep .p-checkbox .p-checkbox-box {

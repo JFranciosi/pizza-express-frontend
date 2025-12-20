@@ -40,10 +40,13 @@
             }
 
             <div class="remember-me">
-                <p-checkbox [(ngModel)]="rememberMe" [binary]="true" inputId="rememberMe"
-                    [ngModelOptions]="{standalone: true}"></p-checkbox>
-                <label for="rememberMe" class="ml-2"
-                    style="color: var(--text-secondary); cursor: pointer; font-size: 0.9rem;">Remember Me</label>
+                <div class="remember-me-group flex align-items-center gap-2">
+                    <p-checkbox [(ngModel)]="rememberMe" [binary]="true" inputId="rememberMe"
+                        [ngModelOptions]="{standalone: true}"></p-checkbox>
+                    <label for="rememberMe" class="cursor-pointer"
+                        style="color: var(--text-secondary); font-size: 0.9rem;">Remember Me</label>
+                </div>
+                <a href="javascript:void(0)" class="link" style="font-size: 0.9rem;">Forgot Password?</a>
             </div>
 
             <button pButton label="LOGIN" type="submit" [loading]="loading" class="w-full submit-btn"></button>
