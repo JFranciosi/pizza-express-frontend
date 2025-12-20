@@ -23,5 +23,13 @@ export const routes: Routes = [
     {
         path: 'legal',
         loadComponent: () => import('./pages/legal/legal').then(m => m.LegalComponent)
+    },
+    {
+        path: 'forgot-password',
+        loadComponent: () => import('./pages/forgot-password/forgot-password').then(m => m.ForgotPasswordComponent)
+    },
+    {
+        path: 'reset-password',
+        loadComponent: () => import('./pages/reset-password/reset-password').then(m => m.ResetPasswordComponent)
     }
 ];

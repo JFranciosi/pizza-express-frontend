@@ -81,7 +81,6 @@ export class AuthService {
     updateEmail(email: string, password: string): Observable<any> {
         return this.http.post(`${this.apiUrl}/update-profile`, { email, password }).pipe(
             tap((response: any) => {
-                // Update local session if successful
                 const user = this.getUser();
                 if (user) {
                     user.email = email;
@@ -90,5 +89,13 @@ export class AuthService {
                 }
             })
         );
+    }
+
+    forgotPassword(email: string): Observable<any> {
+        return this.http.post(`${this.apiUrl}/forgot-password`, { email });
+    }
+
+    resetPassword(token: string, newPassword: string): Observable<any> {
+        return this.http.post(`${this.apiUrl}/reset-password`, { token, newPassword });
     }
 }
