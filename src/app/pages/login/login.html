@@ -14,7 +14,7 @@
                 @if (loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty ||
                 loginForm.get('email')?.touched)) {
                 <small class="p-error block">
-                    Inserisci un'email valida.
+                    Please enter a valid email.
                 </small>
                 }
             </div>
@@ -28,7 +28,7 @@
                 @if (loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty ||
                 loginForm.get('password')?.touched)) {
                 <small class="p-error block">
-                    La password è obbligatoria.
+                    Password is required.
                 </small>
                 }
             </div>
@@ -39,11 +39,18 @@
             </div>
             }
 
-            <button pButton label="ACCEDI" type="submit" [loading]="loading" class="w-full submit-btn"></button>
+            <div class="remember-me">
+                <p-checkbox [(ngModel)]="rememberMe" [binary]="true" inputId="rememberMe"
+                    [ngModelOptions]="{standalone: true}"></p-checkbox>
+                <label for="rememberMe" class="ml-2"
+                    style="color: var(--text-secondary); cursor: pointer; font-size: 0.9rem;">Remember Me</label>
+            </div>
+
+            <button pButton label="LOGIN" type="submit" [loading]="loading" class="w-full submit-btn"></button>
 
             <div class="text-center mt-3">
-                <span class="text-secondary">Non hai un account? </span>
-                <a routerLink="/register" class="link">Registrati qui</a>
+                <span class="text-secondary">Don't have an account? </span>
+                <a routerLink="/register" class="link">Register here</a>
             </div>
         </form>
     </p-card>

@@ -65,7 +65,7 @@ export class Register {
             this.authService.register(registerData).subscribe({
                 next: (response) => {
                     console.log('Registration successful', response);
-                    this.messageService.add({ severity: 'success', summary: 'Successo', detail: 'Registrazione completata!' });
+                    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Registration successful!' });
                     this.loading = false;
                     setTimeout(() => {
                         this.router.navigate(['/home']);
@@ -75,17 +75,17 @@ export class Register {
                     console.error('Registration error', err);
                     this.loading = false;
 
-                    let msg = err.error?.error || 'Impossibile completare la registrazione';
-                    if (msg.includes('Email already in use')) msg = "L'email è già in uso.";
-                    if (msg.includes('Username already in use')) msg = "Lo username è già in uso.";
+                    let msg = err.error?.error || 'Registration failed';
+                    if (msg.includes('Email already in use')) msg = "Email already in use.";
+                    if (msg.includes('Username already in use')) msg = "Username already in use.";
 
-                    this.error = 'Registrazione fallita.';
-                    this.messageService.add({ severity: 'error', summary: 'Errore', detail: msg });
+                    this.error = 'Registration failed.';
+                    this.messageService.add({ severity: 'error', summary: 'Error', detail: msg });
                 }
             });
         } else {
             this.registerForm.markAllAsTouched();
-            this.messageService.add({ severity: 'warn', summary: 'Attenzione', detail: 'Compila tutti i campi richiesti' });
+            this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'Please fill in all required fields' });
         }
     }
 }

@@ -14,7 +14,7 @@
                 @if (registerForm.get('username')?.invalid && (registerForm.get('username')?.dirty ||
                 registerForm.get('username')?.touched)) {
                 <small class="p-error block">
-                    Lo username è obbligatorio.
+                    Username is required.
                 </small>
                 }
             </div>
@@ -27,7 +27,7 @@
                 @if (registerForm.get('email')?.invalid && (registerForm.get('email')?.dirty ||
                 registerForm.get('email')?.touched)) {
                 <small class="p-error block">
-                    Inserisci un'email valida.
+                    Please enter a valid email.
                 </small>
                 }
             </div>
@@ -41,7 +41,7 @@
                 @if (registerForm.get('password')?.invalid && (registerForm.get('password')?.dirty ||
                 registerForm.get('password')?.touched)) {
                 <small class="p-error block">
-                    La password è obbligatoria.
+                    Password is required.
                 </small>
                 }
             </div>
@@ -50,12 +50,12 @@
                 <span class="p-float-label">
                     <p-password id="confirmPassword" formControlName="confirmPassword" [feedback]="false"
                         [toggleMask]="true" class="w-full"></p-password>
-                    <label for="confirmPassword">Conferma Password</label>
+                    <label for="confirmPassword">Confirm Password</label>
                 </span>
                 @if (registerForm.errors?.['mismatch'] && (registerForm.get('confirmPassword')?.dirty ||
                 registerForm.get('confirmPassword')?.touched)) {
                 <small class="p-error block">
-                    Le password non coincidono.
+                    Passwords do not match.
                 </small>
                 }
             </div>
@@ -66,11 +66,11 @@
             </div>
             }
 
-            <button pButton label="REGISTRATI" type="submit" [loading]="loading" class="w-full submit-btn"></button>
+            <button pButton label="REGISTER" type="submit" [loading]="loading" class="w-full submit-btn"></button>
 
             <div class="text-center mt-3">
-                <span class="text-secondary">Hai già un account? </span>
-                <a routerLink="/login" class="link">Accedi qui</a>
+                <span class="text-secondary">Already have an account? </span>
+                <a routerLink="/login" class="link">Login here</a>
             </div>
         </form>
     </p-card>

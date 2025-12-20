@@ -208,3 +208,55 @@
     width: 100%;
     margin-top: 1rem;
 }
+
+:host ::ng-deep .remember-me {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-left: 0.2rem;
+
+    --p-checkbox-hover-border-color: var(--primary-red);
+    --p-checkbox-checked-background: var(--primary-red);
+    --p-checkbox-checked-border-color: var(--primary-red);
+    --p-checkbox-checked-hover-background: #ff5252;
+    --p-checkbox-checked-hover-border-color: #ff5252;
+    --p-focus-ring-color: var(--primary-red-glow);
+}
+
+:host ::ng-deep .p-checkbox .p-checkbox-box {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    transition: all 0.2s;
+    width: 22px;
+    height: 22px;
+}
+
+:host ::ng-deep .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box:hover {
+    border-color: var(--primary-red) !important;
+    background: rgba(255, 23, 68, 0.1);
+    box-shadow: 0 0 8px var(--primary-red-glow) !important;
+}
+
+:host ::ng-deep .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-highlight:hover {
+    background: #ff5252 !important;
+    border-color: #ff5252 !important;
+}
+
+:host ::ng-deep .p-checkbox .p-checkbox-box.p-highlight {
+    background: var(--primary-red) !important;
+    border-color: var(--primary-red) !important;
+    box-shadow: 0 0 10px var(--primary-red-glow);
+}
+
+:host ::ng-deep .p-checkbox .p-checkbox-box:focus-visible,
+:host ::ng-deep .p-checkbox.p-focus .p-checkbox-box {
+    border-color: var(--primary-red) !important;
+    box-shadow: 0 0 0 2px var(--primary-red-glow) !important;
+}
+
+:host ::ng-deep .p-checkbox .p-checkbox-box .p-checkbox-icon {
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+}
