@@ -78,15 +78,75 @@ h3 {
 }
 
 /* Inputs */
-.readonly-input {
+/* Inputs wrapper */
+.input-with-icon {
+    position: relative;
+    width: 100%;
+}
+
+.input-with-icon input {
+    width: 100%;
+    padding-right: 2.5rem;
+    /* Space for icon */
+}
+
+.action-icon {
+    position: absolute;
+    right: 0.8rem;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+    font-size: 0.9rem;
+}
+
+.action-icon:hover {
+    color: var(--text-primary);
+}
+
+.save-icon {
+    color: var(--success-green);
+    font-weight: bold;
+}
+
+.save-icon:hover {
+    transform: translateY(-50%) scale(1.1);
+    color: #00b359;
+}
+
+.error-input {
+    border-color: #ff1744 !important;
+    box-shadow: 0 0 0 2px rgba(255, 23, 68, 0.2) !important;
+}
+
+.error-text {
+    color: #ff1744;
+    font-size: 0.8rem;
+    margin-top: 0.4rem;
+    display: block;
+    margin-left: 0.2rem;
+}
+
+/* Input States */
+/* Readonly (Default View) */
+.input-with-icon input[readonly] {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.08);
     color: var(--text-primary);
-    width: 100%;
     border-radius: 8px;
     padding: 0.75rem 1rem;
     font-family: var(--font-mono);
     opacity: 0.8;
+    cursor: default;
+}
+
+/* Editable (Active) */
+.editable-active {
+    background: rgba(0, 0, 0, 0.3) !important;
+    border-color: var(--success-green) !important;
+    color: white !important;
+    opacity: 1 !important;
 }
 
 /* PrimeNG Input Overrides */

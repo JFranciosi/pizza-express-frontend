@@ -25,9 +25,16 @@ export class SettingsModalComponent implements OnInit {
     visible: boolean = false;
     user: any = null;
 
+    // Password fields
     oldPassword: string = '';
     newPassword: string = '';
     confirmPassword: string = '';
+
+    // Profile Editing
+    isEditingEmail: boolean = false;
+    editEmail: string = '';
+    confirmEmailPassword: string = '';
+    emailError: string = '';
 
     loading: boolean = false;
     error: string = '';
@@ -38,6 +45,9 @@ export class SettingsModalComponent implements OnInit {
     ngOnInit() {
         this.authService.user$.subscribe(user => {
             this.user = user;
+            if (user) {
+                this.editEmail = user.email;
+            }
         });
     }
 
@@ -57,7 +67,46 @@ export class SettingsModalComponent implements OnInit {
         this.confirmPassword = '';
         this.error = '';
         this.success = '';
+        this.emailError = '';
+        this.isEditingEmail = false;
+        this.confirmEmailPassword = '';
+        if (this.user) {
+            this.editEmail = this.user.email;
+        }
         this.loading = false;
+    }
+
+    toggleEditEmail() {
+        this.isEditingEmail = !this.isEditingEmail;
+        this.confirmEmailPassword = ''; // Reset password input
+        if (!this.isEditingEmail) this.editEmail = this.user.email;
+        else this.emailError = '';
+    }
+
+    saveEmail() {
+        // Basic validation
+        if (!this.editEmail) {
+            this.emailError = 'Email cannot be empty';
+            return;
+        }
+        if (!this.confirmEmailPassword) {
+            this.emailError = 'Confirm with password required';
+            return;
+        }
+
+        // Call API
+        this.authService.updateEmail(this.editEmail, this.confirmEmailPassword).subscribe({
+            next: () => {
+                this.isEditingEmail = false;
+                this.success = 'Email updated successfully';
+                this.confirmEmailPassword = '';
+                setTimeout(() => this.success = '', 3000);
+            },
+            error: (err) => {
+                const msg = err.error?.message || err.error?.error || 'Update failed';
+                this.emailError = msg;
+            }
+        });
     }
 
     changePassword() {

@@ -14,11 +14,29 @@
             <h3>Profile</h3>
             <div class="field-group">
                 <label>Username</label>
-                <input pInputText [value]="user.username" readonly class="readonly-input">
+                <!-- Static Readonly Username -->
+                <div class="input-with-icon">
+                    <input pInputText [value]="user?.username" readonly>
+                </div>
             </div>
             <div class="field-group">
                 <label>Email</label>
-                <input pInputText [value]="user.email" readonly class="readonly-input">
+                <div class="input-with-icon">
+                    <input pInputText [(ngModel)]="editEmail" [readonly]="!isEditingEmail"
+                        [class.error-input]="emailError" [class.editable-active]="isEditingEmail"
+                        (keydown.enter)="saveEmail()">
+                    <i class="action-icon pi" [ngClass]="isEditingEmail ? 'pi-check save-icon' : 'pi-pencil edit-icon'"
+                        (click)="isEditingEmail ? saveEmail() : toggleEditEmail()"></i>
+                </div>
+
+                <!-- Password Confirmation for Email Change -->
+                <div *ngIf="isEditingEmail" style="margin-top: 0.5rem;">
+                    <p-password [(ngModel)]="confirmEmailPassword" placeholder="Current password" [feedback]="false"
+                        [toggleMask]="true" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"
+                        (keydown.enter)="saveEmail()"></p-password>
+                </div>
+
+                <small class="error-text" *ngIf="emailError">{{ emailError }}</small>
             </div>
             <div class="field-group">
                 <label>Current Balance</label>
