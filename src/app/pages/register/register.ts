@@ -45,8 +45,14 @@ export class Register {
         this.registerForm = this.fb.group({
             username: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
-            password: ['', Validators.required]
-        });
+            password: ['', Validators.required],
+            confirmPassword: ['', Validators.required]
+        }, { validators: this.passwordMatchValidator });
+    }
+
+    passwordMatchValidator(g: FormGroup) {
+        return g.get('password')?.value === g.get('confirmPassword')?.value
+            ? null : { mismatch: true };
     }
 
     onSubmit() {
@@ -54,7 +60,9 @@ export class Register {
             this.loading = true;
             this.error = '';
 
-            this.authService.register(this.registerForm.value).subscribe({
+            const { confirmPassword, ...registerData } = this.registerForm.value;
+
+            this.authService.register(registerData).subscribe({
                 next: (response) => {
                     console.log('Registration successful', response);
                     this.messageService.add({ severity: 'success', summary: 'Successo', detail: 'Registrazione completata!' });
@@ -66,8 +74,13 @@ export class Register {
                 error: (err) => {
                     console.error('Registration error', err);
                     this.loading = false;
-                    this.error = 'Registrazione fallita. Riprova.';
-                    this.messageService.add({ severity: 'error', summary: 'Errore', detail: 'Impossibile completare la registrazione' });
+
+                    let msg = err.error?.error || 'Impossibile completare la registrazione';
+                    if (msg.includes('Email already in use')) msg = "L'email è già in uso.";
+                    if (msg.includes('Username already in use')) msg = "Lo username è già in uso.";
+
+                    this.error = 'Registrazione fallita.';
+                    this.messageService.add({ severity: 'error', summary: 'Errore', detail: msg });
                 }
             });
         } else {

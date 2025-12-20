@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -6,6 +5,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
+import { ToastModule } from 'primeng/toast';
 import { AuthService } from '../../services/auth.service';
 import { MessageService } from 'primeng/api';
 
@@ -16,7 +16,7 @@ import { TooltipModule } from 'primeng/tooltip';
 @Component({
     selector: 'app-settings-modal',
     standalone: true,
-    imports: [CommonModule, FormsModule, DialogModule, ButtonModule, InputTextModule, PasswordModule, TooltipModule],
+    imports: [CommonModule, FormsModule, DialogModule, ButtonModule, InputTextModule, PasswordModule, TooltipModule, ToastModule],
     providers: [MessageService],
     templateUrl: './settings-modal.html',
     styleUrls: ['./settings-modal.css']
@@ -24,23 +24,18 @@ import { TooltipModule } from 'primeng/tooltip';
 export class SettingsModalComponent implements OnInit {
     visible: boolean = false;
     user: any = null;
-
-    // Password fields
     oldPassword: string = '';
     newPassword: string = '';
     confirmPassword: string = '';
-
-    // Profile Editing
     isEditingEmail: boolean = false;
     editEmail: string = '';
     confirmEmailPassword: string = '';
     emailError: string = '';
-
     loading: boolean = false;
     error: string = '';
     success: string = '';
 
-    constructor(private authService: AuthService, private router: Router) { }
+    constructor(private authService: AuthService, private router: Router, private messageService: MessageService) { }
 
     ngOnInit() {
         this.authService.user$.subscribe(user => {
@@ -78,13 +73,12 @@ export class SettingsModalComponent implements OnInit {
 
     toggleEditEmail() {
         this.isEditingEmail = !this.isEditingEmail;
-        this.confirmEmailPassword = ''; // Reset password input
+        this.confirmEmailPassword = '';
         if (!this.isEditingEmail) this.editEmail = this.user.email;
         else this.emailError = '';
     }
 
     saveEmail() {
-        // Basic validation
         if (!this.editEmail) {
             this.emailError = 'Email cannot be empty';
             return;
@@ -94,29 +88,27 @@ export class SettingsModalComponent implements OnInit {
             return;
         }
 
-        // Call API
         this.authService.updateEmail(this.editEmail, this.confirmEmailPassword).subscribe({
             next: () => {
                 this.isEditingEmail = false;
-                this.success = 'Email updated successfully';
+                this.messageService.add({ severity: 'success', summary: 'Successo', detail: 'Email aggiornata con successo' });
                 this.confirmEmailPassword = '';
-                setTimeout(() => this.success = '', 3000);
             },
             error: (err) => {
-                const msg = err.error?.message || err.error?.error || 'Update failed';
-                this.emailError = msg;
+                const msg = err.error?.error || 'Update failed';
+                this.handleError(msg, 'email');
             }
         });
     }
 
     changePassword() {
         if (!this.oldPassword || !this.newPassword || !this.confirmPassword) {
-            this.error = 'All fields are required';
+            this.messageService.add({ severity: 'warn', summary: 'Attenzione', detail: 'Tutti i campi sono obbligatori' });
             return;
         }
 
         if (this.newPassword !== this.confirmPassword) {
-            this.error = 'New passwords do not match';
+            this.messageService.add({ severity: 'error', summary: 'Errore', detail: 'Le nuove password non coincidono' });
             return;
         }
 
@@ -126,16 +118,30 @@ export class SettingsModalComponent implements OnInit {
 
         this.authService.changePassword(this.oldPassword, this.newPassword).subscribe({
             next: () => {
-                this.success = 'Password changed successfully';
+                this.messageService.add({ severity: 'success', summary: 'Successo', detail: 'Password modificata con successo' });
                 this.loading = false;
                 this.oldPassword = '';
                 this.newPassword = '';
                 this.confirmPassword = '';
             },
             error: (err) => {
-                this.error = err.error?.error || 'Failed to change password';
+                const msg = err.error?.error || 'Failed to change password';
+                this.handleError(msg, 'password');
                 this.loading = false;
             }
         });
+    }
+
+    private handleError(msg: string, context: 'email' | 'password') {
+        let detail = msg;
+        if (msg.includes('Email already in use')) detail = "L'email è già associata a un altro account.";
+        if (msg.includes('Invalid password') || msg.includes('Incorrect old password')) detail = "La password attuale non è corretta.";
+        if (msg.includes('User not found')) detail = "Utente non trovato.";
+
+        this.messageService.add({ severity: 'error', summary: 'Errore', detail: detail });
+
+        if (context === 'email') {
+            this.emailError = detail;
+        }
     }
 }

@@ -9,7 +9,6 @@
     overflow: hidden;
 }
 
-/* Background Elements */
 .register-container::before {
     content: '';
     position: absolute;
@@ -18,7 +17,6 @@
     width: 200%;
     height: 200%;
     background: radial-gradient(circle at center, rgba(0, 230, 118, 0.05) 0%, transparent 50%);
-    /* Green hint for register */
     animation: rotate 25s linear infinite reverse;
     z-index: 0;
 }
@@ -124,7 +122,6 @@
     text-shadow: 0 0 15px var(--primary-red-glow);
 }
 
-/* Input Styling */
 :host ::ng-deep .p-inputtext {
     width: 100%;
     background: rgba(0, 0, 0, 0.3);
@@ -145,7 +142,6 @@
     width: 100%;
 }
 
-/* Button Styling */
 :host ::ng-deep .p-button {
     background: linear-gradient(135deg, var(--primary-red) 0%, #d50000 100%);
     border: none;
@@ -161,7 +157,6 @@
     box-shadow: 0 6px 20px var(--primary-red-glow);
 }
 
-/* Robust Floating Label Overrides */
 :host ::ng-deep .p-float-label {
     display: block;
     position: relative;
@@ -181,7 +176,6 @@
     line-height: normal !important;
 }
 
-/* Floating State - Wrapper Classes & Native Input using :has() for robustness */
 :host ::ng-deep .p-float-label:has(input:focus) label,
 :host ::ng-deep .p-float-label:has(input.p-filled) label,
 :host ::ng-deep .p-float-label:has(.p-inputwrapper-focus) label,

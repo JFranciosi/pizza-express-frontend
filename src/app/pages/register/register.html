@@ -1,6 +1,6 @@
 <div class="register-container">
     <p-toast></p-toast>
-    <p-card header="Pizza Express Register" [style]="{width: '100%', maxWidth: '400px'}" styleClass="register-card">
+    <p-card header="Pizza Express Register" [style]="{width: '100%', maxWidth: '400px'}" class="register-card">
         <div class="logo-container">
             <img src="/assets/logo_full.png" alt="Pizza Express Logo" width="200" style="margin-bottom: 1rem;" />
         </div>
@@ -11,11 +11,12 @@
                     <input pInputText id="username" formControlName="username" class="w-full" />
                     <label for="username">Username</label>
                 </span>
-                <small
-                    *ngIf="registerForm.get('username')?.invalid && (registerForm.get('username')?.dirty || registerForm.get('username')?.touched)"
-                    class="p-error block">
+                @if (registerForm.get('username')?.invalid && (registerForm.get('username')?.dirty ||
+                registerForm.get('username')?.touched)) {
+                <small class="p-error block">
                     Lo username è obbligatorio.
                 </small>
+                }
             </div>
 
             <div class="field-container">
@@ -23,29 +24,47 @@
                     <input pInputText id="email" formControlName="email" class="w-full" />
                     <label for="email">Email</label>
                 </span>
-                <small
-                    *ngIf="registerForm.get('email')?.invalid && (registerForm.get('email')?.dirty || registerForm.get('email')?.touched)"
-                    class="p-error block">
+                @if (registerForm.get('email')?.invalid && (registerForm.get('email')?.dirty ||
+                registerForm.get('email')?.touched)) {
+                <small class="p-error block">
                     Inserisci un'email valida.
                 </small>
+                }
             </div>
 
             <div class="field-container">
                 <span class="p-float-label">
                     <p-password id="password" formControlName="password" [feedback]="true" [toggleMask]="true"
-                        styleClass="w-full"></p-password>
+                        class="w-full"></p-password>
                     <label for="password">Password</label>
                 </span>
-                <small
-                    *ngIf="registerForm.get('password')?.invalid && (registerForm.get('password')?.dirty || registerForm.get('password')?.touched)"
-                    class="p-error block">
+                @if (registerForm.get('password')?.invalid && (registerForm.get('password')?.dirty ||
+                registerForm.get('password')?.touched)) {
+                <small class="p-error block">
                     La password è obbligatoria.
                 </small>
+                }
             </div>
 
-            <div class="error-msg" *ngIf="error">
+            <div class="field-container">
+                <span class="p-float-label">
+                    <p-password id="confirmPassword" formControlName="confirmPassword" [feedback]="false"
+                        [toggleMask]="true" class="w-full"></p-password>
+                    <label for="confirmPassword">Conferma Password</label>
+                </span>
+                @if (registerForm.errors?.['mismatch'] && (registerForm.get('confirmPassword')?.dirty ||
+                registerForm.get('confirmPassword')?.touched)) {
+                <small class="p-error block">
+                    Le password non coincidono.
+                </small>
+                }
+            </div>
+
+            @if (error) {
+            <div class="error-msg">
                 <i class="pi pi-exclamation-circle"></i> {{ error }}
             </div>
+            }
 
             <button pButton label="REGISTRATI" type="submit" [loading]="loading" class="w-full submit-btn"></button>
 

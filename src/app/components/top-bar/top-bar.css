@@ -62,14 +62,10 @@
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
-/* User & Balance Pills */
-/* User & Balance Pills */
-/* Unified User Bar */
 .user-bar {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 99px;
-    /* Pill shape for unified bar */
     display: flex;
     align-items: center;
     backdrop-filter: blur(10px);
@@ -187,7 +183,6 @@
     transform: rotate(30deg);
 }
 
-/* Mobile Responsiveness */
 @media (max-width: 768px) {
     .top-bar {
         height: 70px;
@@ -210,16 +205,13 @@
 
     .stats-row {
         display: none;
-        /* Hide stats on tablet/mobile to save space */
     }
 
     .divider:nth-of-type(1),
     .divider:nth-of-type(2) {
         display: none;
-        /* Hide dividers around stats if stats are hidden */
     }
 
-    /* Keep the last divider before logout? No, remove dividers on mobile for cleaner look */
     .divider {
         display: none;
     }

@@ -1,6 +1,7 @@
+<p-toast></p-toast>
 <p-dialog [(visible)]="visible" [modal]="true" [style]="{width: '500px'}"
     [breakpoints]="{'960px': '75vw', '640px': '95vw'}" [draggable]="false" [resizable]="false" appendTo="body"
-    styleClass="settings-dialog">
+    class="settings-dialog">
     <ng-template pTemplate="header">
         <div class="flex align-items-center justify-content-between w-full">
             <span class="p-dialog-title">ACCOUNT SETTINGS</span>
@@ -9,7 +10,8 @@
         </div>
     </ng-template>
 
-    <div class="settings-content" *ngIf="user">
+    @if (user) {
+    <div class="settings-content">
         <div class="profile-section">
             <h3>Profile</h3>
             <div class="field-group">
@@ -30,13 +32,17 @@
                 </div>
 
                 <!-- Password Confirmation for Email Change -->
-                <div *ngIf="isEditingEmail" style="margin-top: 0.5rem;">
+                @if (isEditingEmail) {
+                <div style="margin-top: 0.5rem;">
                     <p-password [(ngModel)]="confirmEmailPassword" placeholder="Current password" [feedback]="false"
                         [toggleMask]="true" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"
                         (keydown.enter)="saveEmail()"></p-password>
                 </div>
+                }
 
-                <small class="error-text" *ngIf="emailError">{{ emailError }}</small>
+                @if (emailError) {
+                <small class="error-text">{{ emailError }}</small>
+                }
             </div>
             <div class="field-group">
                 <label>Current Balance</label>
@@ -66,16 +72,21 @@
                     [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"></p-password>
             </div>
 
-            <div class="message-box error" *ngIf="error">
+            @if (error) {
+            <div class="message-box error">
                 <i class="pi pi-exclamation-circle"></i> {{ error }}
             </div>
+            }
 
-            <div class="message-box success" *ngIf="success">
+            @if (success) {
+            <div class="message-box success">
                 <i class="pi pi-check-circle"></i> {{ success }}
             </div>
+            }
 
             <button pButton label="UPDATE PASSWORD" class="update-btn" [loading]="loading"
                 (click)="changePassword()"></button>
         </div>
     </div>
+    }
 </p-dialog>

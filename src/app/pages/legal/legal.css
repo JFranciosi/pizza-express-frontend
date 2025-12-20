@@ -6,10 +6,8 @@
     padding: 2rem;
     background: transparent;
     overflow-y: auto;
-    /* Enable scrolling if needed here */
 }
 
-/* Ensure global scroll */
 :host {
     display: block;
     height: 100vh;
@@ -23,7 +21,6 @@
     flex-direction: column;
     gap: 2rem;
     padding-bottom: 2rem;
-    /* Add padding for scroll space */
 }
 
 .header-section {

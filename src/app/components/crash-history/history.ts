@@ -18,7 +18,6 @@ export class CrashHistoryComponent implements OnInit {
 
     ngOnInit() {
         this.gameSocket.history$.subscribe(h => {
-            // Keep Newest first [Newest, Older, ...] for horizontal scroll
             this.history = [...h];
         });
     }

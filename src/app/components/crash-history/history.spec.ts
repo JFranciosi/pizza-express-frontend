@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CrashHistoryComponent } from './crash-history.component';
+import { CrashHistoryComponent } from './history';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('CrashHistoryComponent', () => {

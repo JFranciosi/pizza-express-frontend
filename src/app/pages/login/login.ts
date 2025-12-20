@@ -58,15 +58,20 @@ export class Login {
                     console.log('Login successful', response);
                     this.messageService.add({ severity: 'success', summary: 'Successo', detail: 'Login effettuato con successo' });
                     this.loading = false;
-                    // Navigate to dashboard or home after a short delay to see the toast
                     setTimeout(() => {
                         this.router.navigate(['/home']);
                     }, 1000);
                 },
                 error: (err) => {
                     console.error('Login error', err);
-                    this.error = 'Login fallito. Controlla le credenziali.';
-                    this.messageService.add({ severity: 'error', summary: 'Errore', detail: 'Credenziali non valide' });
+                    let msg = err.error?.error || 'Credenziali non valide';
+
+                    if (msg.includes('Invalid credentials') || msg.includes('User not found')) {
+                        msg = "Email o password non corretti.";
+                    }
+
+                    this.error = 'Login fallito.';
+                    this.messageService.add({ severity: 'error', summary: 'Errore', detail: msg });
                     this.loading = false;
                 }
             });
