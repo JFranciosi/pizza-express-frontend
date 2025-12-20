@@ -250,3 +250,32 @@
         margin-right: 5px;
     }
 }
+
+.balance-warning-banner {
+    width: 100%;
+    background: linear-gradient(90deg, #ff9800 0%, #ff5722 100%);
+    color: white;
+    text-align: center;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(255, 87, 34, 0.3);
+    position: relative;
+    z-index: 99;
+    animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

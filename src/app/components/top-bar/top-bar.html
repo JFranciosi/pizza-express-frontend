@@ -38,4 +38,11 @@
         }
     </div>
 </div>
-<app-settings-modal></app-settings-modal>
+
+@if (user && user.balance <= 0.5) { <div class="balance-warning-banner">
+    <i class="pi pi-info-circle mr-2"></i>
+    <span>Your balance is empty. It will be automatically recharged to 500€ in 24 hours.</span>
+    </div>
+    }
+
+    <app-settings-modal></app-settings-modal>
