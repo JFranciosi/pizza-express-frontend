@@ -10,6 +10,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { AuthService } from '../../services/auth.service';
+import { FooterComponent } from '../../components/footer/footer';
 
 @Component({
     selector: 'app-register',
@@ -23,7 +24,8 @@ import { AuthService } from '../../services/auth.service';
         PasswordModule,
         FloatLabelModule,
         RouterLink,
-        ToastModule
+        ToastModule,
+        FooterComponent
     ],
     providers: [MessageService],
     templateUrl: './register.html',
@@ -43,8 +45,14 @@ export class Register {
         this.registerForm = this.fb.group({
             username: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
-            password: ['', Validators.required]
-        });
+            password: ['', Validators.required],
+            confirmPassword: ['', Validators.required]
+        }, { validators: this.passwordMatchValidator });
+    }
+
+    passwordMatchValidator(g: FormGroup) {
+        return g.get('password')?.value === g.get('confirmPassword')?.value
+            ? null : { mismatch: true };
     }
 
     onSubmit() {
@@ -52,10 +60,12 @@ export class Register {
             this.loading = true;
             this.error = '';
 
-            this.authService.register(this.registerForm.value).subscribe({
+            const { confirmPassword, ...registerData } = this.registerForm.value;
+
+            this.authService.register(registerData).subscribe({
                 next: (response) => {
                     console.log('Registration successful', response);
-                    this.messageService.add({ severity: 'success', summary: 'Successo', detail: 'Registrazione completata!' });
+                    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Registration successful!' });
                     this.loading = false;
                     setTimeout(() => {
                         this.router.navigate(['/home']);
@@ -64,13 +74,18 @@ export class Register {
                 error: (err) => {
                     console.error('Registration error', err);
                     this.loading = false;
-                    this.error = 'Registrazione fallita. Riprova.';
-                    this.messageService.add({ severity: 'error', summary: 'Errore', detail: 'Impossibile completare la registrazione' });
+
+                    let msg = err.error?.error || 'Registration failed';
+                    if (msg.includes('Email already in use')) msg = "Email already in use.";
+                    if (msg.includes('Username already in use')) msg = "Username already in use.";
+
+                    this.error = 'Registration failed.';
+                    this.messageService.add({ severity: 'error', summary: 'Error', detail: msg });
                 }
             });
         } else {
             this.registerForm.markAllAsTouched();
-            this.messageService.add({ severity: 'warn', summary: 'Attenzione', detail: 'Compila tutti i campi richiesti' });
+            this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'Please fill in all required fields' });
         }
     }
 }

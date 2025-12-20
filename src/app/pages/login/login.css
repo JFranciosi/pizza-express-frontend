@@ -1,27 +1,59 @@
 .login-container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: var(--graph-gradient);
     padding: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, rgba(255, 23, 68, 0.05) 0%, transparent 50%);
+    animation: rotate 20s linear infinite;
+    z-index: 0;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 :host ::ng-deep .p-card {
-    background: var(--card-bg);
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    border-radius: 1rem;
-    border: 1px solid rgba(227, 27, 35, 0.2);
+    background: var(--surface-glass);
+    backdrop-filter: var(--blur-strength);
+    -webkit-backdrop-filter: var(--blur-strength);
+    border: var(--glass-border);
+    border-radius: 20px;
+    box-shadow: var(--glass-shadow);
+    position: relative;
+    z-index: 1;
 }
 
 :host ::ng-deep .p-card:hover {
-    border-color: var(--logo-red);
-    box-shadow: 0 0 30px var(--logo-red-glow);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
     transition: all 0.3s ease;
 }
 
 .field {
     margin-bottom: 2rem;
+}
+
+.field-container {
+    margin-bottom: 1.5rem;
 }
 
 .w-full {
@@ -38,10 +70,11 @@
 }
 
 .error-message {
-    color: var(--logo-red);
+    color: var(--primary-red);
     text-align: center;
     margin-top: 1rem;
-    font-weight: bold;
+    font-weight: 700;
+    text-shadow: 0 0 10px var(--primary-red-glow);
 }
 
 .text-center {
@@ -53,16 +86,29 @@
 }
 
 .text-primary {
-    color: var(--logo-red);
+    color: var(--text-secondary);
     transition: color 0.2s;
 }
 
 .text-primary:hover {
-    color: #ff4d4d;
+    color: var(--primary-red);
+    text-shadow: 0 0 8px var(--primary-red-glow);
 }
 
 .no-underline {
     text-decoration: none;
+}
+
+.link {
+    color: var(--primary-red);
+    text-decoration: none;
+    font-weight: 700;
+    transition: all 0.2s;
+}
+
+.link:hover {
+    text-shadow: 0 0 8px var(--primary-red-glow);
+    text-decoration: underline;
 }
 
 :host ::ng-deep .p-card-title {
@@ -70,78 +116,155 @@
     justify-content: center;
     align-items: center;
     margin: 0 0 2rem 0;
-    color: var(--logo-red);
+    color: var(--primary-red);
     font-size: 1.5rem;
-    font-weight: bold;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    text-shadow: 0 0 15px var(--primary-red-glow);
+}
+
+:host ::ng-deep .p-inputtext {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    transition: all 0.2s;
+}
+
+:host ::ng-deep .p-inputtext:enabled:focus {
+    border-color: var(--primary-red);
+    box-shadow: 0 0 0 2px var(--primary-red-glow);
+    background: rgba(0, 0, 0, 0.5);
 }
 
 :host ::ng-deep .p-password input {
     width: 100%;
 }
 
-:host ::ng-deep input {
-    width: 100%;
-    background: #2a2a2a;
-    border: 1px solid #444;
-    color: white;
-}
-
-:host ::ng-deep input:enabled:focus,
-:host ::ng-deep .p-inputtext:enabled:focus,
-:host ::ng-deep .p-password-input:enabled:focus,
-:host ::ng-deep input.p-inputtext:enabled:focus {
-    border-color: #ffffff !important;
-    box-shadow: 0 0 0 1px #ffffff !important;
-    outline: none !important;
-}
-
 :host ::ng-deep .p-button {
-    background: var(--logo-red);
-    border: 1px solid var(--logo-red);
+    background: linear-gradient(135deg, var(--primary-red) 0%, #d50000 100%);
+    border: none;
+    font-weight: 700;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px var(--primary-red-glow);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 :host ::ng-deep .p-button:enabled:hover {
-    background: #c0151c;
-    border-color: #c0151c;
-    box-shadow: 0 0 10px var(--logo-red-glow);
+    background: linear-gradient(135deg, #ff5252 0%, var(--primary-red) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px var(--primary-red-glow);
+}
+
+:host ::ng-deep .p-float-label {
+    display: block;
+    position: relative;
 }
 
 :host ::ng-deep .p-float-label label {
-    color: #aaa;
+    position: absolute !important;
+    top: 50% !important;
+    left: 1rem !important;
+    margin-top: 0 !important;
+    transform: translateY(-50%) !important;
+    transition: all 0.2s ease !important;
+    color: var(--text-secondary) !important;
+    background: transparent !important;
+    pointer-events: none !important;
+    z-index: 100 !important;
+    line-height: normal !important;
 }
 
-:host ::ng-deep .p-input-icon-right>i:last-of-type {
-    color: #aaa;
-}
-
-:host ::ng-deep .p-float-label input:focus~label,
-:host ::ng-deep .p-float-label input.p-filled~label,
-:host ::ng-deep .p-float-label textarea:focus~label,
-:host ::ng-deep .p-float-label textarea.p-filled~label,
-:host ::ng-deep p-floatLabel input:focus+label,
-:host ::ng-deep p-floatLabel input.p-filled+label,
-:host ::ng-deep p-floatLabel .p-inputwrapper-focus~label,
-:host ::ng-deep p-floatLabel .p-inputwrapper-filled~label,
-:host ::ng-deep .p-float-label .p-inputwrapper-focus~label,
-:host ::ng-deep .p-float-label .p-inputwrapper-filled~label,
-:host ::ng-deep p-floatLabel p-password.ng-dirty.ng-valid~label,
-:host ::ng-deep p-floatLabel p-password.p-inputwrapper-filled~label,
-:host ::ng-deep p-floatLabel p-password.p-inputwrapper-focus~label {
-    color: #ffffff !important;
+:host ::ng-deep .p-float-label:has(input:focus) label,
+:host ::ng-deep .p-float-label:has(input.p-filled) label,
+:host ::ng-deep .p-float-label:has(.p-inputwrapper-focus) label,
+:host ::ng-deep .p-float-label:has(.p-inputwrapper-filled) label {
+    top: -0.75rem !important;
+    left: 0.75rem !important;
+    transform: none !important;
+    background: #1e1e1e !important;
+    color: var(--primary-red) !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    padding: 0 4px !important;
+    z-index: 101 !important;
+    border-radius: 4px;
 }
 
 .logo-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
 }
 
 .button-container {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
     width: 100%;
+    margin-top: 1rem;
+}
+
+:host ::ng-deep .remember-me {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 2rem;
+    padding-left: 0;
+
+    --p-checkbox-hover-border-color: var(--primary-red);
+    --p-checkbox-checked-background: var(--primary-red);
+    --p-checkbox-checked-border-color: var(--primary-red);
+    --p-checkbox-checked-hover-background: #ff5252;
+    --p-checkbox-checked-hover-border-color: #ff5252;
+    --p-focus-ring-color: var(--primary-red-glow);
+}
+
+:host ::ng-deep .remember-me-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+:host ::ng-deep .p-checkbox .p-checkbox-box {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    transition: all 0.2s;
+    width: 22px;
+    height: 22px;
+}
+
+:host ::ng-deep .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box:hover {
+    border-color: var(--primary-red) !important;
+    background: rgba(255, 23, 68, 0.1);
+    box-shadow: 0 0 8px var(--primary-red-glow) !important;
+}
+
+:host ::ng-deep .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-highlight:hover {
+    background: #ff5252 !important;
+    border-color: #ff5252 !important;
+}
+
+:host ::ng-deep .p-checkbox .p-checkbox-box.p-highlight {
+    background: var(--primary-red) !important;
+    border-color: var(--primary-red) !important;
+    box-shadow: 0 0 10px var(--primary-red-glow);
+}
+
+:host ::ng-deep .p-checkbox .p-checkbox-box:focus-visible,
+:host ::ng-deep .p-checkbox.p-focus .p-checkbox-box {
+    border-color: var(--primary-red) !important;
+    box-shadow: 0 0 0 2px var(--primary-red-glow) !important;
+}
+
+:host ::ng-deep .p-checkbox .p-checkbox-box .p-checkbox-icon {
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
 }

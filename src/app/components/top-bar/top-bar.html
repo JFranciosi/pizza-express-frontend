@@ -7,15 +7,42 @@
     <div class="actions">
         @if (user) {
         <div class="user-info mr-3">
-            <span class="user-balance">{{ user.balance | currency:'EUR' }}</span>
-            <span class="username">{{ user.username }}</span>
+            <div class="user-bar">
+                <span class="username">{{ user.username }}</span>
+                <div class="divider"></div>
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <span class="label">LAST</span>
+                        <span class="value">{{ lastBet | currency:'EUR':'symbol':'1.0-0' }}</span>
+                    </div>
+                    @if (lastWin > 0) {
+                    <div class="stat-item success">
+                        <span class="label">WIN</span>
+                        <span class="value">+{{ lastWin | currency:'EUR':'symbol':'1.0-0' }}</span>
+                    </div>
+                    }
+                </div>
+                <div class="divider"></div>
+
+                <button class="settings-icon-btn" (click)="openSettings()">
+                    <i class="pi pi-cog"></i>
+                </button>
+
+                <span class="user-balance">{{ user.balance | currency:'EUR' }}</span>
+                <div class="divider"></div>
+                <button class="logout-icon-btn" (click)="onLogout()">
+                    <i class="pi pi-sign-out"></i>
+                </button>
+            </div>
         </div>
         }
-
-        <p-button styleClass="chat-toggle p-button-text p-button-rounded" icon="pi pi-comments"
-            (onClick)="onToggleChat()"></p-button>
-
-        <p-button icon="pi pi-sign-out" styleClass="p-button-danger p-button-text p-button-rounded p-button-sm ml-2"
-            (onClick)="onLogout()"></p-button>
     </div>
 </div>
+
+@if (user && user.balance <= 0.5) { <div class="balance-warning-banner">
+    <i class="pi pi-info-circle mr-2"></i>
+    <span>Your balance is empty. It will be automatically recharged to 500€ in 24 hours.</span>
+    </div>
+    }
+
+    <app-settings-modal></app-settings-modal>

@@ -1,5 +1,5 @@
 <div class="main-container">
-    <app-top-bar (toggleChat)="isChatOpen = !isChatOpen"></app-top-bar>
+    <app-top-bar></app-top-bar>
 
     <div class="dashboard-layout">
         <!-- Left Column: Player Bets -->
@@ -21,12 +21,6 @@
             <app-bet-controls></app-bet-controls>
         </div>
 
-        <!-- Right Column: Chat -->
-        <div class="column right-col" [class.chat-active]="isChatOpen">
-            <app-chat></app-chat>
-            <button class="close-chat-btn" (click)="isChatOpen = false">
-                <i class="pi pi-times"></i>
-            </button>
-        </div>
+
     </div>
 </div>

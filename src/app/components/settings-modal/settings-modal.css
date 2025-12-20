@@ -1,0 +1,273 @@
+:host ::ng-deep * {
+    box-sizing: border-box;
+}
+
+:host {
+    --modal-padding: 2.5rem;
+}
+
+:host ::ng-deep .settings-dialog .p-dialog-content {
+    background: transparent;
+    padding: 0 !important;
+    overflow: visible !important;
+    height: auto !important;
+}
+
+:host ::ng-deep .settings-dialog .p-dialog-header {
+    background: transparent;
+    color: var(--text-primary);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: var(--modal-padding) !important;
+    gap: 1rem;
+}
+
+:host ::ng-deep .settings-dialog .p-dialog {
+    background: var(--surface-glass);
+    backdrop-filter: var(--blur-strength);
+    -webkit-backdrop-filter: var(--blur-strength);
+    border: var(--glass-border);
+    border-radius: 20px;
+    box-shadow: var(--glass-shadow);
+    display: flex;
+    flex-direction: column;
+    max-height: none !important;
+}
+
+.settings-content {
+    padding: var(--modal-padding);
+    padding-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+h3 {
+    margin: 0 0 0.8rem 0;
+    font-size: 0.9rem;
+    color: var(--success-green);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    width: 100%;
+}
+
+.field-group label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-left: 0.2rem;
+}
+
+.input-with-icon {
+    position: relative;
+    width: 100%;
+}
+
+.input-with-icon input {
+    width: 100%;
+    padding-right: 2.5rem;
+}
+
+.action-icon {
+    position: absolute;
+    right: 0.8rem;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+    font-size: 0.9rem;
+}
+
+.action-icon:hover {
+    color: var(--text-primary);
+}
+
+.save-icon {
+    color: var(--success-green);
+    font-weight: bold;
+}
+
+.save-icon:hover {
+    transform: translateY(-50%) scale(1.1);
+    color: #00b359;
+}
+
+.error-input {
+    border-color: #ff1744 !important;
+    box-shadow: 0 0 0 2px rgba(255, 23, 68, 0.2) !important;
+}
+
+.error-text {
+    color: #ff1744;
+    font-size: 0.8rem;
+    margin-top: 0.4rem;
+    display: block;
+    margin-left: 0.2rem;
+}
+
+.input-with-icon input[readonly] {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-family: var(--font-mono);
+    opacity: 0.8;
+    cursor: default;
+}
+
+.editable-active {
+    background: rgba(0, 0, 0, 0.3) !important;
+    border-color: var(--success-green) !important;
+    color: white !important;
+    opacity: 1 !important;
+}
+
+:host ::ng-deep .p-password {
+    width: 100%;
+}
+
+:host ::ng-deep .p-password input {
+    width: 100% !important;
+}
+
+:host ::ng-deep .p-password-input-overlay,
+:host ::ng-deep .p-password-panel {
+    width: 100%;
+    /* Ensure password strength panel matches input width if visible */
+}
+
+:host ::ng-deep .p-password input,
+:host ::ng-deep .p-inputtext:not(.readonly-input) {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    transition: all 0.2s;
+}
+
+:host ::ng-deep .p-password input:focus,
+:host ::ng-deep .p-inputtext:not(.readonly-input):focus {
+    border-color: var(--success-green);
+    box-shadow: 0 0 0 2px var(--success-green-glow);
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.balance-display {
+    font-family: var(--font-mono);
+    font-size: 1.8rem;
+    color: var(--success-green);
+    font-weight: 800;
+    text-shadow: 0 0 15px var(--success-green-glow);
+    padding: 0.5rem 0;
+}
+
+.divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    width: 100%;
+    margin: 0.5rem 0;
+}
+
+.update-btn {
+    width: 100%;
+    margin-top: 1rem;
+    background: linear-gradient(135deg, var(--success-green) 0%, #00b359 100%);
+    border: none;
+    font-weight: 800;
+    letter-spacing: 1px;
+    padding: 1rem;
+    border-radius: 8px;
+    text-transform: uppercase;
+    box-shadow: 0 4px 15px var(--success-green-glow);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.update-btn:hover {
+    background: linear-gradient(135deg, #33eb96 0%, var(--success-green) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px var(--success-green-glow);
+}
+
+.message-box {
+    padding: 1rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.message-box.error {
+    background: rgba(255, 23, 68, 0.1);
+    border: 1px solid rgba(255, 23, 68, 0.3);
+    color: #ff1744;
+}
+
+.message-box.success {
+    background: rgba(0, 230, 118, 0.1);
+    border: 1px solid rgba(0, 230, 118, 0.3);
+    color: #00e676;
+}
+
+.info-icon {
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.2s;
+    margin-left: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 50%;
+}
+
+.info-icon:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+:host ::ng-deep .p-dialog-title {
+    font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+}
+
+:host ::ng-deep .p-dialog-header-icons {
+    margin-right: -0.5rem;
+}
+
+@media (max-width: 640px) {
+    :host ::ng-deep .settings-dialog .p-dialog {
+        width: 100% !important;
+        margin: 0;
+        max-height: 100vh !important;
+        height: 100vh !important;
+        border-radius: 0;
+    }
+
+    .settings-content {
+        padding: 1.5rem;
+        gap: 1.2rem;
+    }
+
+    h3 {
+        font-size: 0.85rem;
+    }
+
+    .balance-display {
+        font-size: 1.5rem;
+    }
+}

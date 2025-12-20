@@ -4,11 +4,13 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { LoginRequest, AuthResponse, RegisterRequest } from '../models/auth.models';
 
+import { environment } from '../../environments/environment';
+
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
-    private apiUrl = 'http://localhost:8080/auth';
+    private apiUrl = `${environment.apiUrl}/auth`;
     private userSubject = new BehaviorSubject<any | null>(this.getUserFromStorage());
     public user$ = this.userSubject.asObservable();
 
@@ -70,5 +72,30 @@ export class AuthService {
             localStorage.setItem('user_data', JSON.stringify(user));
             this.userSubject.next({ ...user });
         }
+    }
+
+    changePassword(oldPass: string, newPass: string): Observable<any> {
+        return this.http.post(`${this.apiUrl}/change-password`, { oldPass, newPass });
+    }
+
+    updateEmail(email: string, password: string): Observable<any> {
+        return this.http.post(`${this.apiUrl}/update-profile`, { email, password }).pipe(
+            tap((response: any) => {
+                const user = this.getUser();
+                if (user) {
+                    user.email = email;
+                    localStorage.setItem('user_data', JSON.stringify(user));
+                    this.userSubject.next({ ...user });
+                }
+            })
+        );
+    }
+
+    forgotPassword(email: string): Observable<any> {
+        return this.http.post(`${this.apiUrl}/forgot-password`, { email });
+    }
+
+    resetPassword(token: string, newPassword: string): Observable<any> {
+        return this.http.post(`${this.apiUrl}/reset-password`, { token, newPassword });
     }
 }

@@ -1,39 +1,62 @@
 <div class="login-container">
     <p-toast></p-toast>
-    <p-card header="Welcome" [style]="{ width: '100%', maxWidth: '400px' }">
+    <p-card header="Pizza Express Login" [style]="{width: '100%', maxWidth: '400px'}" class="login-card">
         <div class="logo-container">
-            <img src="/assets/logo_full.png" alt="Pizza Express Logo" width="160" height="80" loading="eager" />
+            <img src="/assets/logo_full.png" alt="Pizza Express Logo" width="200" style="margin-bottom: 1rem;" />
         </div>
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-4">
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
-            <div class="field">
-                <p-floatLabel>
+            <div class="field-container">
+                <span class="p-float-label">
                     <input pInputText id="email" formControlName="email" class="w-full" />
                     <label for="email">Email</label>
-                </p-floatLabel>
+                </span>
+                @if (loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty ||
+                loginForm.get('email')?.touched)) {
+                <small class="p-error block">
+                    Please enter a valid email.
+                </small>
+                }
             </div>
 
-            <div class="field">
-                <p-floatLabel>
+            <div class="field-container">
+                <span class="p-float-label">
                     <p-password id="password" formControlName="password" [feedback]="false" [toggleMask]="true"
-                        styleClass="w-full" inputStyleClass="w-full"></p-password>
+                        class="w-full"></p-password>
                     <label for="password">Password</label>
-                </p-floatLabel>
-            </div>
-
-            <div class="button-container">
-                <p-button label="Login" type="submit" [loading]="loading"></p-button>
+                </span>
+                @if (loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty ||
+                loginForm.get('password')?.touched)) {
+                <small class="p-error block">
+                    Password is required.
+                </small>
+                }
             </div>
 
             @if (error) {
-            <div class="error-message">
-                {{ error }}
+            <div class="error-msg">
+                <i class="pi pi-exclamation-circle"></i> {{ error }}
             </div>
             }
 
+            <div class="remember-me">
+                <div class="remember-me-group flex align-items-center gap-2">
+                    <p-checkbox [(ngModel)]="rememberMe" [binary]="true" inputId="rememberMe"
+                        [ngModelOptions]="{standalone: true}"></p-checkbox>
+                    <label for="rememberMe" class="cursor-pointer"
+                        style="color: var(--text-secondary); font-size: 0.9rem;">Remember Me</label>
+                </div>
+                <a routerLink="/forgot-password" class="link" style="font-size: 0.9rem;">Forgot Password?</a>
+            </div>
+
+            <button pButton label="LOGIN" type="submit" [loading]="loading" class="w-full submit-btn"></button>
+
             <div class="text-center mt-3">
-                <a routerLink="/register" class="text-primary no-underline">Don't have an account? Register</a>
+                <span class="text-secondary">Don't have an account? </span>
+                <a routerLink="/register" class="link">Register here</a>
             </div>
         </form>
     </p-card>
+
+    <app-footer></app-footer>
 </div>

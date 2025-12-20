@@ -1,72 +1,281 @@
 .top-bar {
-    height: 80px;
-    background: #1e1e1e;
-    border-bottom: 1px solid #333;
+    height: 90px;
+    background: rgba(10, 10, 10, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 1.5rem;
+    padding: 0 2rem;
     color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     z-index: 100;
     position: relative;
+    width: 100%;
 }
 
 .brand {
     font-weight: 800;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    color: #e31b23;
+    gap: 1rem;
+    color: var(--accent-orange);
+    letter-spacing: -0.5px;
 }
 
 .brand-logo {
-    height: 65px;
+    height: 70px;
     width: auto;
-    filter: drop-shadow(0 0 5px rgba(227, 27, 35, 0.3));
-    transition: transform 0.2s;
+    filter: drop-shadow(0 0 15px var(--accent-orange-glow));
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .brand-logo:hover {
-    transform: scale(1.05);
+    transform: scale(1.1) rotate(-5deg);
 }
 
 .user-info {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+    flex-direction: row;
+    align-items: center;
     color: #fff;
-    font-size: 0.9rem;
-    line-height: 1.2;
-}
-
-.user-balance {
-    font-weight: bold;
-    color: #4caf50;
-}
-
-.username {
-    font-size: 0.8rem;
-    color: #aaa;
-}
-
-.brand span {
-    color: white;
+    font-size: 1rem;
+    gap: 1rem;
 }
 
 .actions {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 1.5rem;
 }
 
 .chat-toggle {
     display: block;
-    color: #aaa;
-    transition: color 0.2s;
+    color: var(--text-secondary);
+    transition: all 0.2s;
 }
 
 .chat-toggle:hover {
     color: white;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.user-bar {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 99px;
+    display: flex;
+    align-items: center;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    height: 48px;
+    padding: 0 6px 0 20px;
+    gap: 15px;
+}
+
+.user-bar:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.username {
+    font-size: 0.95rem;
+    color: white;
+    font-weight: 700;
+    font-family: var(--font-pro);
+    white-space: nowrap;
+}
+
+.divider {
+    width: 1px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.stats-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    background: rgba(0, 0, 0, 0.2);
+    padding: 2px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    white-space: nowrap;
+}
+
+.stat-item.success {
+    color: var(--success-green);
+    border-color: rgba(0, 255, 127, 0.2);
+    background: rgba(0, 255, 127, 0.1);
+}
+
+.stat-item .label {
+    opacity: 0.6;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.stat-item .value {
+    font-weight: 700;
+    font-family: var(--font-mono);
+}
+
+.user-balance {
+    font-weight: 800;
+    color: var(--success-green);
+    font-size: 1.1rem;
+    text-shadow: 0 0 12px var(--success-green-glow);
+    font-family: var(--font-mono);
+    white-space: nowrap;
+}
+
+.logout-icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 59, 48, 0.1);
+    color: var(--primary-red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.logout-icon-btn:hover {
+    background: var(--primary-red);
+    color: white;
+    box-shadow: 0 0 15px var(--primary-red-glow);
+    transform: scale(1.05);
+}
+
+.settings-icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-right: 10px;
+}
+
+.settings-icon-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    transform: rotate(30deg);
+}
+
+@media (max-width: 768px) {
+    .top-bar {
+        height: 70px;
+        padding: 0 1rem;
+    }
+
+    .brand {
+        font-size: 1.2rem;
+    }
+
+    .brand-logo {
+        height: 40px;
+    }
+
+    .user-bar {
+        height: 40px;
+        padding: 0 4px 0 12px;
+        gap: 10px;
+    }
+
+    .stats-row {
+        display: none;
+    }
+
+    .divider:nth-of-type(1),
+    .divider:nth-of-type(2) {
+        display: none;
+    }
+
+    .divider {
+        display: none;
+    }
+
+    .username {
+        max-width: 80px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .user-balance {
+        font-size: 0.95rem;
+    }
+
+    .logout-icon-btn {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+@media (max-width: 480px) {
+    .username {
+        display: none;
+    }
+
+    .user-bar {
+        gap: 8px;
+        padding: 0 4px 0 4px;
+    }
+
+    .user-balance {
+        font-size: 0.9rem;
+    }
+
+    .settings-icon-btn {
+        margin-right: 5px;
+    }
+}
+
+.balance-warning-banner {
+    width: 100%;
+    background: linear-gradient(90deg, #ff9800 0%, #ff5722 100%);
+    color: white;
+    text-align: center;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(255, 87, 34, 0.3);
+    position: relative;
+    z-index: 99;
+    animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

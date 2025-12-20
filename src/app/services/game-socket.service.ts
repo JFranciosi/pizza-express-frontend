@@ -2,6 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Subject, BehaviorSubject, Observable, Subscription, timer } from 'rxjs';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { retryWhen, delay, tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 export enum GameState {
     WAITING = 'WAITING',
@@ -15,6 +16,7 @@ export interface Bet {
     amount: number;
     multiplier?: number | null;
     profit?: number | null;
+    index: number; // 0 or 1
 }
 
 @Injectable({
@@ -22,7 +24,7 @@ export interface Bet {
 })
 export class GameSocketService implements OnDestroy {
     private socket$: WebSocketSubject<any> | undefined;
-    private readonly WS_ENDPOINT = 'ws://localhost:8080/game';
+    private readonly WS_ENDPOINT = `${environment.wsUrl}/game`;
 
     private gameStateSub = new BehaviorSubject<GameState>(GameState.WAITING);
     public gameState$ = this.gameStateSub.asObservable();
@@ -71,25 +73,29 @@ export class GameSocketService implements OnDestroy {
     private handleMessage(message: string) {
         if (message.startsWith('BET:') && !message.startsWith('BET_OK')) {
             const parts = message.split(':');
+            // BET:userId:username:amount:index
             const bet: Bet = {
                 userId: parts[1],
                 username: parts[2],
                 amount: parseFloat(parts[3]),
                 multiplier: null,
-                profit: null
+                profit: null,
+                index: parts.length > 4 ? parseInt(parts[4]) : 0
             };
             const currentBets = this.betsSub.getValue();
             this.betsSub.next([...currentBets, bet]);
 
         } else if (message.startsWith('CASHOUT:') && !message.startsWith('CASHOUT_OK')) {
             const parts = message.split(':');
+            // CASHOUT:userId:multiplier:winAmount:index
             const userId = parts[1];
             const multiplier = parseFloat(parts[2]);
             const profit = parseFloat(parts[3]);
+            const index = parts.length > 4 ? parseInt(parts[4]) : 0;
 
             const currentBets = this.betsSub.getValue();
             const updatedBets = currentBets.map(b => {
-                if (b.userId === userId) {
+                if (b.userId === userId && b.index === index) {
                     return { ...b, multiplier, profit };
                 }
                 return b;
@@ -97,9 +103,13 @@ export class GameSocketService implements OnDestroy {
             this.betsSub.next(updatedBets);
 
         } else if (message.startsWith('CANCEL_BET:')) {
-            const userId = message.split(':')[1];
+            // CANCEL_BET:userId:index
+            const parts = message.split(':');
+            const userId = parts[1];
+            const index = parts.length > 2 ? parseInt(parts[2]) : 0;
+
             const currentBets = this.betsSub.getValue();
-            this.betsSub.next(currentBets.filter(b => b.userId !== userId));
+            this.betsSub.next(currentBets.filter(b => !(b.userId === userId && b.index === index)));
 
         } else if (message.startsWith('STATE:')) {
             const parts = message.split(':');
@@ -130,7 +140,7 @@ export class GameSocketService implements OnDestroy {
             this.multiplierSub.next(mult);
 
             const currentHistory = this.historySub.getValue();
-            this.historySub.next([mult, ...currentHistory].slice(0, 50));
+            this.historySub.next([mult, ...currentHistory].slice(0, 200));
 
             this.betsSub.next([]);
 

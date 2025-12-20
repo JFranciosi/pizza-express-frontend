@@ -18,9 +18,7 @@ export class CrashHistoryComponent implements OnInit {
 
     ngOnInit() {
         this.gameSocket.history$.subscribe(h => {
-            // Reverse so we display [Oldest ... Newest] [+]
-            // Also take only what fits? No, user wanted 50.
-            this.history = [...h].reverse();
+            this.history = [...h];
         });
     }
 

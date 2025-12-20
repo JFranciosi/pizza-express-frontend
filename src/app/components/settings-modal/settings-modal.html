@@ -1,0 +1,92 @@
+<p-toast></p-toast>
+<p-dialog [(visible)]="visible" [modal]="true" [style]="{width: '500px'}"
+    [breakpoints]="{'960px': '75vw', '640px': '95vw'}" [draggable]="false" [resizable]="false" appendTo="body"
+    class="settings-dialog">
+    <ng-template pTemplate="header">
+        <div class="flex align-items-center justify-content-between w-full">
+            <span class="p-dialog-title">ACCOUNT SETTINGS</span>
+            <i class="pi pi-info-circle info-icon" (click)="openLegal()" pTooltip="Legal Info"
+                tooltipPosition="left"></i>
+        </div>
+    </ng-template>
+
+    @if (user) {
+    <div class="settings-content">
+        <div class="profile-section">
+            <h3>Profile</h3>
+            <div class="field-group">
+                <label>Username</label>
+                <!-- Static Readonly Username -->
+                <div class="input-with-icon">
+                    <input pInputText [value]="user?.username" readonly>
+                </div>
+            </div>
+            <div class="field-group">
+                <label>Email</label>
+                <div class="input-with-icon">
+                    <input pInputText [(ngModel)]="editEmail" [readonly]="!isEditingEmail"
+                        [class.error-input]="emailError" [class.editable-active]="isEditingEmail"
+                        (keydown.enter)="saveEmail()">
+                    <i class="action-icon pi" [ngClass]="isEditingEmail ? 'pi-check save-icon' : 'pi-pencil edit-icon'"
+                        (click)="isEditingEmail ? saveEmail() : toggleEditEmail()"></i>
+                </div>
+
+                <!-- Password Confirmation for Email Change -->
+                @if (isEditingEmail) {
+                <div style="margin-top: 0.5rem;">
+                    <p-password [(ngModel)]="confirmEmailPassword" placeholder="Current password" [feedback]="false"
+                        [toggleMask]="true" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"
+                        (keydown.enter)="saveEmail()"></p-password>
+                </div>
+                }
+
+                @if (emailError) {
+                <small class="error-text">{{ emailError }}</small>
+                }
+            </div>
+            <div class="field-group">
+                <label>Current Balance</label>
+                <div class="balance-display">{{ user.balance | currency:'EUR' }}</div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="security-section">
+            <h3>Security</h3>
+            <div class="field-group">
+                <label>Current Password</label>
+                <p-password [(ngModel)]="oldPassword" [toggleMask]="true" [feedback]="false" [style]="{'width':'100%'}"
+                    [inputStyle]="{'width':'100%'}"></p-password>
+            </div>
+
+            <div class="field-group">
+                <label>New Password</label>
+                <p-password [(ngModel)]="newPassword" [toggleMask]="true" [feedback]="true" [style]="{'width':'100%'}"
+                    [inputStyle]="{'width':'100%'}"></p-password>
+            </div>
+
+            <div class="field-group">
+                <label>Confirm New Password</label>
+                <p-password [(ngModel)]="confirmPassword" [toggleMask]="true" [feedback]="false"
+                    [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"></p-password>
+            </div>
+
+            @if (error) {
+            <div class="message-box error">
+                <i class="pi pi-exclamation-circle"></i> {{ error }}
+            </div>
+            }
+
+            @if (success) {
+            <div class="message-box success">
+                <i class="pi pi-check-circle"></i> {{ success }}
+            </div>
+            }
+
+            <button pButton label="UPDATE PASSWORD" class="update-btn" [loading]="loading"
+                (click)="changePassword()"></button>
+        </div>
+    </div>
+    }
+</p-dialog>
