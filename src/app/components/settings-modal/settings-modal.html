@@ -2,9 +2,10 @@
     [breakpoints]="{'960px': '75vw', '640px': '95vw'}" [draggable]="false" [resizable]="false" appendTo="body"
     styleClass="settings-dialog">
     <ng-template pTemplate="header">
-        <div class="flex align-items-center gap-2">
-            <span class="p-dialog-title">Account Settings</span>
-            <i class="pi pi-info-circle info-icon" (click)="openLegal()"></i>
+        <div class="flex align-items-center justify-content-between w-full">
+            <span class="p-dialog-title">ACCOUNT SETTINGS</span>
+            <i class="pi pi-info-circle info-icon" (click)="openLegal()" pTooltip="Legal Info"
+                tooltipPosition="left"></i>
         </div>
     </ng-template>
 
@@ -31,17 +32,20 @@
             <h3>Security</h3>
             <div class="field-group">
                 <label>Current Password</label>
-                <p-password [(ngModel)]="oldPassword" [toggleMask]="true" [feedback]="false"></p-password>
+                <p-password [(ngModel)]="oldPassword" [toggleMask]="true" [feedback]="false" [style]="{'width':'100%'}"
+                    [inputStyle]="{'width':'100%'}"></p-password>
             </div>
 
             <div class="field-group">
                 <label>New Password</label>
-                <p-password [(ngModel)]="newPassword" [toggleMask]="true" [feedback]="true"></p-password>
+                <p-password [(ngModel)]="newPassword" [toggleMask]="true" [feedback]="true" [style]="{'width':'100%'}"
+                    [inputStyle]="{'width':'100%'}"></p-password>
             </div>
 
             <div class="field-group">
                 <label>Confirm New Password</label>
-                <p-password [(ngModel)]="confirmPassword" [toggleMask]="true" [feedback]="false"></p-password>
+                <p-password [(ngModel)]="confirmPassword" [toggleMask]="true" [feedback]="false"
+                    [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"></p-password>
             </div>
 
             <div class="message-box error" *ngIf="error">

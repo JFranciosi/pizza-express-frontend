@@ -11,10 +11,12 @@ import { MessageService } from 'primeng/api';
 
 import { Router } from '@angular/router';
 
+import { TooltipModule } from 'primeng/tooltip';
+
 @Component({
     selector: 'app-settings-modal',
     standalone: true,
-    imports: [CommonModule, FormsModule, DialogModule, ButtonModule, InputTextModule, PasswordModule],
+    imports: [CommonModule, FormsModule, DialogModule, ButtonModule, InputTextModule, PasswordModule, TooltipModule],
     providers: [MessageService],
     templateUrl: './settings-modal.html',
     styleUrls: ['./settings-modal.css']

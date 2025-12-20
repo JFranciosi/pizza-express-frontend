@@ -1,101 +1,171 @@
+/* Global Box Sizing */
+:host ::ng-deep * {
+    box-sizing: border-box;
+}
+
+/* Variables for Alignment */
+:host {
+    --modal-padding: 2.5rem;
+    /* Increased for better spacing, ensures clear alignment */
+}
+
+/* Global Dialog Overrides */
 :host ::ng-deep .settings-dialog .p-dialog-content {
-    background: #121212;
-    color: white;
-    padding: 0;
+    background: transparent;
+    padding: 0 !important;
+    overflow: visible !important;
+    /* Remove scrollbar completely */
+    height: auto !important;
 }
 
 :host ::ng-deep .settings-dialog .p-dialog-header {
-    background: #121212;
-    color: white;
+    background: transparent;
+    color: var(--text-primary);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: var(--modal-padding) !important;
+    gap: 1rem;
+}
+
+:host ::ng-deep .settings-dialog .p-dialog {
+    background: var(--surface-glass);
+    backdrop-filter: var(--blur-strength);
+    -webkit-backdrop-filter: var(--blur-strength);
+    border: var(--glass-border);
+    border-radius: 20px;
+    box-shadow: var(--glass-shadow);
+    display: flex;
+    flex-direction: column;
+    max-height: none !important;
+    /* Allow unbounded growth */
 }
 
 .settings-content {
-    padding: 1.5rem;
+    padding: var(--modal-padding);
+    padding-top: 2rem;
+    /* Slightly less top padding to bring content closer to title */
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    width: 100%;
 }
 
+/* Typography */
 h3 {
-    margin: 0 0 1rem 0;
-    font-size: 1.1rem;
-    color: #22c55e;
+    margin: 0 0 0.8rem 0;
+    font-size: 0.9rem;
+    color: var(--success-green);
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .field-group {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
+    width: 100%;
 }
 
 .field-group label {
     font-size: 0.85rem;
     color: var(--text-secondary);
     font-weight: 500;
+    margin-left: 0.2rem;
 }
 
+/* Inputs */
 .readonly-input {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #fff;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
     width: 100%;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-family: var(--font-mono);
+    opacity: 0.8;
+}
+
+/* PrimeNG Input Overrides */
+/* PrimeNG Input Overrides */
+:host ::ng-deep .p-password {
+    width: 100%;
+}
+
+:host ::ng-deep .p-password input {
+    width: 100% !important;
+}
+
+:host ::ng-deep .p-password-input-overlay,
+:host ::ng-deep .p-password-panel {
+    width: 100%;
+    /* Ensure password strength panel matches input width if visible */
+}
+
+:host ::ng-deep .p-password input,
+:host ::ng-deep .p-inputtext:not(.readonly-input) {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    transition: all 0.2s;
+}
+
+:host ::ng-deep .p-password input:focus,
+:host ::ng-deep .p-inputtext:not(.readonly-input):focus {
+    border-color: var(--success-green);
+    box-shadow: 0 0 0 2px var(--success-green-glow);
+    background: rgba(0, 0, 0, 0.5);
 }
 
 .balance-display {
     font-family: var(--font-mono);
-    font-size: 1.2rem;
+    font-size: 1.8rem;
     color: var(--success-green);
     font-weight: 800;
+    text-shadow: 0 0 15px var(--success-green-glow);
+    padding: 0.5rem 0;
 }
 
 .divider {
     height: 1px;
-    background: rgba(255, 255, 255, 0.1);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
     width: 100%;
+    margin: 0.5rem 0;
 }
 
-:host ::ng-deep .p-password,
-:host ::ng-deep .p-password input {
-    width: 100%;
-}
-
-:host ::ng-deep .p-password input {
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: white;
-}
-
-:host ::ng-deep .p-password input:focus,
-:host ::ng-deep .p-inputtext:focus {
-    border-color: #22c55e;
-    box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.3);
-}
-
+/* Update Button */
 .update-btn {
     width: 100%;
     margin-top: 1rem;
-    background: #22c55e;
+    background: linear-gradient(135deg, var(--success-green) 0%, #00b359 100%);
     border: none;
     font-weight: 800;
+    letter-spacing: 1px;
+    padding: 1rem;
+    border-radius: 8px;
+    text-transform: uppercase;
+    box-shadow: 0 4px 15px var(--success-green-glow);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .update-btn:hover {
-    background: #16a34a;
-    /* Darker Green */
+    background: linear-gradient(135deg, #33eb96 0%, var(--success-green) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px var(--success-green-glow);
 }
 
+/* Messages */
 .message-box {
-    padding: 0.8rem;
+    padding: 1rem;
     border-radius: 8px;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.8rem;
     font-size: 0.9rem;
     margin-top: 0.5rem;
 }
@@ -112,33 +182,54 @@ h3 {
     color: #00e676;
 }
 
-@media (max-width: 640px) {
-    :host ::ng-deep .settings-dialog .p-dialog-header {
-        padding: 1rem;
-    }
-
-    :host ::ng-deep .settings-dialog .p-dialog-title {
-        font-size: 1.1rem;
-    }
-
-    .settings-content {
-        padding: 1rem;
-        gap: 1rem;
-    }
-
-    .field-group {
-        margin-bottom: 0.8rem;
-    }
-}
-
+/* Header Info */
 .info-icon {
     color: var(--text-secondary);
     cursor: pointer;
     font-size: 1.2rem;
-    transition: color 0.2s;
+    transition: all 0.2s;
     margin-left: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 50%;
 }
 
 .info-icon:hover {
-    color: var(--accent-orange);
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+:host ::ng-deep .p-dialog-title {
+    font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+}
+
+/* Close Icon Adjustment */
+:host ::ng-deep .p-dialog-header-icons {
+    margin-right: -0.5rem;
+    /* Compensate for icon padding to align visually */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 640px) {
+    :host ::ng-deep .settings-dialog .p-dialog {
+        width: 100% !important;
+        margin: 0;
+        max-height: 100vh !important;
+        height: 100vh !important;
+        border-radius: 0;
+    }
+
+    .settings-content {
+        padding: 1.5rem;
+        gap: 1.2rem;
+    }
+
+    h3 {
+        font-size: 0.85rem;
+    }
+
+    .balance-display {
+        font-size: 1.5rem;
+    }
 }
