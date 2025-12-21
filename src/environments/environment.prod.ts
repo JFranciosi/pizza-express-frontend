@@ -1,5 +1,5 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://pizza-express-backend.azurewebsites.net',
-    wsUrl: 'wss://pizza-express-backend.azurewebsites.net'
+    apiUrl: 'https://pizzaezpress-cfhubva9axd0dxeq.italynorth-01.azurewebsites.net',
+    wsUrl: 'wss://pizzaezpress-cfhubva9axd0dxeq.italynorth-01.azurewebsites.net'
 };
