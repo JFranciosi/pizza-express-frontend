@@ -45,6 +45,21 @@ A premium, responsive, and real-time betting interface.
    ```
 
 3. Open `http://localhost:4200`.
+   
+## ☁️ Deployment
+
+### 1. Build for Production
+```bash
+npm run build --prod
+```
+
+### 2. Netlify (Frontend)
+- Drag and drop the `dist/pizza-express-frontend` folder to Netlify.
+- **Important**: Ensure your `CORS_ORIGINS` on the backend includes your Netlify domain.
+
+### 3. Azure (Backend)
+- This frontend is configured to talk to: `https://pizzaezpress-cfhubva9axd0dxeq.italynorth-01.azurewebsites.net`
+- Ensure the backend on Azure has the environment variable `CORS_ORIGINS` set to this frontend's URL.
 
 ## 📂 Project Structure
 
