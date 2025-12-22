@@ -17,10 +17,6 @@
     text-decoration: none;
     font-size: 1.1rem;
     transition: all 0.2s;
-    cursor: pointer;
-    display: inline-block;
-    position: relative;
-    z-index: 10;
 }
 
 .contact-email:hover {
