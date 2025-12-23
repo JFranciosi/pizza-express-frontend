@@ -15,6 +15,14 @@
             <!-- Middle: Game Canvas -->
             <div class="canvas-wrapper">
                 <canvas #gameCanvas></canvas>
+                @if (winToastVisible) {
+                <div class="win-toast">
+                    <div class="win-content">
+                        <div class="win-label">YOU WON</div>
+                        <div class="win-amount">+{{ winAmount | currency:'EUR':'symbol':'1.2-2' }}</div>
+                    </div>
+                </div>
+                }
             </div>
 
             <!-- Bottom: Betting Controls -->

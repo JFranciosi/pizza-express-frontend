@@ -144,3 +144,56 @@ canvas {
         flex-shrink: 0;
     }
 }
+
+.win-toast {
+    position: absolute;
+    top: calc(20px + 0.5rem);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    pointer-events: none;
+    animation: slideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.win-content {
+    background: rgba(0, 0, 0, 0.85);
+    border: 1px solid #00e676;
+    border-radius: 6px;
+    padding: 4px 12px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 230, 118, 0.2);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.win-label {
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-bottom: 0;
+    font-family: 'Outfit', sans-serif;
+    opacity: 0.9;
+    letter-spacing: 0.3px;
+}
+
+.win-amount {
+    color: #00e676;
+    font-size: 0.9rem;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    text-shadow: 0 0 5px rgba(0, 230, 118, 0.3);
+}
+
+@keyframes slideDown {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}

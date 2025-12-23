@@ -52,6 +52,10 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
 
     private readonly RAMP_TIME = 6000;
 
+    winToastVisible: boolean = false;
+    winAmount: number = 0;
+    private toastTimeout: any = null;
+
     constructor(
         private authService: AuthService,
         private router: Router,
@@ -87,6 +91,10 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
                         this.startDrawing();
                     } else if (state === GameState.CRASHED) {
                         this.crashStartTime = Date.now();
+                    } else if (state === GameState.WAITING) {
+                        this.winToastVisible = false;
+                        if (this.toastTimeout) clearTimeout(this.toastTimeout);
+                        this.startDrawing();
                     } else {
                         this.startDrawing();
                     }
@@ -115,8 +123,46 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
                 if (Math.abs(estimatedEnd - this.waitingEndTime) > 500 || this.waitingEndTime === 0) {
                     this.waitingEndTime = estimatedEnd;
                 }
+            }),
+            // Toast Logic
+            this.gameSocket.bets$.subscribe(bets => {
+                const user = this.authService.getUser();
+                if (user) {
+                    // Check if *any* of my bets are won
+                    const myWinningBets = bets.filter(b => b.userId === user.id && b.profit && b.profit > 0);
+                    // Filter those that we haven't shown toast for? 
+                    // Actually, simple logic: if profit > 0 and toast not visible (or different amount), show it.
+                    // But duplicates? The bets array is state.
+                    // Ideally we react to specific events or diffing. 
+                    // Since "optimistic update" happens instantly, this stream emits the won bet instantly.
+
+                    // Let's find the most recent win? Or simply sum them?
+                    // Let's just monitor if a new win appeared.
+                    // Basic approach: If there is a winning bet that wasn't there before?
+                    // Or simpler: If we see a winning bet, we show the toast. 
+                    // To avoid spamming, we trigger only if toast wasn't visible or amount changed significantly.
+                    if (myWinningBets.length > 0) {
+                        // Sum them up or just take the last one? Usually single bet per round.
+                        // Multibet support: sum all profits.
+                        const totalProfit = myWinningBets.reduce((acc, b) => acc + (b.profit || 0), 0);
+
+                        if (!this.winToastVisible || this.winAmount !== totalProfit) {
+                            this.showWinToast(totalProfit);
+                        }
+                    }
+                }
             })
         );
+    }
+
+    showWinToast(amount: number) {
+        this.winAmount = amount;
+        this.winToastVisible = true;
+
+        if (this.toastTimeout) clearTimeout(this.toastTimeout);
+        this.toastTimeout = setTimeout(() => {
+            this.winToastVisible = false;
+        }, 3000);
     }
 
     ngAfterViewInit() {
@@ -329,8 +375,6 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
 
     getScaleFactor(): number {
         const w = this.canvasRef.nativeElement.width;
-        // Base width for desktop is around 1200px
-        // We clamp the scale between 0.5 (mobile) and 1.2 (large screens)
         return Math.min(1.2, Math.max(0.5, w / 1200));
     }
 
