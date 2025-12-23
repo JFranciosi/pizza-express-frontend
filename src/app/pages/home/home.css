@@ -92,30 +92,57 @@ canvas {
 
 @media (max-width: 992px) {
     .dashboard-layout {
-        grid-template-columns: 1fr;
-        height: auto;
-        overflow-y: auto;
-        padding-bottom: 80px;
-        display: block;
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100dvh !important;
+        /* Use dynamic viewport height */
+        max-height: 100dvh !important;
+        overflow: hidden !important;
+        /* Strictly no scroll on main container */
+        padding: 0.5rem !important;
+        gap: 0.5rem !important;
     }
 
     .column {
         height: auto;
-        margin-bottom: 1rem;
+        margin-bottom: 0;
+        min-height: 0;
+        /* Crucial for nested flex scrolling/shrinking */
     }
 
     .left-col {
-        height: auto;
-        order: 2;
+        display: none;
+        /* Hide player list on mobile to prioritize game */
     }
 
     .center-col {
         order: 1;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        height: 100%;
     }
 
-
+    /* Crash History: ensure it doesn't take too much space */
+    app-crash-history {
+        flex-shrink: 0;
+    }
 
     .canvas-wrapper {
-        height: 350px;
+        flex: 1;
+        /* Take up all remaining space */
+        height: auto;
+        /* Override fixed height */
+        min-height: 0;
+        /* Allow shrinking */
+        border-radius: 12px;
+        padding: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    app-bet-controls {
+        flex-shrink: 0;
+        /* Don't shrink controls */
     }
 }
