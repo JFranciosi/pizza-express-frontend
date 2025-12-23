@@ -24,6 +24,10 @@
                 </div>
                 <div class="divider"></div>
 
+                <button class="settings-icon-btn fairness-btn" (click)="openFairness()" title="Provably Fair">
+                    <i class="pi pi-shield"></i>
+                </button>
+
                 <button class="settings-icon-btn" (click)="openSettings()">
                     <i class="pi pi-cog"></i>
                 </button>
@@ -46,3 +50,4 @@
     }
 
     <app-settings-modal></app-settings-modal>
+    <app-fairness-modal></app-fairness-modal>

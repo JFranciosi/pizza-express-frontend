@@ -128,31 +128,52 @@ export class BetPanelComponent {
     cancelBet() {
         if (!this.betPlaced) return;
 
+        // Optimistic update
+        this.betPlaced = false;
+        const user = this.authService.getUser();
+        if (user) {
+            // Optimistically refund? Be careful with balance sync. 
+            // Better to wait for server balance update or predict it.
+            // For now, just visuals.
+        }
+
         this.gameApi.cancelBet(this.index).subscribe({
             next: () => {
-                this.betPlaced = false;
+                // Confirmed by server
                 const user = this.authService.getUser();
                 if (user) {
                     this.authService.updateBalance(user.balance + this.betAmount);
                 }
             },
-            error: (err: any) => console.error('Cancel bet failed', err)
+            error: (err: any) => {
+                console.error('Cancel bet failed', err);
+                // Revert state
+                this.betPlaced = true;
+                this.showError('Check failed');
+            }
         });
     }
 
     cashOut() {
         if (!this.betPlaced || this.cashedOut) return;
 
+        // Optimistic update
+        this.cashedOut = true;
+
         this.gameApi.cashOut(this.index).subscribe({
             next: (response: any) => {
-                this.cashedOut = true;
                 const winAmount = response.winAmount;
                 const newBalance = response.newBalance;
 
                 this.authService.updateBalance(newBalance);
                 console.log(`Cashout success: Won ${winAmount}`);
             },
-            error: (err: any) => console.error('Cashout failed', err)
+            error: (err: any) => {
+                console.error('Cashout failed', err);
+                // Revert state
+                this.cashedOut = false;
+                this.showError('Cashout failed');
+            }
         });
     }
 

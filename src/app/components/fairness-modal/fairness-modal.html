@@ -1,0 +1,29 @@
+<p-dialog header="Provably Fair" [(visible)]="visible" [modal]="true" [style]="{ width: '400px' }"
+    [breakpoints]="{'960px': '75vw', '640px': 'calc(100vw - 1rem)'}" [draggable]="false" [resizable]="false">
+    <div class="fairness-content">
+        <div class="info-block">
+            <h3>Current Round Hash (SHA256)</h3>
+            <p class="desc">Commitment generated before the round starts.</p>
+            <div class="code-box">
+                <code>{{ currentHash() || 'Waiting for round...' }}</code>
+                <button pButton icon="pi pi-copy" class="p-button-text p-button-sm"
+                    (click)="copyToClipboard(currentHash())" [disabled]="!currentHash()"></button>
+            </div>
+        </div>
+
+        <div class="info-block">
+            <h3>Previous Round Secret (Seed)</h3>
+            <p class="desc">Revealed after crash. SHA256(Secret) must match the Hash.</p>
+            <div class="code-box">
+                <code>{{ lastSecret() || 'Revealed after crash' }}</code>
+                <button pButton icon="pi pi-copy" class="p-button-text p-button-sm"
+                    (click)="copyToClipboard(lastSecret())" [disabled]="!lastSecret()"></button>
+            </div>
+        </div>
+
+        <div class="verification-note">
+            <i class="pi pi-shield"></i>
+            <span>This game uses a reverse hash chain. Each round's hash is the seed for the next.</span>
+        </div>
+    </div>
+</p-dialog>

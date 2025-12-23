@@ -247,7 +247,9 @@
     }
 
     .settings-icon-btn {
-        margin-right: 5px;
+        margin-right: 2px;
+        width: 32px;
+        height: 32px;
     }
 }
 
