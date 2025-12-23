@@ -88,7 +88,7 @@ export class GameSocketService implements OnDestroy {
                     multiplier: null,
                     profit: null,
                     index: parts.length > 4 ? parseInt(parts[4]) : 0,
-                    avatarUrl: parts.length > 5 ? parts[5] : undefined
+                    avatarUrl: parts.length > 5 ? parts.slice(5).join(':') : undefined
                 };
 
                 const currentBets = this.betsSub.getValue();
