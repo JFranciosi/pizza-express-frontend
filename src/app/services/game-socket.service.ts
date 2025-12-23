@@ -41,6 +41,12 @@ export class GameSocketService implements OnDestroy {
     private historySub = new BehaviorSubject<number[]>([]);
     public history$ = this.historySub.asObservable();
 
+    private currentHashSub = new BehaviorSubject<string>('');
+    public currentHash$ = this.currentHashSub.asObservable();
+
+    private lastSecretSub = new BehaviorSubject<string>('');
+    public lastSecret$ = this.lastSecretSub.asObservable();
+
     constructor() {
         this.connect();
     }
@@ -143,6 +149,17 @@ export class GameSocketService implements OnDestroy {
             this.historySub.next([mult, ...currentHistory].slice(0, 200));
 
             this.betsSub.next([]);
+
+            if (message.split(':').length > 2) {
+                const secret = message.split(':')[2];
+                this.lastSecretSub.next(secret);
+            }
+
+        } else if (message.startsWith('HASH:')) {
+            const hash = message.split(':')[1];
+            this.currentHashSub.next(hash);
+            // Reset secret on new hash/round
+            this.lastSecretSub.next('');
 
         } else if (message.startsWith('TIMER:')) {
             const seconds = parseInt(message.split(':')[1], 10);

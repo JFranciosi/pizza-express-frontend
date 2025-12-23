@@ -6,16 +6,18 @@ import { Router } from '@angular/router';
 import { GameSocketService, Bet } from '../../services/game-socket.service';
 import { Subscription } from 'rxjs';
 import { SettingsModalComponent } from '../settings-modal/settings-modal';
+import { FairnessModalComponent } from '../fairness-modal/fairness-modal';
 
 @Component({
     selector: 'app-top-bar',
     standalone: true,
-    imports: [CommonModule, ButtonModule, SettingsModalComponent],
+    imports: [CommonModule, ButtonModule, SettingsModalComponent, FairnessModalComponent],
     templateUrl: './top-bar.html',
     styleUrl: './top-bar.css'
 })
 export class TopBarComponent implements OnInit, OnDestroy {
     @ViewChild(SettingsModalComponent) settingsModal!: SettingsModalComponent;
+    @ViewChild(FairnessModalComponent) fairnessModal!: FairnessModalComponent;
     user: any | null = null;
     lastBet: number = 0;
     lastWin: number = 0;
@@ -62,6 +64,10 @@ export class TopBarComponent implements OnInit, OnDestroy {
 
     openSettings() {
         this.settingsModal.show();
+    }
+
+    openFairness() {
+        this.fairnessModal.show();
     }
 
     ngOnDestroy() {
