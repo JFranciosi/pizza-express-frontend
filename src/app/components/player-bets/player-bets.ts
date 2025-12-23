@@ -18,4 +18,12 @@ export class PlayerBetsComponent {
     constructor(private gameSocket: GameSocketService) {
         this.bets = toSignal(this.gameSocket.bets$, { initialValue: [] });
     }
+
+    getAvatarUrl(url: string | undefined): string {
+        if (!url) return 'assets/default-avatar.png';
+        if (url.startsWith('/uploads/')) {
+            return `http://localhost:8080${url}`;
+        }
+        return url;
+    }
 }

@@ -14,6 +14,22 @@
     <div class="settings-content">
         <div class="profile-section">
             <h3>Profile</h3>
+
+            <div class="field-group avatar-field">
+                <div class="avatar-preview-wrapper" (click)="fileInput.click()" style="cursor: pointer;">
+                    <img [src]="getAvatarUrl(editAvatar)" (error)="onAvatarError($event)" class="avatar-preview">
+                    <div class="avatar-overlay">
+                        <i class="pi pi-camera"></i>
+                    </div>
+                </div>
+                <div class="input-with-icon">
+                    <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" hidden>
+                    <button pButton label="Choose Image" class="p-button-outlined p-button-sm"
+                        (click)="fileInput.click()"></button>
+                    <!-- Loading indicator? -->
+                </div>
+            </div>
+
             <div class="field-group">
                 <label>Username</label>
                 <!-- Static Readonly Username -->

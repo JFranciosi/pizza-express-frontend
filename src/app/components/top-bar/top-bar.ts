@@ -90,6 +90,18 @@ export class TopBarComponent implements OnInit, OnDestroy {
         }
     }
 
+    onAvatarError(event: any) {
+        event.target.src = 'assets/default-avatar.png';
+    }
+
+    getAvatarUrl(url: string | undefined): string {
+        if (!url) return 'assets/default-avatar.png';
+        if (url.startsWith('/uploads/')) {
+            return `http://localhost:8080${url}`;
+        }
+        return url;
+    }
+
     ngOnDestroy() {
         this.subs.forEach(s => s.unsubscribe());
         this.audio.pause();

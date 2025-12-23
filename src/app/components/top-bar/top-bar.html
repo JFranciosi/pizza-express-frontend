@@ -8,40 +8,34 @@
         @if (user) {
         <div class="user-info mr-3">
             <div class="user-bar">
-                <span class="username">{{ user.username }}</span>
-                <div class="divider"></div>
-                <div class="stats-row">
-                    <div class="stat-item">
-                        <span class="label">LAST</span>
-                        <span class="value">{{ lastBet | currency:'EUR':'symbol':'1.0-0' }}</span>
-                    </div>
-                    @if (lastWin > 0) {
-                    <div class="stat-item success">
-                        <span class="label">WIN</span>
-                        <span class="value">+{{ lastWin | currency:'EUR':'symbol':'1.0-0' }}</span>
-                    </div>
-                    }
+                <div class="user-avatar-wrapper">
+                    <img [src]="getAvatarUrl(user.avatarUrl)" class="user-avatar" (error)="onAvatarError($event)">
                 </div>
-                <div class="divider"></div>
+                <div class="user-details ml-2">
+                    <span class="username">{{ user.username }}</span>
+                    <span class="user-balance">{{ user.balance | currency:'EUR' }}</span>
+                </div>
 
-                <button class="settings-icon-btn fairness-btn" (click)="openFairness()" title="Provably Fair">
-                    <i class="pi pi-shield"></i>
-                </button>
+                <div class="vertical-divider"></div>
 
-                <button class="settings-icon-btn" (click)="toggleMute()"
-                    [title]="isMuted ? 'Unmute Music' : 'Mute Music'">
-                    <i class="pi" [class.pi-volume-off]="isMuted" [class.pi-volume-up]="!isMuted"></i>
-                </button>
+                <div class="actions-row">
+                    <button class="settings-icon-btn fairness-btn" (click)="openFairness()" title="Provably Fair">
+                        <i class="pi pi-shield"></i>
+                    </button>
 
-                <button class="settings-icon-btn" (click)="openSettings()">
-                    <i class="pi pi-cog"></i>
-                </button>
+                    <button class="settings-icon-btn" (click)="toggleMute()"
+                        [title]="isMuted ? 'Unmute Music' : 'Mute Music'">
+                        <i class="pi" [class.pi-volume-off]="isMuted" [class.pi-volume-up]="!isMuted"></i>
+                    </button>
 
-                <span class="user-balance">{{ user.balance | currency:'EUR' }}</span>
-                <div class="divider"></div>
-                <button class="logout-icon-btn" (click)="onLogout()">
-                    <i class="pi pi-sign-out"></i>
-                </button>
+                    <button class="settings-icon-btn" (click)="openSettings()">
+                        <i class="pi pi-cog"></i>
+                    </button>
+
+                    <button class="logout-icon-btn" (click)="onLogout()">
+                        <i class="pi pi-sign-out"></i>
+                    </button>
+                </div>
             </div>
         </div>
         }

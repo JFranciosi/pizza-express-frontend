@@ -207,29 +207,70 @@
         display: none;
     }
 
-    .divider:nth-of-type(1),
-    .divider:nth-of-type(2) {
-        display: none;
-    }
-
-    .divider {
-        display: none;
-    }
-
-    .username {
-        max-width: 80px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .user-balance {
-        font-size: 0.95rem;
-    }
-
-    .logout-icon-btn {
+    .user-avatar-wrapper {
         width: 32px;
         height: 32px;
     }
+}
+
+.user-avatar-wrapper {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid rgba(78, 78, 78, 0.559);
+    flex-shrink: 0;
+    position: relative;
+    background: rgba(0, 0, 0, 0.559);
+}
+
+.user-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    line-height: 1.2;
+}
+
+.vertical-divider {
+    width: 1px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 0 10px;
+}
+
+.actions-row {
+    display: flex;
+    align-items: center;
+}
+
+.divider:nth-of-type(1),
+.divider:nth-of-type(2) {
+    display: none;
+}
+
+.divider {
+    display: none;
+}
+
+.username {
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.user-balance {
+    font-size: 0.95rem;
+}
+
+.logout-icon-btn {
+    width: 32px;
+    height: 32px;
 }
 
 @media (max-width: 480px) {

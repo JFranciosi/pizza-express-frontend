@@ -17,6 +17,7 @@ export interface Bet {
     multiplier?: number | null;
     profit?: number | null;
     index: number;
+    avatarUrl?: string;
 }
 
 @Injectable({
@@ -86,7 +87,8 @@ export class GameSocketService implements OnDestroy {
                     amount: parseFloat(parts[3]),
                     multiplier: null,
                     profit: null,
-                    index: parts.length > 4 ? parseInt(parts[4]) : 0
+                    index: parts.length > 4 ? parseInt(parts[4]) : 0,
+                    avatarUrl: parts.length > 5 ? parts[5] : undefined
                 };
 
                 const currentBets = this.betsSub.getValue();

@@ -16,6 +16,7 @@ export interface AuthResponse {
     username: string;
     email: string;
     balance: number;
+    avatarUrl?: string;
 }
 
 export interface User {
@@ -23,4 +24,5 @@ export interface User {
     username: string;
     email: string;
     balance: number;
+    avatarUrl?: string;
 }
