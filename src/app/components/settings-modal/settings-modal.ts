@@ -9,6 +9,7 @@ import { ToastModule } from 'primeng/toast';
 import { AuthService } from '../../services/auth.service';
 import { MessageService } from 'primeng/api';
 
+
 import { Router } from '@angular/router';
 
 import { TooltipModule } from 'primeng/tooltip';
@@ -35,6 +36,9 @@ export class SettingsModalComponent implements OnInit {
     error: string = '';
     success: string = '';
 
+    editAvatar: string = '';
+    isEditingAvatar: boolean = false;
+
     constructor(private authService: AuthService, private router: Router, private messageService: MessageService) { }
 
     ngOnInit() {
@@ -42,6 +46,7 @@ export class SettingsModalComponent implements OnInit {
             this.user = user;
             if (user) {
                 this.editEmail = user.email;
+                this.editAvatar = user.avatarUrl || '';
             }
         });
     }
@@ -64,9 +69,11 @@ export class SettingsModalComponent implements OnInit {
         this.success = '';
         this.emailError = '';
         this.isEditingEmail = false;
+        this.isEditingAvatar = false;
         this.confirmEmailPassword = '';
         if (this.user) {
             this.editEmail = this.user.email;
+            this.editAvatar = this.user.avatarUrl || '';
         }
         this.loading = false;
     }
@@ -76,6 +83,47 @@ export class SettingsModalComponent implements OnInit {
         this.confirmEmailPassword = '';
         if (!this.isEditingEmail) this.editEmail = this.user.email;
         else this.emailError = '';
+    }
+
+    toggleEditAvatar() {
+        this.isEditingAvatar = !this.isEditingAvatar;
+        if (!this.isEditingAvatar) {
+            this.editAvatar = this.user.avatarUrl || '';
+        }
+    }
+
+
+    onFileSelected(event: any) {
+        const file: File = event.target.files[0];
+        if (file) {
+            this.uploadAvatar(file);
+        }
+    }
+
+    uploadAvatar(file: File) {
+        this.loading = true;
+        const formData = new FormData();
+        formData.append('file', file);
+
+        this.authService.updateAvatar(formData).subscribe({
+            next: (res: any) => {
+                this.loading = false;
+                this.messageService.add({ severity: 'success', summary: 'Successo', detail: 'Avatar aggiornato' });
+            },
+            error: (err) => {
+                this.loading = false;
+                this.messageService.add({ severity: 'error', summary: 'Errore', detail: 'Upload failed: ' + (err.error?.message || err.statusText) });
+            }
+        });
+    }
+
+    getAvatarUrl(url: string): string {
+        if (!url) return '/assets/default-avatar.png';
+        return url;
+    }
+
+    onAvatarError(event: any) {
+        event.target.src = '/assets/default-avatar.png';
     }
 
     saveEmail() {

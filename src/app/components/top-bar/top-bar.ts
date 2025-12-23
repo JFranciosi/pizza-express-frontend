@@ -24,6 +24,10 @@ export class TopBarComponent implements OnInit, OnDestroy {
 
     private subs: Subscription[] = [];
 
+    // Audio Player
+    private audio: HTMLAudioElement = new Audio('/assets/pizza-soundtrack.mp3');
+    public isMuted: boolean = true;
+
     constructor(
         private authService: AuthService,
         private router: Router,
@@ -34,6 +38,10 @@ export class TopBarComponent implements OnInit, OnDestroy {
                 this.user = user;
             })
         );
+
+        // Configure audio
+        this.audio.loop = true;
+        this.audio.volume = 0.3; // Set a reasonable volume
     }
 
     ngOnInit() {
@@ -70,7 +78,33 @@ export class TopBarComponent implements OnInit, OnDestroy {
         this.fairnessModal.show();
     }
 
+    toggleMute() {
+        this.isMuted = !this.isMuted;
+        if (!this.isMuted) {
+            this.audio.play().catch(e => {
+                console.error("Error playing audio:", e);
+                this.isMuted = true; // Revert if playback fails (e.g. browser block)
+            });
+        } else {
+            this.audio.pause();
+        }
+    }
+
+    onAvatarError(event: any) {
+        event.target.src = 'assets/default-avatar.png';
+    }
+
+    getAvatarUrl(url: string | undefined): string {
+        if (!url) return 'assets/default-avatar.png';
+        if (url.startsWith('/uploads/')) {
+            return `http://localhost:8080${url}`;
+        }
+        return url;
+    }
+
     ngOnDestroy() {
         this.subs.forEach(s => s.unsubscribe());
+        this.audio.pause();
+        this.audio = null!;
     }
 }

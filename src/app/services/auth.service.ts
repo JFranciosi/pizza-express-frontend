@@ -39,7 +39,8 @@ export class AuthService {
             id: response.userId,
             username: response.username,
             email: response.email,
-            balance: response.balance
+            balance: response.balance,
+            avatarUrl: response.avatarUrl
         };
         localStorage.setItem('user_data', JSON.stringify(user));
         this.userSubject.next(user);
@@ -84,6 +85,19 @@ export class AuthService {
                 const user = this.getUser();
                 if (user) {
                     user.email = email;
+                    localStorage.setItem('user_data', JSON.stringify(user));
+                    this.userSubject.next({ ...user });
+                }
+            })
+        );
+    }
+
+    updateAvatar(formData: FormData): Observable<any> {
+        return this.http.post(`${this.apiUrl}/upload-avatar`, formData).pipe(
+            tap((response: any) => {
+                const user = this.getUser();
+                if (user && response.avatarUrl) {
+                    user.avatarUrl = response.avatarUrl;
                     localStorage.setItem('user_data', JSON.stringify(user));
                     this.userSubject.next({ ...user });
                 }
