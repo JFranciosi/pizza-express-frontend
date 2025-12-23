@@ -1,4 +1,11 @@
 /* Glass Panel Style */
+:host {
+    display: block;
+    min-width: 0;
+    /* Critical for grid children */
+    width: 100%;
+}
+
 .controls-panel {
     background: var(--surface-glass);
     backdrop-filter: var(--blur-strength);
@@ -16,6 +23,11 @@
     transition: all 0.3s ease;
     box-shadow: var(--glass-shadow), 0 0 100px rgba(0, 230, 118, 0.1);
     border: 1px solid rgba(0, 230, 118, 0.1);
+    width: 100%;
+    box-sizing: border-box;
+    /* Ensure padding doesn't overflow width */
+    min-width: 0;
+    /* CRITICAL: Allows grid item to shrink below content size */
 }
 
 .controls-panel:hover {
@@ -302,6 +314,89 @@
     text-align: center;
     gap: 1rem;
     padding: 1rem;
+}
+
+/* Compact Side-by-Side Mobile Styles */
+/* Compact Side-by-Side Mobile Styles */
+@media (max-width: 992px) {
+    .controls-panel {
+        padding: 0.35rem !important;
+        border-radius: 12px;
+        gap: 0.2rem !important;
+        min-width: 0 !important;
+    }
+
+    .pizza-btn {
+        padding: 0.25rem;
+        font-size: 0.7rem;
+        border-radius: 6px;
+    }
+
+    .quick-bets {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.2rem !important;
+    }
+
+    .quick-bets .pizza-btn:nth-child(5) {
+        grid-column: span 2 !important;
+    }
+
+    .inputs-row {
+        grid-template-columns: 1fr !important;
+        gap: 0.35rem !important;
+    }
+
+    .input-header {
+        margin-bottom: 0;
+    }
+
+    .input-header label {
+        font-size: 0.65rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+    }
+
+    .toggle-wrapper {
+        font-size: 0.6rem;
+        padding: 1px 4px;
+        flex-shrink: 0;
+        /* Keep toggle same size */
+    }
+
+    ::ng-deep .p-inputnumber-input {
+        padding: 0.25rem !important;
+        font-size: 0.8rem !important;
+        height: 32px;
+        border-radius: 8px !important;
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    .bet-button {
+        font-size: 0.7rem !important;
+        padding: 0.4rem;
+        border-radius: 8px;
+        line-height: 1;
+        min-height: 36px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 0.25rem;
+        align-items: center;
+    }
+
+    .sub-text {
+        font-size: 0.7rem;
+        margin-top: 0;
+        margin-left: 2px;
+        display: inline-block;
+    }
+
+    .action-row {
+        margin-top: 0;
+    }
 }
 
 .error-icon {

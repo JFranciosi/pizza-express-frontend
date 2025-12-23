@@ -5,8 +5,10 @@
     width: 100%;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
     .bet-controls-container {
-        grid-template-columns: 1fr;
+        /* Force side-by-side on all mobile/tablets */
+        gap: 0.25rem !important;
+        /* Tighter gap */
     }
 }
