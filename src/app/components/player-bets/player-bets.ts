@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { GameSocketService } from '../../services/game-socket.service';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'app-player-bets',
@@ -21,6 +22,9 @@ export class PlayerBetsComponent {
 
     getAvatarUrl(url: string | undefined): string {
         if (!url) return '/assets/default-avatar.png';
+        if (url.startsWith('/users/')) {
+            return `${environment.apiUrl}${url}`;
+        }
         return url;
     }
 }
