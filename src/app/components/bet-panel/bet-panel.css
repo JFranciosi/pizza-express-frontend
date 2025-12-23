@@ -2,7 +2,6 @@
 :host {
     display: block;
     min-width: 0;
-    /* Critical for grid children */
     width: 100%;
 }
 
@@ -11,23 +10,18 @@
     backdrop-filter: var(--blur-strength);
     -webkit-backdrop-filter: var(--blur-strength);
     border-radius: 16px;
-    /* Slightly smaller radius */
     padding: 0.75rem;
-    /* Reduced padding */
     box-shadow: var(--glass-shadow);
     border: var(--glass-border);
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    /* Reduced gap */
     transition: all 0.3s ease;
     box-shadow: var(--glass-shadow), 0 0 100px rgba(0, 230, 118, 0.1);
     border: 1px solid rgba(0, 230, 118, 0.1);
     width: 100%;
     box-sizing: border-box;
-    /* Ensure padding doesn't overflow width */
     min-width: 0;
-    /* CRITICAL: Allows grid item to shrink below content size */
 }
 
 .controls-panel:hover {

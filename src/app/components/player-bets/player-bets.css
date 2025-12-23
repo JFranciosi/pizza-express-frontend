@@ -153,3 +153,49 @@
     font-size: 1rem;
     text-shadow: 0 0 8px var(--success-green-glow);
 }
+
+/* Compact Mobile Styles for Top Bar */
+@media (max-width: 992px) {
+    :host ::ng-deep .players-panel .p-card-body {
+        padding: 0.5rem !important;
+    }
+
+    .players-header {
+        display: flex;
+        /* Restore header */
+        font-size: 0.65rem;
+        /* Very small font */
+        padding-bottom: 0.25rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .player-row {
+        padding: 0.25rem 0.5rem !important;
+        /* Slim padding */
+        border-radius: 8px;
+    }
+
+    .player-avatar {
+        width: 24px;
+        height: 24px;
+        font-size: 0.7rem;
+    }
+
+    .player-name {
+        font-size: 0.8rem;
+    }
+
+    .bet-amount,
+    .profit-amount {
+        font-size: 0.8rem;
+    }
+
+    .cashout-pill {
+        padding: 2px 8px;
+        font-size: 0.7rem;
+    }
+
+    .player-info {
+        gap: 0.5rem;
+    }
+}

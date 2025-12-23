@@ -7,8 +7,9 @@
 
 @media (max-width: 992px) {
     .bet-controls-container {
-        /* Force side-by-side on all mobile/tablets */
+        grid-template-columns: 1fr 1fr !important;
         gap: 0.25rem !important;
-        /* Tighter gap */
+        max-width: 600px !important;
+        margin: 0 auto !important;
     }
 }
