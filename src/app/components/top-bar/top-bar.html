@@ -28,6 +28,11 @@
                     <i class="pi pi-shield"></i>
                 </button>
 
+                <button class="settings-icon-btn" (click)="toggleMute()"
+                    [title]="isMuted ? 'Unmute Music' : 'Mute Music'">
+                    <i class="pi" [class.pi-volume-off]="isMuted" [class.pi-volume-up]="!isMuted"></i>
+                </button>
+
                 <button class="settings-icon-btn" (click)="openSettings()">
                     <i class="pi pi-cog"></i>
                 </button>
