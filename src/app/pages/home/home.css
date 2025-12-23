@@ -95,10 +95,8 @@ canvas {
         display: flex !important;
         flex-direction: column !important;
         height: 100dvh !important;
-        /* Use dynamic viewport height */
         max-height: 100dvh !important;
         overflow: hidden !important;
-        /* Strictly no scroll on main container */
         padding: 0.5rem !important;
         gap: 0.5rem !important;
     }
@@ -107,35 +105,36 @@ canvas {
         height: auto;
         margin-bottom: 0;
         min-height: 0;
-        /* Crucial for nested flex scrolling/shrinking */
     }
 
     .left-col {
-        display: none;
-        /* Hide player list on mobile to prioritize game */
+        display: block !important;
+        height: 15vh !important;
+        min-height: 120px !important;
+        overflow-y: auto !important;
+        order: -1 !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        padding-bottom: 0.5rem;
+        flex: 0 0 auto !important;
     }
 
     .center-col {
         order: 1;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        height: 100%;
+        flex: 1 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+        height: auto !important;
     }
 
-    /* Crash History: ensure it doesn't take too much space */
     app-crash-history {
         flex-shrink: 0;
     }
 
     .canvas-wrapper {
-        flex: 1;
-        /* Take up all remaining space */
-        height: auto;
-        /* Override fixed height */
-        min-height: 0;
-        /* Allow shrinking */
+        flex: 1 !important;
+        height: auto !important;
+        min-height: 0 !important;
         border-radius: 12px;
         padding: 0.5rem;
         margin-bottom: 0.5rem;
@@ -143,6 +142,5 @@ canvas {
 
     app-bet-controls {
         flex-shrink: 0;
-        /* Don't shrink controls */
     }
 }
