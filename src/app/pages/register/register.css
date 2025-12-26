@@ -48,10 +48,6 @@
     transition: all 0.3s ease;
 }
 
-.field {
-    margin-bottom: 2rem;
-}
-
 .field-container {
     margin-bottom: 1.5rem;
 }
@@ -60,14 +56,9 @@
     width: 100%;
 }
 
-.flex-column {
-    display: flex;
-    flex-direction: column;
-}
 
-.gap-4 {
-    gap: 1.5rem;
-}
+
+
 
 .error-message {
     color: var(--primary-red);
@@ -84,18 +75,7 @@
     margin-top: 1rem;
 }
 
-.text-primary {
-    color: var(--text-secondary);
-    transition: color 0.2s;
-}
 
-.text-primary:hover {
-    color: var(--primary-red);
-}
-
-.no-underline {
-    text-decoration: none;
-}
 
 .link {
     color: var(--primary-red);
@@ -197,12 +177,4 @@
     justify-content: center;
     align-items: center;
     margin-bottom: 2rem;
-}
-
-.button-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    margin-top: 1rem;
 }

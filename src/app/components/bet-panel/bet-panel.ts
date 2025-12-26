@@ -1,4 +1,4 @@
-import { Component, effect, computed, Signal, Input } from '@angular/core';
+import { Component, effect, computed, Signal, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
@@ -16,7 +16,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
     standalone: true,
     imports: [CommonModule, FormsModule, ButtonModule, InputNumberModule, ToggleSwitchModule, DialogModule],
     templateUrl: './bet-panel.html',
-    styleUrl: './bet-panel.css'
+    styleUrl: './bet-panel.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BetPanelComponent {
     @Input() index: number = 0;
@@ -41,7 +42,8 @@ export class BetPanelComponent {
         private authService: AuthService,
         private gameApi: GameApiService,
         private gameSocket: GameSocketService,
-        private soundService: SoundService
+        private soundService: SoundService,
+        private cdr: ChangeDetectorRef
     ) {
         this.gameState = toSignal(this.gameSocket.gameState$, { initialValue: GameState.WAITING });
         this.currentMultiplier = toSignal(this.gameSocket.multiplier$, { initialValue: 1.00 });
@@ -55,10 +57,12 @@ export class BetPanelComponent {
                     if (!this.betPlaced && this.gameState() === GameState.WAITING) {
                         this.betPlaced = true;
                         this.betAmount = myBet.amount;
+                        this.cdr.markForCheck();
                     }
 
                     if (myBet.profit && myBet.profit > 0) {
                         this.cashedOut = true;
+                        this.cdr.markForCheck();
                     }
                 }
             }
@@ -91,10 +95,12 @@ export class BetPanelComponent {
 
     addToBet(amount: number) {
         this.betAmount = Math.min(this.betAmount + amount, 100);
+        this.cdr.markForCheck(); // Update UI
     }
 
     setBet(amount: number) {
         this.betAmount = amount;
+        this.cdr.markForCheck();
     }
 
     placeBet() {
@@ -141,6 +147,7 @@ export class BetPanelComponent {
                 console.error('Bet failed', err);
                 this.betPlaced = false;
                 this.showError((err.error?.error || 'Bet Failed'));
+                this.cdr.markForCheck();
             }
         });
     }
@@ -203,6 +210,7 @@ export class BetPanelComponent {
                 console.error('Cashout failed', err);
                 this.cashedOut = false;
                 this.showError('Cashout failed');
+                this.cdr.markForCheck();
             }
         });
     }
@@ -214,6 +222,7 @@ export class BetPanelComponent {
     showError(msg: string) {
         this.errorMessage = msg;
         this.errorVisible = true;
+        this.cdr.markForCheck(); // Ensure dialog opens
     }
 
     get isCashoutDisabled(): boolean {

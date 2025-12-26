@@ -110,47 +110,7 @@
     border-radius: 12px;
 }
 
-.stat-box {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 1px 6px;
-    border-radius: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    align-items: center;
-    height: 18px;
-}
 
-.stat-box.success {
-    background: rgba(0, 230, 118, 0.1);
-    border-color: rgba(0, 230, 118, 0.3);
-}
-
-.stat-value {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    color: var(--text-secondary);
-    font-weight: 600;
-}
-
-.stat-box.success .stat-value {
-    color: var(--success-green);
-    text-shadow: 0 0 5px rgba(0, 230, 118, 0.3);
-}
-
-.stat-value.neutral {
-    color: rgba(255, 255, 255, 0.7);
-}
-
-.stat-box.faded {
-    opacity: 0.5;
-    background: transparent;
-    border-color: rgba(255, 255, 255, 0.05);
-}
-
-.stat-box.faded .stat-value {
-    color: rgba(255, 255, 255, 0.3);
-    text-shadow: none;
-}
 
 ::ng-deep .p-inputnumber {
     width: 100%;

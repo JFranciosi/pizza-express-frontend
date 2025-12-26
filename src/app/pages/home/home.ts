@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -25,7 +25,8 @@ import { SoundService } from '../../services/sound.service';
         TopBarComponent
     ],
     templateUrl: './home.html',
-    styleUrl: './home.css'
+    styleUrl: './home.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Home implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('gameCanvas') canvasRef!: ElementRef<HTMLCanvasElement>;
@@ -58,7 +59,8 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         private authService: AuthService,
         private router: Router,
         private gameSocket: GameSocketService,
-        private soundService: SoundService
+        private soundService: SoundService,
+        private cdr: ChangeDetectorRef
     ) {
         this.rocketImage.src = 'assets/vespa.png';
     }
@@ -81,6 +83,7 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
                         this.resetAnimationState();
                         this.startDrawing();
                         this.soundService.playIdle();
+                        this.cdr.markForCheck();
                     }, 1000);
                 } else {
                     const prevState = this.gameState;
@@ -103,6 +106,7 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
                     } else {
                         this.startDrawing();
                     }
+                    this.cdr.markForCheck();
                 }
             }),
             this.gameSocket.multiplier$.subscribe(serverMultiplier => {
@@ -117,6 +121,7 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
 
                     if (serverMultiplier > this.multiplier || this.gameState === GameState.CRASHED) {
                         this.multiplier = serverMultiplier;
+                        // No markForCheck needed here as canvas loop handles the visual multiplier update
                     }
                 } else {
                     this.roundStartTime = Date.now();
@@ -129,6 +134,7 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
                 if (Math.abs(estimatedEnd - this.waitingEndTime) > 500 || this.waitingEndTime === 0) {
                     this.waitingEndTime = estimatedEnd;
                 }
+                this.cdr.markForCheck();
             }),
             this.gameSocket.bets$.subscribe(bets => {
                 const user = this.authService.getUser();
@@ -149,10 +155,12 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
     showWinToast(amount: number) {
         this.winAmount = amount;
         this.winToastVisible = true;
+        this.cdr.markForCheck();
 
         if (this.toastTimeout) clearTimeout(this.toastTimeout);
         this.toastTimeout = setTimeout(() => {
             this.winToastVisible = false;
+            this.cdr.markForCheck();
         }, 3000);
     }
 
