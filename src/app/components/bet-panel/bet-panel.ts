@@ -76,15 +76,21 @@ export class BetPanelComponent {
                 this.cashedOut = false;
             }
 
+            // Handle Auto Cashout Optimistic UI
+            if (state === GameState.FLYING && this.betPlaced && !this.cashedOut && this.isAutoCashoutEnabled) {
+                if (this.currentMultiplier() >= this.autoCashout) {
+                    this.cashedOut = true;
+                    // We don't trigger API call here (server does it auto)
+                    // converting optimistic visual state
+                }
+            }
+
             // Handle Auto Bet when entering Waiting state
             if (state === GameState.WAITING) {
                 if (this.isAutoBetEnabled && !this.betPlaced) {
-                    // Small delay to ensure state stability and UX
-                    setTimeout(() => {
-                        if (!this.betPlaced && this.gameState() === GameState.WAITING && this.isAutoBetEnabled) {
-                            this.placeBet();
-                        }
-                    }, 500);
+                    if (!this.betPlaced && this.gameState() === GameState.WAITING && this.isAutoBetEnabled) {
+                        this.placeBet();
+                    }
                 }
             }
         }, { allowSignalWrites: true });
