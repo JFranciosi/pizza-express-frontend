@@ -1,4 +1,3 @@
-
 import { Component, effect, computed, Signal, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -9,6 +8,7 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { AuthService } from '../../services/auth.service';
 import { GameApiService } from '../../services/game-api.service';
 import { GameSocketService, GameState } from '../../services/game-socket.service';
+import { SoundService } from '../../services/sound.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -25,7 +25,6 @@ export class BetPanelComponent {
     autoCashout: number = 2.00;
     isAutoCashoutEnabled: boolean = false;
 
-    // Error Modal State
     errorVisible: boolean = false;
     errorMessage: string = '';
 
@@ -35,26 +34,24 @@ export class BetPanelComponent {
 
     betPlaced: boolean = false;
     cashedOut: boolean = false;
+    nextRoundBet: boolean = false;
     isAutoBetEnabled: boolean = false;
-    // lastWin and lastBet removed as they are now global in TopBar
 
     constructor(
         private authService: AuthService,
         private gameApi: GameApiService,
-        private gameSocket: GameSocketService
+        private gameSocket: GameSocketService,
+        private soundService: SoundService
     ) {
         this.gameState = toSignal(this.gameSocket.gameState$, { initialValue: GameState.WAITING });
         this.currentMultiplier = toSignal(this.gameSocket.multiplier$, { initialValue: 1.00 });
         this.timeLeft = toSignal(this.gameSocket.timeLeft$, { initialValue: 0 });
 
-        // Listen for bets to sync state
         this.gameSocket.bets$.subscribe(bets => {
             const user = this.authService.getUser();
             if (user) {
-                // Filter by userId AND index
                 const myBet = bets.find(b => b.userId === user.id && b.index === this.index);
                 if (myBet) {
-                    // Sync state if backend says we placed a bet (e.g. page reload)
                     if (!this.betPlaced && this.gameState() === GameState.WAITING) {
                         this.betPlaced = true;
                         this.betAmount = myBet.amount;
@@ -70,27 +67,23 @@ export class BetPanelComponent {
         effect(() => {
             const state = this.gameState();
 
-            // Reset state when game crashes
             if (state === GameState.CRASHED) {
                 this.betPlaced = false;
                 this.cashedOut = false;
             }
 
-            // Handle Auto Cashout Optimistic UI
             if (state === GameState.FLYING && this.betPlaced && !this.cashedOut && this.isAutoCashoutEnabled) {
                 if (this.currentMultiplier() >= this.autoCashout) {
                     this.cashedOut = true;
-                    // We don't trigger API call here (server does it auto)
-                    // converting optimistic visual state
                 }
             }
 
-            // Handle Auto Bet when entering Waiting state
             if (state === GameState.WAITING) {
-                if (this.isAutoBetEnabled && !this.betPlaced) {
-                    if (!this.betPlaced && this.gameState() === GameState.WAITING && this.isAutoBetEnabled) {
-                        this.placeBet();
-                    }
+                if (this.nextRoundBet) {
+                    this.placeBet();
+                }
+                else if (this.isAutoBetEnabled && !this.betPlaced) {
+                    this.placeBet();
                 }
             }
         }, { allowSignalWrites: true });
@@ -105,6 +98,13 @@ export class BetPanelComponent {
     }
 
     placeBet() {
+        if (this.gameState() !== GameState.WAITING) {
+            if (!this.betPlaced) {
+                this.nextRoundBet = true;
+            }
+            return;
+        }
+
         if (this.betAmount > 100) {
             this.showError('Max bet is 100€');
             return;
@@ -112,6 +112,7 @@ export class BetPanelComponent {
         if (this.betPlaced) return;
 
         this.betPlaced = true;
+        this.nextRoundBet = false;
 
         const user = this.authService.getUser();
         if (user) {
@@ -140,14 +141,16 @@ export class BetPanelComponent {
                 console.error('Bet failed', err);
                 this.betPlaced = false;
                 this.showError((err.error?.error || 'Bet Failed'));
-                // TODO: Remove the optimistic bet if failure? 
-                // Currently GameSocket handles the stream, removing a specific bet locally is hard without strict ID. 
-                // But the next WAITING state will satisfy clearing.
             }
         });
     }
 
     cancelBet() {
+        if (this.nextRoundBet) {
+            this.nextRoundBet = false;
+            return;
+        }
+
         if (!this.betPlaced) return;
 
         this.betPlaced = false;
@@ -175,6 +178,7 @@ export class BetPanelComponent {
         if (!this.betPlaced || this.cashedOut) return;
 
         this.cashedOut = true;
+        this.soundService.playCashout();
 
         const user = this.authService.getUser();
         if (user) {

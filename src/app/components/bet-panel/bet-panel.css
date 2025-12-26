@@ -1,4 +1,3 @@
-/* Glass Panel Style */
 :host {
     display: block;
     min-width: 0;
@@ -32,9 +31,7 @@
 .quick-bets {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
-    /* Smaller min-width */
     gap: 0.25rem;
-    /* Tighter gap */
 }
 
 .pizza-btn {
@@ -42,14 +39,12 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: var(--text-secondary);
     padding: 0.4rem;
-    /* Compact padding */
+    padding: 0.4rem;
     border-radius: 8px;
-    /* Smaller radius */
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     font-weight: 600;
     font-size: 0.8rem;
-    /* Smaller text */
     font-family: var(--font-mono);
 }
 
@@ -70,17 +65,14 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0.5rem;
-    /* Tighter gap */
 }
 
-/* New Header Structure */
 .input-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
     margin-bottom: 2px;
-    /* Less breathe */
 }
 
 .label-group {
@@ -104,11 +96,9 @@
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
-    /* Tighter vertical gap */
     height: 100%;
 }
 
-/* Toggles & Headers */
 .toggle-wrapper {
     display: flex;
     align-items: center;
@@ -120,7 +110,6 @@
     border-radius: 12px;
 }
 
-/* Stat Boxes */
 .stat-box {
     background: rgba(255, 255, 255, 0.05);
     padding: 1px 6px;
@@ -129,7 +118,6 @@
     display: flex;
     align-items: center;
     height: 18px;
-    /* Slimmer stats */
 }
 
 .stat-box.success {
@@ -140,7 +128,6 @@
 .stat-value {
     font-family: var(--font-mono);
     font-size: 0.7rem;
-    /* Smaller text */
     color: var(--text-secondary);
     font-weight: 600;
 }
@@ -165,7 +152,6 @@
     text-shadow: none;
 }
 
-/* PrimeNG Overrides */
 ::ng-deep .p-inputnumber {
     width: 100%;
 }
@@ -177,13 +163,10 @@
     color: white !important;
     border-radius: 10px !important;
     padding: 0.5rem !important;
-    /* Compact padding */
     font-family: var(--font-mono) !important;
     font-size: 0.9rem !important;
-    /* Smaller text */
     transition: all 0.2s !important;
     height: 38px;
-    /* Fixed smaller height */
 }
 
 ::ng-deep .p-inputnumber-input:focus {
@@ -192,7 +175,12 @@
     background: rgba(0, 0, 0, 0.5) !important;
 }
 
-/* Big Action Button */
+::ng-deep .p-inputnumber-button {
+    width: 2.5rem !important;
+    padding: 0 !important;
+    justify-content: center;
+}
+
 .action-row {
     display: flex;
     justify-content: center;
@@ -205,10 +193,8 @@
     color: #000;
     border: none;
     padding: 0.8rem;
-    /* Reduced padding */
     border-radius: 12px;
     font-size: 1.2rem;
-    /* Reduced font size */
     font-weight: 800;
     cursor: pointer;
     box-shadow: 0 4px 20px var(--success-green-glow);
@@ -223,7 +209,6 @@
     overflow: hidden;
 }
 
-/* ... existing button styles for hover, cancel, etc ... */
 .bet-button::after {
     content: '';
     position: absolute;
@@ -245,7 +230,6 @@
     box-shadow: 0 6px 25px var(--success-green-glow);
 }
 
-/* Cancel State (Red) */
 .cancel-button {
     background: linear-gradient(135deg, var(--primary-red) 0%, #d50000 100%) !important;
     color: white !important;
@@ -257,7 +241,6 @@
     transform: translateY(-2px) scale(1.01);
 }
 
-/* Cashout State (Orange/Yellow - Gold) */
 .bet-button.cashout {
     background: linear-gradient(135deg, #FFD740 0%, #FF6D00 100%) !important;
     color: #000 !important;
@@ -311,7 +294,6 @@
 }
 
 /* Compact Side-by-Side Mobile Styles */
-/* Compact Side-by-Side Mobile Styles */
 @media (max-width: 992px) {
     .controls-panel {
         padding: 0.35rem !important;
@@ -345,7 +327,7 @@
     }
 
     .input-header label {
-        font-size: 0.65rem;
+        font-size: 0.55rem;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -356,7 +338,6 @@
         font-size: 0.6rem;
         padding: 1px 4px;
         flex-shrink: 0;
-        /* Keep toggle same size */
     }
 
     ::ng-deep .p-inputnumber-input {

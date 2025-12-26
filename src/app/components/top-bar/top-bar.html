@@ -23,10 +23,31 @@
                         <i class="pi pi-shield"></i>
                     </button>
 
-                    <button class="settings-icon-btn" (click)="toggleMute()"
-                        [title]="isMuted ? 'Unmute Music' : 'Mute Music'">
-                        <i class="pi" [class.pi-volume-off]="isMuted" [class.pi-volume-up]="!isMuted"></i>
-                    </button>
+                    <div class="volume-control-wrapper" (mouseenter)="showVolumeControls = true"
+                        (mouseleave)="showVolumeControls = false">
+                        <button class="settings-icon-btn">
+                            <i class="pi" [class.pi-volume-up]="!isMusicMuted || !isSfxMuted"
+                                [class.pi-volume-off]="isMusicMuted && isSfxMuted"></i>
+                        </button>
+
+                        @if (showVolumeControls) {
+                        <div class="volume-dropdown">
+                            <div class="vol-row" (click)="toggleMusic()">
+                                <i class="pi" [class.pi-volume-up]="!isMusicMuted"
+                                    [class.pi-volume-off]="isMusicMuted"></i>
+                                <span>Music</span>
+                            </div>
+                            <div class="vol-slider-row">
+                                <input type="range" min="0" max="100" [(ngModel)]="musicVolume"
+                                    (input)="onVolumeChange()" title="Music Volume">
+                            </div>
+                            <div class="vol-row" (click)="toggleSfx()">
+                                <i class="pi" [class.pi-megaphone]="!isSfxMuted" [class.pi-volume-off]="isSfxMuted"></i>
+                                <span>SFX</span>
+                            </div>
+                        </div>
+                        }
+                    </div>
 
                     <button class="settings-icon-btn" (click)="openSettings()">
                         <i class="pi pi-cog"></i>
