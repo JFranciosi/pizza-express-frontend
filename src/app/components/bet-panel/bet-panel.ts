@@ -115,7 +115,8 @@ export class BetPanelComponent {
                 amount: this.betAmount,
                 index: this.index,
                 multiplier: null,
-                profit: null
+                profit: null,
+                avatarUrl: user.avatarUrl
             };
             this.gameSocket.addBet(optimisticBet);
         }

@@ -92,8 +92,15 @@ export class GameSocketService implements OnDestroy {
                 };
 
                 const currentBets = this.betsSub.getValue();
-                if (!currentBets.some(b => b.userId === bet.userId && b.index === bet.index)) {
+                const existingIndex = currentBets.findIndex(b => b.userId === bet.userId && b.index === bet.index);
+
+                if (existingIndex === -1) {
                     this.betsSub.next([...currentBets, bet]);
+                } else {
+                    // Update existing bet (e.g. from optimistic to confirmed)
+                    const updatedBets = [...currentBets];
+                    updatedBets[existingIndex] = { ...updatedBets[existingIndex], ...bet };
+                    this.betsSub.next(updatedBets);
                 }
 
             } else if (message.startsWith('CASHOUT:') && !message.startsWith('CASHOUT_OK')) {
