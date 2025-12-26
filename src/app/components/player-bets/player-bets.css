@@ -1,4 +1,3 @@
-/* Glass Panel Style */
 :host ::ng-deep .players-panel {
     background: var(--surface-glass) !important;
     backdrop-filter: var(--blur-strength) !important;
@@ -50,7 +49,6 @@
     padding-right: 4px;
 }
 
-/* Custom Scrollbar */
 .players-list::-webkit-scrollbar {
     width: 4px;
 }
@@ -155,7 +153,6 @@
     text-shadow: 0 0 8px var(--success-green-glow);
 }
 
-/* Compact Mobile Styles for Top Bar */
 @media (max-width: 992px) {
     :host ::ng-deep .players-panel .p-card-body {
         padding: 0.5rem !important;
@@ -163,16 +160,13 @@
 
     .players-header {
         display: flex;
-        /* Restore header */
         font-size: 0.65rem;
-        /* Very small font */
         padding-bottom: 0.25rem;
         margin-bottom: 0.25rem;
     }
 
     .player-row {
         padding: 0.25rem 0.5rem !important;
-        /* Slim padding */
         border-radius: 8px;
     }
 

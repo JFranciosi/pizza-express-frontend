@@ -222,7 +222,7 @@ export class BetPanelComponent {
     showError(msg: string) {
         this.errorMessage = msg;
         this.errorVisible = true;
-        this.cdr.markForCheck(); // Ensure dialog opens
+        this.cdr.markForCheck();
     }
 
     get isCashoutDisabled(): boolean {

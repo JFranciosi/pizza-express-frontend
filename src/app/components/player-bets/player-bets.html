@@ -12,7 +12,6 @@
                     <img [src]="getAvatarUrl(bet.avatarUrl)" alt="Avatar" class="avatar-img"
                         (error)="bet.avatarUrl = ''">
                 </div>
-                <!-- Fallback to initials only if image fails not handled nicely here, but 'assets/default-avatar.png' should exist or use onerror to swap -->
                 <span class="player-name">{{ bet.username }}</span>
             </div>
             <div class="player-stats">

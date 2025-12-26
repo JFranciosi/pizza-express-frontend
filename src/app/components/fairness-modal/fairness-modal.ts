@@ -39,11 +39,7 @@ export class FairnessModalComponent {
 
     async verify() {
         if (!this.verifySecret) return;
-
-        // 1. Calculate SHA256 Hash
         this.verifyHash = await this.sha256(this.verifySecret);
-
-        // 2. Calculate Crash Point
         this.verifyResult = this.calculateCrashPoint(this.verifySecret);
     }
 
@@ -56,8 +52,6 @@ export class FairnessModalComponent {
     }
 
     private calculateCrashPoint(hash: string): number {
-        // Implementation matching backend ProvablyFairService.java
-        // 1. Take first 13 chars (52 bits)
         const hex = hash.substring(0, 13);
         const h = parseInt(hex, 16);
         const e = Math.pow(2, 52);

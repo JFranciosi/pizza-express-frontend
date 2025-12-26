@@ -26,13 +26,11 @@
                     <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" hidden>
                     <button pButton label="Choose Image" class="p-button-outlined p-button-sm"
                         (click)="fileInput.click()"></button>
-                    <!-- Loading indicator? -->
                 </div>
             </div>
 
             <div class="field-group">
                 <label>Username</label>
-                <!-- Static Readonly Username -->
                 <div class="input-with-icon">
                     <input pInputText [value]="user?.username" readonly>
                 </div>
@@ -47,7 +45,6 @@
                         (click)="isEditingEmail ? saveEmail() : toggleEditEmail()"></i>
                 </div>
 
-                <!-- Password Confirmation for Email Change -->
                 @if (isEditingEmail) {
                 <div style="margin-top: 0.5rem;">
                     <p-password [(ngModel)]="confirmEmailPassword" placeholder="Current password" [feedback]="false"
