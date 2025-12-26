@@ -20,6 +20,11 @@ export interface Bet {
     avatarUrl?: string;
 }
 
+export interface HistoryItem {
+    multiplier: number;
+    secret?: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -39,7 +44,7 @@ export class GameSocketService implements OnDestroy {
     private betsSub = new BehaviorSubject<Bet[]>([]);
     public bets$ = this.betsSub.asObservable();
 
-    private historySub = new BehaviorSubject<number[]>([]);
+    private historySub = new BehaviorSubject<HistoryItem[]>([]);
     public history$ = this.historySub.asObservable();
 
     private currentHashSub = new BehaviorSubject<string>('');
@@ -144,17 +149,20 @@ export class GameSocketService implements OnDestroy {
                     this.multiplierSub.next(mult);
                 }
             } else if (message.startsWith('CRASH:')) {
-                const mult = parseFloat(message.split(':')[1]);
+                const parts = message.split(':');
+                const mult = parseFloat(parts[1]);
+                const secret = parts.length > 2 ? parts[2] : undefined;
+
                 this.gameStateSub.next(GameState.CRASHED);
                 this.multiplierSub.next(mult);
 
                 const currentHistory = this.historySub.getValue();
-                this.historySub.next([mult, ...currentHistory].slice(0, 200));
+                const newItem: HistoryItem = { multiplier: mult, secret };
+                this.historySub.next([newItem, ...currentHistory].slice(0, 200));
 
                 this.betsSub.next([]);
 
-                if (message.split(':').length > 2) {
-                    const secret = message.split(':')[2];
+                if (secret) {
                     this.lastSecretSub.next(secret);
                 }
 
@@ -172,8 +180,14 @@ export class GameSocketService implements OnDestroy {
             } else if (message.startsWith('HISTORY:')) {
                 const csv = message.substring(8);
                 if (csv.length > 0) {
-                    const numbers = csv.split(',').map(s => parseFloat(s));
-                    this.historySub.next(numbers);
+                    const items: HistoryItem[] = csv.split(',').map(s => {
+                        const p = s.split(':');
+                        if (p.length > 1) {
+                            return { multiplier: parseFloat(p[0]), secret: p[1] };
+                        }
+                        return { multiplier: parseFloat(p[0]) };
+                    });
+                    this.historySub.next(items);
                 }
             }
         });

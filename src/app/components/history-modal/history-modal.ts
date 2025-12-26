@@ -4,6 +4,8 @@ import { DialogModule } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { GameApiService } from '../../services/game-api.service';
+import { HistoryItem } from '../../services/game-socket.service';
+import { FairnessService } from '../../services/fairness.service';
 
 @Component({
     selector: 'app-history-modal',
@@ -20,10 +22,13 @@ import { GameApiService } from '../../services/game-api.service';
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-item let-i="rowIndex">
-                        <tr [class.high-win]="item >= 10">
+                        <tr [class.high-win]="item.multiplier >= 10" 
+                            (click)="openDetails(item)"
+                            style="cursor: pointer;"
+                            [title]="item.secret ? 'Verify Round' : ''">
                             <td>{{ i + 1 }} rounds ago</td>
-                            <td class="multiplier-val" [class.high]="item >= 10" [class.medium]="item >= 2 && item < 10" [class.low]="item < 2">
-                                {{ item.toFixed(2) }}x
+                            <td class="multiplier-val" [class.high]="item.multiplier >= 10" [class.medium]="item.multiplier >= 2 && item.multiplier < 10" [class.low]="item.multiplier < 2">
+                                {{ item.multiplier.toFixed(2) }}x
                             </td>
                         </tr>
                     </ng-template>
@@ -48,9 +53,9 @@ import { GameApiService } from '../../services/game-api.service';
 })
 export class HistoryModalComponent {
     visible: boolean = false;
-    history: number[] = [];
+    history: HistoryItem[] = [];
 
-    constructor(private gameApi: GameApiService, private cdr: ChangeDetectorRef) { }
+    constructor(private gameApi: GameApiService, private cdr: ChangeDetectorRef, private fairnessService: FairnessService) { }
 
     show() {
         this.visible = true;
@@ -61,7 +66,6 @@ export class HistoryModalComponent {
     loadHistory() {
         this.gameApi.getFullHistory().subscribe({
             next: (data) => {
-                console.log('History loaded:', data);
                 this.history = data || [];
                 this.cdr.detectChanges();
             },
@@ -71,5 +75,11 @@ export class HistoryModalComponent {
                 this.cdr.detectChanges();
             }
         });
+    }
+
+    openDetails(item: HistoryItem) {
+        if (item.secret) {
+            this.fairnessService.openRoundDetails({ secret: item.secret, multiplier: item.multiplier });
+        }
     }
 }

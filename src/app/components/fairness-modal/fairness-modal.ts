@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { GameSocketService } from '../../services/game-socket.service';
+import { FairnessService } from '../../services/fairness.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 
@@ -24,13 +25,25 @@ export class FairnessModalComponent {
     verifyResult: number | null = null;
     calculationSteps: string = '';
 
-    constructor(private gameSocket: GameSocketService) {
+    constructor(private gameSocket: GameSocketService, private fairnessService: FairnessService) {
         this.currentHash = toSignal(this.gameSocket.currentHash$, { initialValue: '' });
         this.lastSecret = toSignal(this.gameSocket.lastSecret$, { initialValue: '' });
+
+        this.fairnessService.openModal$.subscribe(data => {
+            if (data) {
+                this.show(data.secret);
+            } else {
+                this.show();
+            }
+        });
     }
 
-    show() {
+    show(secret?: string) {
         this.visible = true;
+        if (secret) {
+            this.verifySecret = secret;
+            this.verify(); // Auto verify
+        }
     }
 
     copyToClipboard(text: string) {
@@ -40,7 +53,7 @@ export class FairnessModalComponent {
     async verify() {
         if (!this.verifySecret) return;
         this.verifyHash = await this.sha256(this.verifySecret);
-        this.verifyResult = this.calculateCrashPoint(this.verifySecret);
+        this.verifyResult = this.calculateCrashPoint(this.verifyHash);
     }
 
     private async sha256(message: string): Promise<string> {
