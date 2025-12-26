@@ -21,6 +21,33 @@
             </div>
         </div>
 
+        <div class="separator-line"></div>
+
+        <div class="current-block verify-block">
+            <h3>Verify Round</h3>
+            <p class="desc">Paste the Secret (Seed) to verify the result independently.</p>
+
+            <div class="input-group">
+                <input type="text" pInputText [(ngModel)]="verifySecret" placeholder="Paste Secret here..."
+                    class="verify-input" />
+                <button pButton label="Verify" icon="pi pi-check" (click)="verify()"
+                    [disabled]="!verifySecret"></button>
+            </div>
+
+            @if (verifyHash) {
+            <div class="results-grid">
+                <div class="result-item">
+                    <label>Calculated Hash (SHA256)</label>
+                    <code class="wrapper-code">{{ verifyHash }}</code>
+                </div>
+                <div class="result-item">
+                    <label>Calculated Crash Output</label>
+                    <strong class="highlight-result">{{ verifyResult ? verifyResult.toFixed(2) + 'x' : '-' }}</strong>
+                </div>
+            </div>
+            }
+        </div>
+
         <div class="verification-note">
             <i class="pi pi-shield"></i>
             <span>This game uses a reverse hash chain. Each round's hash is the seed for the next.</span>

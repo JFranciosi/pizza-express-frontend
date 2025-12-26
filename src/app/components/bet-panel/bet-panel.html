@@ -65,14 +65,30 @@
             <span class="sub-text">WIN</span>
         </button>
         } @else {
-        <button class="bet-button disabled" disabled>
-            ROUND IN PROGRESS
+        @if (nextRoundBet) {
+        <button class="bet-button cancel-button" (click)="cancelBet()">
+            CANCEL NEXT BET
+            <span class="sub-text">({{ betAmount | currency:'EUR' }})</span>
+        </button>
+        } @else {
+        <button class="bet-button waiting" (click)="placeBet()">
+            BET NEXT ROUND
+            <span class="sub-text">{{ betAmount | currency:'EUR' }}</span>
         </button>
         }
+        }
         } @else {
-        <button class="bet-button disabled" disabled>
-            CRASHED
+        @if (nextRoundBet) {
+        <button class="bet-button cancel-button" (click)="cancelBet()">
+            CANCEL NEXT BET
+            <span class="sub-text">{{ betAmount | currency:'EUR' }}</span>
         </button>
+        } @else {
+        <button class="bet-button waiting" (click)="placeBet()">
+            BET NEXT ROUND
+            <span class="sub-text">{{ betAmount | currency:'EUR' }}</span>
+        </button>
+        }
         }
     </div>
 

@@ -1,17 +1,19 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
+import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { GameSocketService, Bet } from '../../services/game-socket.service';
 import { Subscription } from 'rxjs';
 import { SettingsModalComponent } from '../settings-modal/settings-modal';
 import { FairnessModalComponent } from '../fairness-modal/fairness-modal';
+import { SoundService } from '../../services/sound.service';
 
 @Component({
     selector: 'app-top-bar',
     standalone: true,
-    imports: [CommonModule, ButtonModule, SettingsModalComponent, FairnessModalComponent],
+    imports: [CommonModule, ButtonModule, FormsModule, SettingsModalComponent, FairnessModalComponent],
     templateUrl: './top-bar.html',
     styleUrl: './top-bar.css'
 })
@@ -24,14 +26,20 @@ export class TopBarComponent implements OnInit, OnDestroy {
 
     private subs: Subscription[] = [];
 
-    // Audio Player
+
     private audio: HTMLAudioElement = new Audio('/assets/pizza-soundtrack.mp3');
-    public isMuted: boolean = true;
+    public isMusicMuted: boolean = true;
+    public isSfxMuted: boolean = false;
+    public musicVolume: number = 15;
+
+
+    public showVolumeControls: boolean = false;
 
     constructor(
         private authService: AuthService,
         private router: Router,
-        private gameSocket: GameSocketService
+        private gameSocket: GameSocketService,
+        private soundService: SoundService
     ) {
         this.subs.push(
             this.authService.user$.subscribe(user => {
@@ -39,9 +47,9 @@ export class TopBarComponent implements OnInit, OnDestroy {
             })
         );
 
-        // Configure audio
+
         this.audio.loop = true;
-        this.audio.volume = 0.3; // Set a reasonable volume
+        this.audio.volume = this.musicVolume / 100;
     }
 
     ngOnInit() {
@@ -66,6 +74,8 @@ export class TopBarComponent implements OnInit, OnDestroy {
     }
 
     onLogout() {
+        this.audio.pause();
+        this.soundService.stopAll();
         this.authService.logout();
         this.router.navigate(['/login']);
     }
@@ -78,16 +88,25 @@ export class TopBarComponent implements OnInit, OnDestroy {
         this.fairnessModal.show();
     }
 
-    toggleMute() {
-        this.isMuted = !this.isMuted;
-        if (!this.isMuted) {
+    toggleMusic() {
+        this.isMusicMuted = !this.isMusicMuted;
+        if (!this.isMusicMuted) {
             this.audio.play().catch(e => {
                 console.error("Error playing audio:", e);
-                this.isMuted = true; // Revert if playback fails (e.g. browser block)
+                this.isMusicMuted = true;
             });
         } else {
             this.audio.pause();
         }
+    }
+
+    onVolumeChange() {
+        this.audio.volume = this.musicVolume / 100;
+    }
+
+    toggleSfx() {
+        this.isSfxMuted = !this.isSfxMuted;
+        this.soundService.setMuted(this.isSfxMuted);
     }
 
     onAvatarError(event: any) {

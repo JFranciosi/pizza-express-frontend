@@ -6,12 +6,11 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { GameSocketService, GameState } from '../../services/game-socket.service';
 import { Subscription } from 'rxjs';
-
 import { CrashHistoryComponent } from '../../components/crash-history/history';
 import { PlayerBetsComponent } from '../../components/player-bets/player-bets';
 import { BetControlsComponent } from '../../components/bet-controls/bet-controls';
-
 import { TopBarComponent } from '../../components/top-bar/top-bar';
+import { SoundService } from '../../services/sound.service';
 
 @Component({
     selector: 'app-home',
@@ -23,7 +22,6 @@ import { TopBarComponent } from '../../components/top-bar/top-bar';
         CrashHistoryComponent,
         PlayerBetsComponent,
         BetControlsComponent,
-
         TopBarComponent
     ],
     templateUrl: './home.html',
@@ -59,7 +57,8 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
     constructor(
         private authService: AuthService,
         private router: Router,
-        private gameSocket: GameSocketService
+        private gameSocket: GameSocketService,
+        private soundService: SoundService
     ) {
         this.rocketImage.src = 'assets/vespa.png';
     }
@@ -81,6 +80,7 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
                         this.gameState = state;
                         this.resetAnimationState();
                         this.startDrawing();
+                        this.soundService.playIdle();
                     }, 1000);
                 } else {
                     const prevState = this.gameState;
@@ -89,12 +89,17 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
                     if (state === GameState.FLYING) {
                         this.resetAnimationState();
                         this.startDrawing();
+                        this.soundService.playTakeoff();
                     } else if (state === GameState.CRASHED) {
                         this.crashStartTime = Date.now();
+                        this.soundService.playCrash();
                     } else if (state === GameState.WAITING) {
                         this.winToastVisible = false;
                         if (this.toastTimeout) clearTimeout(this.toastTimeout);
                         this.startDrawing();
+                        if (prevState !== GameState.CRASHED) {
+                            this.soundService.playIdle();
+                        }
                     } else {
                         this.startDrawing();
                     }
@@ -105,7 +110,8 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
                     const timeElapsed = Math.log(serverMultiplier) / this.GROWTH_RATE;
                     const calculatedStartTime = Date.now() - timeElapsed;
 
-                    if (this.roundStartTime === 0 || Math.abs(this.roundStartTime - calculatedStartTime) > 100) {
+                    // Only sync if drift is significant (> 500ms) to prevent rubber-banding (scatti)
+                    if (this.roundStartTime === 0 || Math.abs(this.roundStartTime - calculatedStartTime) > 500) {
                         this.roundStartTime = calculatedStartTime;
                     }
 
@@ -124,26 +130,11 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
                     this.waitingEndTime = estimatedEnd;
                 }
             }),
-            // Toast Logic
             this.gameSocket.bets$.subscribe(bets => {
                 const user = this.authService.getUser();
                 if (user) {
-                    // Check if *any* of my bets are won
                     const myWinningBets = bets.filter(b => b.userId === user.id && b.profit && b.profit > 0);
-                    // Filter those that we haven't shown toast for? 
-                    // Actually, simple logic: if profit > 0 and toast not visible (or different amount), show it.
-                    // But duplicates? The bets array is state.
-                    // Ideally we react to specific events or diffing. 
-                    // Since "optimistic update" happens instantly, this stream emits the won bet instantly.
-
-                    // Let's find the most recent win? Or simply sum them?
-                    // Let's just monitor if a new win appeared.
-                    // Basic approach: If there is a winning bet that wasn't there before?
-                    // Or simpler: If we see a winning bet, we show the toast. 
-                    // To avoid spamming, we trigger only if toast wasn't visible or amount changed significantly.
                     if (myWinningBets.length > 0) {
-                        // Sum them up or just take the last one? Usually single bet per round.
-                        // Multibet support: sum all profits.
                         const totalProfit = myWinningBets.reduce((acc, b) => acc + (b.profit || 0), 0);
 
                         if (!this.winToastVisible || this.winAmount !== totalProfit) {
@@ -548,6 +539,7 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngOnDestroy() {
+        this.soundService.stopAll();
         if (this.crashTimeout) clearTimeout(this.crashTimeout);
         this.subs.forEach(s => s.unsubscribe());
         this.stopDrawing();
