@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { GameSocketService } from '../../services/game-socket.service';
+import { FairnessService } from '../../services/fairness.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 
@@ -24,13 +25,25 @@ export class FairnessModalComponent {
     verifyResult: number | null = null;
     calculationSteps: string = '';
 
-    constructor(private gameSocket: GameSocketService) {
+    constructor(private gameSocket: GameSocketService, private fairnessService: FairnessService) {
         this.currentHash = toSignal(this.gameSocket.currentHash$, { initialValue: '' });
         this.lastSecret = toSignal(this.gameSocket.lastSecret$, { initialValue: '' });
+
+        this.fairnessService.openModal$.subscribe(data => {
+            if (data) {
+                this.show(data.secret);
+            } else {
+                this.show();
+            }
+        });
     }
 
-    show() {
+    show(secret?: string) {
         this.visible = true;
+        if (secret) {
+            this.verifySecret = secret;
+            this.verify(); // Auto verify
+        }
     }
 
     copyToClipboard(text: string) {
@@ -39,12 +52,8 @@ export class FairnessModalComponent {
 
     async verify() {
         if (!this.verifySecret) return;
-
-        // 1. Calculate SHA256 Hash
         this.verifyHash = await this.sha256(this.verifySecret);
-
-        // 2. Calculate Crash Point
-        this.verifyResult = this.calculateCrashPoint(this.verifySecret);
+        this.verifyResult = this.calculateCrashPoint(this.verifyHash);
     }
 
     private async sha256(message: string): Promise<string> {
@@ -56,8 +65,6 @@ export class FairnessModalComponent {
     }
 
     private calculateCrashPoint(hash: string): number {
-        // Implementation matching backend ProvablyFairService.java
-        // 1. Take first 13 chars (52 bits)
         const hex = hash.substring(0, 13);
         const h = parseInt(hex, 16);
         const e = Math.pow(2, 52);

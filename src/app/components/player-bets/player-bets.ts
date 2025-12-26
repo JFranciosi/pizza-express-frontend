@@ -1,6 +1,7 @@
-import { Component, Signal, computed } from '@angular/core';
+import { Component, Signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
+import { RouterLink } from '@angular/router';
 import { GameSocketService } from '../../services/game-socket.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { environment } from '../../../environments/environment';
@@ -8,9 +9,10 @@ import { environment } from '../../../environments/environment';
 @Component({
     selector: 'app-player-bets',
     standalone: true,
-    imports: [CommonModule, CardModule],
+    imports: [CommonModule, CardModule, RouterLink],
     templateUrl: './player-bets.html',
-    styleUrl: './player-bets.css'
+    styleUrl: './player-bets.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PlayerBetsComponent {
     bets: Signal<any[]>;

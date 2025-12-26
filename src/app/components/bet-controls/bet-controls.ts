@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BetPanelComponent } from '../bet-panel/bet-panel'; // Ensure path is correct
+import { BetPanelComponent } from '../bet-panel/bet-panel';
 
 @Component({
     selector: 'app-bet-controls',

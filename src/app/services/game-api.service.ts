@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
+import { HistoryItem } from './game-socket.service';
 
 @Injectable({
     providedIn: 'root'
@@ -14,9 +15,17 @@ export class GameApiService {
 
     constructor(private http: HttpClient) { }
 
-    getFullHistory(): Observable<number[]> {
+    // ...
+
+    getFullHistory(): Observable<HistoryItem[]> {
         return this.http.get<string[]>(`${this.API_URL}/history?limit=200`).pipe(
-            map(list => (list || []).map(item => parseFloat(item)))
+            map(list => (list || []).map(s => {
+                const p = s.split(':');
+                if (p.length > 1) {
+                    return { multiplier: parseFloat(p[0]), secret: p[1] };
+                }
+                return { multiplier: parseFloat(p[0]) };
+            }))
         );
     }
 

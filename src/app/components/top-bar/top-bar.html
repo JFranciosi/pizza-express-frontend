@@ -32,6 +32,10 @@
 
                         @if (showVolumeControls) {
                         <div class="volume-dropdown">
+                            <div class="vol-row" (click)="toggleSfx()">
+                                <i class="pi" [class.pi-volume-up]="!isSfxMuted" [class.pi-volume-off]="isSfxMuted"></i>
+                                <span>SFX</span>
+                            </div>
                             <div class="vol-row" (click)="toggleMusic()">
                                 <i class="pi" [class.pi-volume-up]="!isMusicMuted"
                                     [class.pi-volume-off]="isMusicMuted"></i>
@@ -40,10 +44,6 @@
                             <div class="vol-slider-row">
                                 <input type="range" min="0" max="100" [(ngModel)]="musicVolume"
                                     (input)="onVolumeChange()" title="Music Volume">
-                            </div>
-                            <div class="vol-row" (click)="toggleSfx()">
-                                <i class="pi" [class.pi-megaphone]="!isSfxMuted" [class.pi-volume-off]="isSfxMuted"></i>
-                                <span>SFX</span>
                             </div>
                         </div>
                         }

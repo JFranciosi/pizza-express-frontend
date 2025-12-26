@@ -26,21 +26,16 @@
     display: flex;
     gap: 8px;
     justify-content: flex-start;
-    /* Start from left (Newest) */
     flex-direction: row;
     overflow-x: auto;
     padding: 5px 15px;
-    /* Add side padding for mask */
     scrollbar-width: none;
-    /* Firefox */
     -ms-overflow-style: none;
-    /* IE/Edge */
     width: 100%;
 }
 
 .history-scroll::-webkit-scrollbar {
     display: none;
-    /* Chrome/Safari */
 }
 
 .history-badge {
@@ -53,7 +48,10 @@
     font-family: 'Inter', sans-serif;
     font-size: 0.9rem;
     min-width: 60px;
+    width: auto;
+    white-space: nowrap;
     text-align: center;
+    flex-shrink: 0;
     transition: all 0.2s ease;
     border: 1px solid rgba(255, 255, 255, 0.1);
 }

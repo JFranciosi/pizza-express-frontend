@@ -51,16 +51,7 @@
     gap: 1.5rem;
 }
 
-.chat-toggle {
-    display: block;
-    color: var(--text-secondary);
-    transition: all 0.2s;
-}
 
-.chat-toggle:hover {
-    color: white;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-}
 
 .user-bar {
     background: rgba(255, 255, 255, 0.05);
@@ -89,48 +80,9 @@
     white-space: nowrap;
 }
 
-.divider {
-    width: 1px;
-    height: 20px;
-    background: rgba(255, 255, 255, 0.1);
-}
 
-.stats-row {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
 
-.stat-item {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-    background: rgba(0, 0, 0, 0.2);
-    padding: 2px 8px;
-    border-radius: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    white-space: nowrap;
-}
 
-.stat-item.success {
-    color: var(--success-green);
-    border-color: rgba(0, 255, 127, 0.2);
-    background: rgba(0, 255, 127, 0.1);
-}
-
-.stat-item .label {
-    opacity: 0.6;
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-}
-
-.stat-item .value {
-    font-weight: 700;
-    font-family: var(--font-mono);
-}
 
 .user-balance {
     font-weight: 800;
@@ -248,14 +200,7 @@
     align-items: center;
 }
 
-.divider:nth-of-type(1),
-.divider:nth-of-type(2) {
-    display: none;
-}
 
-.divider {
-    display: none;
-}
 
 .username {
     max-width: 80px;
@@ -406,6 +351,7 @@
     border-radius: 2px;
     outline: none;
     -webkit-appearance: none;
+    appearance: none;
     cursor: pointer;
 }
 
@@ -413,9 +359,9 @@
     -webkit-appearance: none;
     width: 12px;
     height: 12px;
-    background: var(--accent-orange);
+    background: var(--success-green);
     border-radius: 50%;
-    box-shadow: 0 0 10px var(--accent-orange-glow);
+    box-shadow: 0 0 10px var(--success-green-glow);
     cursor: pointer;
     transition: transform 0.1s;
 }

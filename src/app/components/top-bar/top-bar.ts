@@ -29,7 +29,7 @@ export class TopBarComponent implements OnInit, OnDestroy {
 
     private audio: HTMLAudioElement = new Audio('/assets/pizza-soundtrack.mp3');
     public isMusicMuted: boolean = true;
-    public isSfxMuted: boolean = false;
+    public isSfxMuted: boolean = true;
     public musicVolume: number = 15;
 
 

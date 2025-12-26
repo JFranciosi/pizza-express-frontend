@@ -12,7 +12,7 @@ export class SoundService {
     private clickSound: HTMLAudioElement;
 
     private isFlying: boolean = false;
-    private isMuted: boolean = false;
+    private isMuted: boolean = true;
 
     constructor() {
         this.engineIdle = new Audio('assets/Vespa-Waiting.mp3');
