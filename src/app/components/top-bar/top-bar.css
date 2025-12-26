@@ -359,9 +359,9 @@
     -webkit-appearance: none;
     width: 12px;
     height: 12px;
-    background: var(--accent-orange);
+    background: var(--success-green);
     border-radius: 50%;
-    box-shadow: 0 0 10px var(--accent-orange-glow);
+    box-shadow: 0 0 10px var(--success-green-glow);
     cursor: pointer;
     transition: transform 0.1s;
 }
