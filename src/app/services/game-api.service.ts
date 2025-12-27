@@ -6,6 +6,17 @@ import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { HistoryItem } from './game-socket.service';
 
+export interface TopBet {
+    id: string;
+    username: string;
+    avatarUrl?: string;
+    betAmount: number;
+    profit: number;
+    multiplier: number;
+    timestamp: number;
+}
+
+
 @Injectable({
     providedIn: 'root'
 })
@@ -39,5 +50,9 @@ export class GameApiService {
 
     cashOut(index: number = 0): Observable<any> {
         return this.http.post(`${this.BASE_URL}/bet/cashout?index=${index}`, {});
+    }
+
+    getTopBets(type: 'profit' | 'multiplier'): Observable<TopBet[]> {
+        return this.http.get<TopBet[]>(`${this.BASE_URL}/bet/top?type=${type}`);
     }
 }

@@ -1,8 +1,37 @@
 <p-card class="players-panel h-full">
     <div class="players-header">
-        <span>{{ bets().length }} Players</span>
-        <span>Total {{ totalBetsAmount() | currency:'EUR' }}</span>
+        <div class="header-mode-switch">
+            <span [class.active]="view() === 'live'" (click)="setView('live')">Live Bets</span>
+            <span class="divider">|</span>
+            <span [class.active]="view() === 'top'" (click)="setView('top')">Top Winners</span>
+        </div>
+        @if (view() === 'live') {
+        <div class="live-stats">
+            <span>Players {{ bets().length }}</span>
+            <span class="divider">•</span>
+            <span>Total {{ totalBetsAmount() | currency:'EUR':'symbol':'1.0-0' }}</span>
+        </div>
+
+        }
+        @if (view() === 'top') {
+        <div class="top-header-controls">
+            <div class="mobile-top-tabs">
+                <span [class.active]="activeTopBetTab() === 'profit'"
+                    (click)="activeTopBetTab.set('profit')">Profit</span>
+                <span class="divider">/</span>
+                <span [class.active]="activeTopBetTab() === 'multiplier'"
+                    (click)="activeTopBetTab.set('multiplier')">Multi</span>
+            </div>
+            <button class="refresh-btn" (click)="refreshTopBets()">
+                <i class="pi pi-sync"></i>
+            </button>
+        </div>
+        }
     </div>
+
+    @if (view() === 'live') {
+    <!-- Stats removed from here, moved to header -->
+
 
     <div class="players-list">
         @for (bet of bets(); track bet.userId) {
@@ -20,17 +49,20 @@
                     {{ bet.multiplier.toFixed(2) }}x
                 </span>
                 <span class="profit-amount">
-                    +{{ bet.profit | currency:'EUR' }}
+                    +{{ bet.profit | currency:'EUR':'symbol':'1.0-2' }}
                 </span>
                 } @else {
                 <span class="bet-amount">
-                    {{ bet.amount | currency:'EUR' }}
+                    {{ bet.amount | currency:'EUR':'symbol':'1.0-0' }}
                 </span>
                 }
             </div>
         </div>
         }
     </div>
+    } @else {
+    <app-top-bets [forceTab]="activeTopBetTab()"></app-top-bets>
+    }
 
     <div class="provably-fair-footer">
         <div class="footer-group">
