@@ -2,6 +2,10 @@
 
 ![Pizza Express Hero](./pizza-express-hero.png)
 
+> ⚙️ **Looking for the Backend?**
+> This is the Angular Interface. To run the game engine, you need the Quarkus Backend:
+> 👉 **[CLICCA QUI PER IL REPO DEL BACKEND](https://github.com/JFranciosi/pizza-express-backend)**
+
 Frontend for the **Pizza Express** Crash Game, built with **Angular 20**.
 A premium, responsive, and real-time betting interface.
 
