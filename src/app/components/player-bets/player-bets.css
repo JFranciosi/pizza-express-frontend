@@ -30,14 +30,117 @@
 .players-header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     color: var(--text-secondary);
     font-size: 0.85rem;
     font-weight: 600;
-    padding-bottom: 1rem;
+    padding-bottom: 0.5rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
+    min-height: 40px;
+}
+
+.header-mode-switch {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 2px;
+}
+
+.header-mode-switch span {
+    cursor: pointer;
+    transition: color 0.2s;
+    font-size: 0.85rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
+}
+
+.header-mode-switch span.active {
+    color: #fff;
+    font-weight: 700;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.header-mode-switch span.divider {
+    color: rgba(255, 255, 255, 0.2);
+    cursor: default;
+    font-weight: 300;
+}
+
+.header-mode-switch span:not(.active):not(.divider):hover {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.live-stats {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+}
+
+.live-stats .divider {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.mobile-top-tabs {
+    display: none;
+    /* Hidden by default (desktop) */
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.mobile-top-tabs span {
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.mobile-top-tabs span.active {
+    color: #fff;
+    font-weight: 700;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.top-header-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.refresh-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 0.3rem;
+    border-radius: 50%;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.refresh-btn:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(30deg);
+}
+
+.mobile-top-tabs .divider {
+    color: rgba(255, 255, 255, 0.2);
+    cursor: default;
+}
+
+.header-stats {
+    display: flex;
+    justify-content: flex-end;
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    padding-right: 4px;
 }
 
 .players-list {
@@ -192,6 +295,23 @@
 
     .player-info {
         gap: 0.5rem;
+    }
+
+    .mobile-top-tabs {
+        display: flex;
+    }
+
+    :host ::ng-deep .players-panel {
+        overflow: visible !important;
+    }
+
+    .provably-fair-footer {
+        bottom: -35px;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        border: none;
+        border-radius: 8px;
+        padding: 4px 8px;
     }
 }
 

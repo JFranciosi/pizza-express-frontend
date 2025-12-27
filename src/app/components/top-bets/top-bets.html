@@ -1,0 +1,44 @@
+<div class="top-bets-panel">
+    <!-- Sub-tabs for metric selection -->
+    <div class="internal-tabs">
+        <div class="tab" [class.active]="activeTab() === 'profit'" (click)="setTab('profit')">Highest Profit</div>
+        <div class="tab" [class.active]="activeTab() === 'multiplier'" (click)="setTab('multiplier')">Highest Multiplier
+        </div>
+    </div>
+
+    <div class="list-container">
+        @if (isLoading()) {
+        <div class="loading-state">
+            <i class="pi pi-spin pi-spinner"></i>
+            <span>Loading Winners...</span>
+        </div>
+        } @else {
+        @for (bet of displayedBets(); track bet.id) {
+        <div class="bet-row">
+            <div class="rank">{{ $index + 1 }}</div>
+
+            <div class="user-info">
+                <img [src]="getAvatarUrl(bet.avatarUrl)" class="avatar" (error)="bet.avatarUrl = ''">
+                <span class="username">{{ bet.username }}</span>
+            </div>
+
+            <div class="stats">
+                @if (activeTab() === 'profit') {
+                <span class="value profit">+{{ bet.profit | currency:'EUR':'symbol':'1.0-2' }}</span>
+                <span class="sub-value multiplier-badge"
+                    [ngClass]="{'high': bet.multiplier >= 10, 'medium': bet.multiplier >= 2 && bet.multiplier < 10, 'low': bet.multiplier < 2}">
+                    {{ bet.multiplier }}x
+                </span>
+                } @else {
+                <span class="value multiplier-badge"
+                    [ngClass]="{'high': bet.multiplier >= 10, 'medium': bet.multiplier >= 2 && bet.multiplier < 10, 'low': bet.multiplier < 2}">
+                    {{ bet.multiplier }}x
+                </span>
+                <span class="sub-value">{{ bet.betAmount | currency:'EUR':'symbol':'1.0-0' }}</span>
+                }
+            </div>
+        </div>
+        }
+        }
+    </div>
+</div>

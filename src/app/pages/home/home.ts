@@ -22,6 +22,7 @@ import { SoundService } from '../../services/sound.service';
         CrashHistoryComponent,
         PlayerBetsComponent,
         BetControlsComponent,
+        BetControlsComponent,
         TopBarComponent
     ],
     templateUrl: './home.html',
