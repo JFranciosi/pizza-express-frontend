@@ -321,4 +321,30 @@
     .internal-tabs {
         display: none;
     }
+
+    /* Mobile specific loading state - Compact, looks like a row */
+    .loading-state {
+        min-height: 0;
+        height: auto;
+        flex-direction: row;
+        gap: 0.8rem;
+        padding: 0.5rem;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .loading-state i {
+        font-size: 1rem;
+        /* Small spinner */
+        width: 18px;
+        /* Match rank width approx */
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .loading-state span {
+        font-size: 0.75rem;
+    }
 }
