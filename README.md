@@ -1,5 +1,7 @@
 # Pizza Express Frontend 🍕🎨
 
+![Pizza Express Hero](./pizza-express-hero.png)
+
 Frontend for the **Pizza Express** Crash Game, built with **Angular 20**.
 A premium, responsive, and real-time betting interface.
 
@@ -12,7 +14,8 @@ A premium, responsive, and real-time betting interface.
   - `GameCanvasComponent`: Renders the flying pizza multiplier curve using HTML5 Canvas.
   - `GameSocketService`: Manages WebSocket connection for live game updates.
 - **Components**:
-  - `CrashHistory`: Displays previous round multipliers with color codes (Red/Green/Gold).
+  - `CrashHistory`: Live pills and full history table with verification support.
+  - `RoundDetailsModal`: Professional modal for verifying round integrity (Seeds, Hash, breakdown).
   - `PlayerBets`: Live feed of all players' bets and winnings.
   - `Chat`: Real-time chat for players.
 - **Authentication**: JWT-based Login/Register pages with dark/glassmorphism design.
