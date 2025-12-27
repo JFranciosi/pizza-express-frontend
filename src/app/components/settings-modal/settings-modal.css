@@ -308,3 +308,14 @@ h3 {
         gap: 1rem;
     }
 }
+
+.avatar-controls {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.text-secondary {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}

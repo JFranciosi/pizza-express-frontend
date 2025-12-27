@@ -16,16 +16,38 @@
             <h3>Profile</h3>
 
             <div class="field-group avatar-field">
-                <div class="avatar-preview-wrapper" (click)="fileInput.click()" style="cursor: pointer;">
+                <div class="avatar-preview-wrapper" (click)="!pendingAvatarFile && triggerFileInput()"
+                    [style.cursor]="pendingAvatarFile ? 'default' : 'pointer'">
                     <img [src]="getAvatarUrl(editAvatar)" (error)="onAvatarError($event)" class="avatar-preview">
+
+                    @if (isEditingAvatar) {
+                    <div class="avatar-overlay mobile-visible">
+                        <i class="pi pi-spin pi-spinner" style="font-size: 2rem;"></i>
+                    </div>
+                    } @else if (!pendingAvatarFile) {
                     <div class="avatar-overlay">
                         <i class="pi pi-camera"></i>
                     </div>
+                    }
                 </div>
-                <div class="input-with-icon">
-                    <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" hidden>
-                    <button pButton label="Choose Image" class="p-button-outlined p-button-sm"
-                        (click)="fileInput.click()"></button>
+
+                <div class="avatar-controls">
+                    @if (!pendingAvatarFile) {
+                    <div class="input-with-icon">
+                        <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" hidden>
+                        <button pButton label="Choose Image" class="p-button-outlined p-button-sm"
+                            (click)="fileInput.click()"></button>
+                    </div>
+                    <small class="text-secondary mt-1 block">Max size: 2MB</small>
+                    } @else {
+                    <div class="flex gap-2">
+                        <button pButton icon="pi pi-check" class="p-button-success p-button-sm" [loading]="loading"
+                            (click)="uploadAvatar()"></button>
+                        <button pButton icon="pi pi-times" class="p-button-danger p-button-outlined p-button-sm"
+                            (click)="cancelAvatarPreview()"></button>
+                    </div>
+                    <small class="text-secondary mt-1 block">Preview Mode</small>
+                    }
                 </div>
             </div>
 

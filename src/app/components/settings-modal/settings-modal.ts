@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
@@ -39,6 +39,12 @@ export class SettingsModalComponent implements OnInit {
     editAvatar: string = '';
     isEditingAvatar: boolean = false;
 
+    @ViewChild('fileInput') fileInput!: ElementRef;
+
+    triggerFileInput() {
+        this.fileInput?.nativeElement.click();
+    }
+
     constructor(private authService: AuthService, private router: Router, private messageService: MessageService) { }
 
     ngOnInit() {
@@ -75,6 +81,8 @@ export class SettingsModalComponent implements OnInit {
             this.editEmail = this.user.email;
             this.editAvatar = this.user.avatarUrl || '';
         }
+        this.pendingAvatarFile = null;
+        this.previewAvatarUrl = null;
         this.loading = false;
     }
 
@@ -93,31 +101,59 @@ export class SettingsModalComponent implements OnInit {
     }
 
 
+    pendingAvatarFile: File | null = null;
+    previewAvatarUrl: string | null = null;
+
     onFileSelected(event: any) {
         const file: File = event.target.files[0];
         if (file) {
-            this.uploadAvatar(file);
+            if (file.size > 2 * 1024 * 1024) { // 2MB Check
+                this.messageService.add({ severity: 'error', summary: 'Errore', detail: 'Immagine troppo grande (Max 2MB)' });
+                return;
+            }
+
+            this.pendingAvatarFile = file;
+
+            // Create preview
+            const reader = new FileReader();
+            reader.onload = (e: any) => {
+                this.previewAvatarUrl = e.target.result;
+            };
+            reader.readAsDataURL(file);
         }
     }
 
-    uploadAvatar(file: File) {
+    cancelAvatarPreview() {
+        this.pendingAvatarFile = null;
+        this.previewAvatarUrl = null;
+    }
+
+    uploadAvatar() {
+        if (!this.pendingAvatarFile) return;
+
         this.loading = true;
+        this.isEditingAvatar = true;
         const formData = new FormData();
-        formData.append('file', file);
+        formData.append('file', this.pendingAvatarFile);
 
         this.authService.updateAvatar(formData).subscribe({
             next: (res: any) => {
                 this.loading = false;
+                this.isEditingAvatar = false;
+                this.pendingAvatarFile = null;
+                this.previewAvatarUrl = null;
                 this.messageService.add({ severity: 'success', summary: 'Successo', detail: 'Avatar aggiornato' });
             },
             error: (err) => {
                 this.loading = false;
+                this.isEditingAvatar = false;
                 this.messageService.add({ severity: 'error', summary: 'Errore', detail: 'Upload failed: ' + (err.error?.message || err.statusText) });
             }
         });
     }
 
     getAvatarUrl(url: string): string {
+        if (this.previewAvatarUrl) return this.previewAvatarUrl;
         if (!url) return '/assets/default-avatar.png';
         return url;
     }
