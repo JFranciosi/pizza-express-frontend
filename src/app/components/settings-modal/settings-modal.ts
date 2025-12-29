@@ -8,10 +8,7 @@ import { PasswordModule } from 'primeng/password';
 import { ToastModule } from 'primeng/toast';
 import { AuthService } from '../../services/auth.service';
 import { MessageService } from 'primeng/api';
-
-
 import { Router } from '@angular/router';
-
 import { TooltipModule } from 'primeng/tooltip';
 
 @Component({

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, effect, Injector } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -32,11 +32,11 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('gameCanvas') canvasRef!: ElementRef<HTMLCanvasElement>;
     private ctx!: CanvasRenderingContext2D;
 
-    gameState: GameState = GameState.WAITING;
+    // Use Signals from Service directly where possible, or track locally if needed for animation loop
+    // Multiplier for display is managed by animation loop for smoothness, 
+    // but we can check drift against signal
     multiplier: number = 1.00;
-    timeLeft: number = 0;
 
-    private subs: Subscription[] = [];
     private animationFrameId: number | null = null;
     private crashTimeout: any = null;
     private readonly GROWTH_RATE = 0.00006;
@@ -54,102 +54,119 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
     winToastVisible: boolean = false;
     winAmount: number = 0;
     private toastTimeout: any = null;
+    private prevState: GameState = GameState.WAITING;
 
     constructor(
         private authService: AuthService,
         private router: Router,
         private gameSocket: GameSocketService,
         private soundService: SoundService,
-        private cdr: ChangeDetectorRef
+        private cdr: ChangeDetectorRef,
+        private injector: Injector
     ) {
         this.rocketImage.src = 'assets/vespa.png';
+
+        // React to Game State Changes
+        effect(() => {
+            const state = this.gameSocket.gameState();
+            this.handleStateChange(state);
+        }, { injector: this.injector });
+
+        // React to Server Multiplier for Drift Correction
+        effect(() => {
+            const serverMultiplier = this.gameSocket.multiplier();
+            this.handleMultiplierUpdate(serverMultiplier);
+        }, { injector: this.injector });
+
+        // React to Time Left
+        effect(() => {
+            const t = this.gameSocket.timeLeft();
+            const estimatedEnd = Date.now() + t * 1000;
+            if (this.waitingEndTime === 0 || Math.abs(estimatedEnd - this.waitingEndTime) > 500) {
+                this.waitingEndTime = estimatedEnd;
+            }
+            this.cdr.markForCheck();
+        }, { injector: this.injector });
+
+        // React to Bets for Win Toast
+        effect(() => {
+            const bets = this.gameSocket.bets();
+            const user = this.authService.getUser();
+            if (user) {
+                const myWinningBets = bets.filter(b => b.userId === user.id && b.profit && b.profit > 0);
+                if (myWinningBets.length > 0) {
+                    const totalProfit = myWinningBets.reduce((acc, b) => acc + (b.profit || 0), 0);
+                    if (!this.winToastVisible || this.winAmount !== totalProfit) {
+                        this.showWinToast(totalProfit);
+                    }
+                }
+            }
+        }, { injector: this.injector });
     }
 
     ngOnInit() {
-        this.subs.push(
-            this.gameSocket.gameState$.subscribe(state => {
-                if (this.crashTimeout) {
-                    if (state === GameState.WAITING || state === GameState.CRASHED) {
-                        return;
-                    }
-                    clearTimeout(this.crashTimeout);
-                    this.crashTimeout = null;
-                }
+        // Signals handle logic now
+    }
 
-                if (this.gameState === GameState.CRASHED && state === GameState.WAITING) {
-                    this.crashTimeout = setTimeout(() => {
-                        this.crashTimeout = null;
-                        this.gameState = state;
-                        this.resetAnimationState();
-                        this.startDrawing();
-                        this.soundService.playIdle();
-                        this.cdr.markForCheck();
-                    }, 1000);
-                } else {
-                    const prevState = this.gameState;
-                    this.gameState = state;
+    handleStateChange(state: GameState) {
+        if (this.crashTimeout) {
+            if (state === GameState.WAITING || state === GameState.CRASHED) {
+                return;
+            }
+            clearTimeout(this.crashTimeout);
+            this.crashTimeout = null;
+        }
 
-                    if (state === GameState.FLYING) {
-                        this.resetAnimationState();
-                        this.startDrawing();
-                        this.soundService.playTakeoff();
-                    } else if (state === GameState.CRASHED) {
-                        this.crashStartTime = Date.now();
-                        this.soundService.playCrash();
-                    } else if (state === GameState.WAITING) {
-                        this.winToastVisible = false;
-                        if (this.toastTimeout) clearTimeout(this.toastTimeout);
-                        this.startDrawing();
-                        if (prevState !== GameState.CRASHED) {
-                            this.soundService.playIdle();
-                        }
-                    } else {
-                        this.startDrawing();
-                    }
-                    this.cdr.markForCheck();
-                }
-            }),
-            this.gameSocket.multiplier$.subscribe(serverMultiplier => {
-                if (serverMultiplier > 1.0) {
-                    const timeElapsed = Math.log(serverMultiplier) / this.GROWTH_RATE;
-                    const calculatedStartTime = Date.now() - timeElapsed;
-
-                    // Only sync if drift is significant (> 500ms) to prevent rubber-banding (scatti)
-                    if (this.roundStartTime === 0 || Math.abs(this.roundStartTime - calculatedStartTime) > 500) {
-                        this.roundStartTime = calculatedStartTime;
-                    }
-
-                    if (serverMultiplier > this.multiplier || this.gameState === GameState.CRASHED) {
-                        this.multiplier = serverMultiplier;
-                        // No markForCheck needed here as canvas loop handles the visual multiplier update
-                    }
-                } else {
-                    this.roundStartTime = Date.now();
-                    this.multiplier = 1.00;
-                }
-            }),
-            this.gameSocket.timeLeft$.subscribe(t => {
-                this.timeLeft = t;
-                const estimatedEnd = Date.now() + t * 1000;
-                if (Math.abs(estimatedEnd - this.waitingEndTime) > 500 || this.waitingEndTime === 0) {
-                    this.waitingEndTime = estimatedEnd;
-                }
+        if (this.prevState === GameState.CRASHED && state === GameState.WAITING) {
+            this.crashTimeout = setTimeout(() => {
+                this.crashTimeout = null;
+                // Transition logic
+                this.resetAnimationState();
+                this.startDrawing();
+                this.soundService.playIdle();
                 this.cdr.markForCheck();
-            }),
-            this.gameSocket.bets$.subscribe(bets => {
-                const user = this.authService.getUser();
-                if (user) {
-                    const myWinningBets = bets.filter(b => b.userId === user.id && b.profit && b.profit > 0);
-                    if (myWinningBets.length > 0) {
-                        const totalProfit = myWinningBets.reduce((acc, b) => acc + (b.profit || 0), 0);
-
-                        if (!this.winToastVisible || this.winAmount !== totalProfit) {
-                            this.showWinToast(totalProfit);
-                        }
-                    }
+            }, 1000);
+        } else {
+            if (state === GameState.FLYING) {
+                this.roundStartTime = Date.now();
+                this.multiplier = 1.00;
+                this.resetAnimationState();
+                this.startDrawing();
+                this.soundService.playTakeoff();
+            } else if (state === GameState.CRASHED) {
+                this.crashStartTime = Date.now();
+                this.soundService.playCrash();
+            } else if (state === GameState.WAITING) {
+                this.winToastVisible = false;
+                if (this.toastTimeout) clearTimeout(this.toastTimeout);
+                this.startDrawing();
+                if (this.prevState !== GameState.CRASHED) {
+                    this.soundService.playIdle();
                 }
-            })
-        );
+            } else {
+                this.startDrawing();
+            }
+            this.cdr.markForCheck();
+        }
+        this.prevState = state;
+    }
+
+    handleMultiplierUpdate(serverMultiplier: number) {
+        if (serverMultiplier > 1.0) {
+            const timeElapsed = Math.log(serverMultiplier) / this.GROWTH_RATE;
+            const calculatedStartTime = Date.now() - timeElapsed;
+
+            if (this.roundStartTime === 0 || Math.abs(this.roundStartTime - calculatedStartTime) > 500) {
+                this.roundStartTime = calculatedStartTime;
+            }
+
+            if (serverMultiplier > this.multiplier || this.gameSocket.gameState() === GameState.CRASHED) {
+                this.multiplier = serverMultiplier;
+            }
+        } else {
+            this.roundStartTime = Date.now();
+            this.multiplier = 1.00;
+        }
     }
 
     showWinToast(amount: number) {
@@ -211,14 +228,17 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         const dt = (now - this.lastFrameTime) / 16.666;
         this.lastFrameTime = now;
 
-        if (this.gameState === GameState.FLYING) {
+        const currentState = this.gameSocket.gameState();
+
+        if (currentState === GameState.FLYING) {
             this.updateMultiplier();
             this.drawGame(dt, now);
-        } else if (this.gameState === GameState.CRASHED) {
+        } else if (currentState === GameState.CRASHED) {
             this.drawCrashSequence(dt, now);
         } else {
             this.drawWaiting(now);
         }
+        this.cdr.detectChanges();
     }
 
     updateMultiplier() {
@@ -226,6 +246,8 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         const predictedMultiplier = Math.exp(this.GROWTH_RATE * elapsed);
         this.multiplier = Math.max(this.multiplier, predictedMultiplier);
     }
+
+
 
     getCubicBezier(t: number, p0: any, p1: any, p2: any, p3: any) {
         const oneMinusT = 1 - t;
@@ -401,7 +423,7 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         this.ctx.shadowColor = 'rgba(0, 230, 118, 0.6)';
         this.ctx.shadowBlur = 20 * responsiveScale;
 
-        if (this.gameState === GameState.FLYING || this.crashStartTime > 0) {
+        if (this.gameSocket.gameState() === GameState.FLYING || this.crashStartTime > 0) {
             const scaledOffsetX = 22.4 * finalScale;
             const scaledOffsetY = 15 * finalScale;
 
@@ -549,7 +571,7 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
     ngOnDestroy() {
         this.soundService.stopAll();
         if (this.crashTimeout) clearTimeout(this.crashTimeout);
-        this.subs.forEach(s => s.unsubscribe());
+        // Effects cleanup is automatic
         this.stopDrawing();
         window.removeEventListener('resize', () => this.resizeCanvas());
     }

@@ -1,4 +1,4 @@
-import { Component, effect, computed, Signal, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, effect, computed, Signal, Input, ChangeDetectionStrategy, ChangeDetectorRef, Injector } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
@@ -21,6 +21,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 })
 export class BetPanel {
     @Input() index: number = 0;
+    @Input() multiplier: number = 1.0;
 
     betAmount: number = 5.00;
     autoCashout: number = 2.00;
@@ -30,7 +31,7 @@ export class BetPanel {
     errorMessage: string = '';
 
     gameState: Signal<GameState>;
-    currentMultiplier: Signal<number>;
+    currentMultiplier: Signal<number>; // Note: We use @Input for smooth display, this is server state
     timeLeft: Signal<number>;
 
     betPlaced: boolean = false;
@@ -43,13 +44,15 @@ export class BetPanel {
         private gameApi: GameApiService,
         private gameSocket: GameSocketService,
         private soundService: SoundService,
-        private cdr: ChangeDetectorRef
+        private cdr: ChangeDetectorRef,
+        private injector: Injector
     ) {
-        this.gameState = toSignal(this.gameSocket.gameState$, { initialValue: GameState.WAITING });
-        this.currentMultiplier = toSignal(this.gameSocket.multiplier$, { initialValue: 1.00 });
-        this.timeLeft = toSignal(this.gameSocket.timeLeft$, { initialValue: 0 });
-
-        this.gameSocket.bets$.subscribe(bets => {
+        this.gameState = this.gameSocket.gameState;
+        this.currentMultiplier = this.gameSocket.multiplier;
+        this.timeLeft = this.gameSocket.timeLeft;
+        // Track bets to update local state
+        effect(() => {
+            const bets = this.gameSocket.bets();
             const user = this.authService.getUser();
             if (user) {
                 const myBet = bets.find(b => b.userId === user.id && b.index === this.index);
@@ -66,7 +69,7 @@ export class BetPanel {
                     }
                 }
             }
-        });
+        }, { injector: this.injector });
 
         effect(() => {
             const state = this.gameState();
@@ -77,6 +80,8 @@ export class BetPanel {
             }
 
             if (state === GameState.FLYING && this.betPlaced && !this.cashedOut && this.isAutoCashoutEnabled) {
+                // Use input multiplier for smooth check, or server for safety?
+                // Server multiplier is safer for auto-cashout trigger
                 if (this.currentMultiplier() >= this.autoCashout) {
                     this.cashedOut = true;
                 }
@@ -90,7 +95,7 @@ export class BetPanel {
                     this.placeBet();
                 }
             }
-        }, { allowSignalWrites: true });
+        }, { injector: this.injector });
     }
 
     addToBet(amount: number) {
