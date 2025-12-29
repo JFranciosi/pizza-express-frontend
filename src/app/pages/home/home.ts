@@ -6,10 +6,10 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { GameSocketService, GameState } from '../../services/game-socket.service';
 import { Subscription } from 'rxjs';
-import { CrashHistoryComponent } from '../../components/crash-history/history';
-import { PlayerBetsComponent } from '../../components/player-bets/player-bets';
-import { BetControlsComponent } from '../../components/bet-controls/bet-controls';
-import { TopBarComponent } from '../../components/top-bar/top-bar';
+import { CrashHistory } from '../../components/crash-history/crash-history';
+import { PlayerBets } from '../../components/player-bets/player-bets';
+import { BetControls } from '../../components/bet-controls/bet-controls';
+import { TopBar } from '../../components/top-bar/top-bar';
 import { SoundService } from '../../services/sound.service';
 
 @Component({
@@ -19,11 +19,10 @@ import { SoundService } from '../../services/sound.service';
         CommonModule,
         CardModule,
         ButtonModule,
-        CrashHistoryComponent,
-        PlayerBetsComponent,
-        BetControlsComponent,
-        BetControlsComponent,
-        TopBarComponent
+        CrashHistory,
+        PlayerBets,
+        BetControls,
+        TopBar
     ],
     templateUrl: './home.html',
     styleUrl: './home.css',

@@ -51,7 +51,7 @@ import { FairnessService } from '../../services/fairness.service';
         .low { color: #4caf50; }
     `]
 })
-export class HistoryModalComponent {
+export class HistoryModal {
     visible: boolean = false;
     history: HistoryItem[] = [];
 

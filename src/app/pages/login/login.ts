@@ -11,7 +11,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { AuthService } from '../../services/auth.service';
-import { FooterComponent } from '../../components/footer/footer';
+import { Footer } from '../../components/footer/footer';
 
 @Component({
     selector: 'app-login',
@@ -28,7 +28,7 @@ import { FooterComponent } from '../../components/footer/footer';
         FloatLabelModule,
         RouterLink,
         ToastModule,
-        FooterComponent
+        Footer
     ],
     providers: [MessageService],
     templateUrl: './login.html',

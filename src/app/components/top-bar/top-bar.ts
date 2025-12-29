@@ -6,20 +6,24 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { GameSocketService, Bet } from '../../services/game-socket.service';
 import { Subscription } from 'rxjs';
-import { SettingsModalComponent } from '../settings-modal/settings-modal';
-import { FairnessModalComponent } from '../fairness-modal/fairness-modal';
+import { SettingsModal } from '../settings-modal/settings-modal';
+import { FairnessModal } from '../fairness-modal/fairness-modal';
 import { SoundService } from '../../services/sound.service';
+import { ToolbarModule } from 'primeng/toolbar';
+import { AvatarModule } from 'primeng/avatar';
+import { MenuModule } from 'primeng/menu';
+
 
 @Component({
     selector: 'app-top-bar',
     standalone: true,
-    imports: [CommonModule, ButtonModule, FormsModule, SettingsModalComponent, FairnessModalComponent],
+    imports: [CommonModule, ToolbarModule, ButtonModule, FormsModule, AvatarModule, MenuModule, SettingsModal, FairnessModal],
     templateUrl: './top-bar.html',
     styleUrl: './top-bar.css'
 })
-export class TopBarComponent implements OnInit, OnDestroy {
-    @ViewChild(SettingsModalComponent) settingsModal!: SettingsModalComponent;
-    @ViewChild(FairnessModalComponent) fairnessModal!: FairnessModalComponent;
+export class TopBar implements OnInit, OnDestroy {
+    @ViewChild(SettingsModal) settingsModal!: SettingsModal;
+    @ViewChild(FairnessModal) fairnessModal!: FairnessModal;
     user: any | null = null;
     lastBet: number = 0;
     lastWin: number = 0;

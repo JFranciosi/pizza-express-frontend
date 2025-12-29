@@ -5,18 +5,18 @@ import { RouterLink } from '@angular/router';
 import { GameSocketService } from '../../services/game-socket.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { environment } from '../../../environments/environment';
-import { TopBetsComponent } from '../top-bets/top-bets';
+import { TopBets } from '../top-bets/top-bets';
 
 @Component({
     selector: 'app-player-bets',
     standalone: true,
-    imports: [CommonModule, CardModule, RouterLink, TopBetsComponent],
+    imports: [CommonModule, CardModule, RouterLink, TopBets],
     templateUrl: './player-bets.html',
     styleUrl: './player-bets.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PlayerBetsComponent {
-    @ViewChild(TopBetsComponent) topBetsComponent!: TopBetsComponent;
+export class PlayerBets {
+    @ViewChild(TopBets) topBetsComponent!: TopBets;
 
     bets: Signal<any[]>;
     totalBetsAmount = computed(() => this.bets().reduce((acc, bet) => acc + bet.amount, 0));

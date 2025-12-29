@@ -22,7 +22,7 @@ import { TooltipModule } from 'primeng/tooltip';
     templateUrl: './settings-modal.html',
     styleUrls: ['./settings-modal.css']
 })
-export class SettingsModalComponent implements OnInit {
+export class SettingsModal implements OnInit {
     visible: boolean = false;
     user: any = null;
     oldPassword: string = '';
