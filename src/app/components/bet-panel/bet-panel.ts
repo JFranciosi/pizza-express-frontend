@@ -21,6 +21,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 })
 export class BetPanel {
     @Input() index: number = 0;
+    @Input() multiplier: number = 1.0;
 
     betAmount: number = 5.00;
     autoCashout: number = 2.00;

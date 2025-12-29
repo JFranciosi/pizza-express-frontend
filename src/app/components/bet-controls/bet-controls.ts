@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BetPanel } from '../bet-panel/bet-panel';
 
@@ -10,5 +10,5 @@ import { BetPanel } from '../bet-panel/bet-panel';
     styleUrl: './bet-controls.css'
 })
 export class BetControls {
-
+    @Input() multiplier: number = 1.0;
 }

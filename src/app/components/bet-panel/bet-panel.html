@@ -60,7 +60,7 @@
         @if (betPlaced && !cashedOut) {
         <button class="bet-button cashout" (click)="cashOut()" (touchstart)="cashOut(); $event.preventDefault()">
             CASHOUT
-            <span class="sub-text">{{ (betAmount * currentMultiplier()) | currency:'EUR' }}</span>
+            <span class="sub-text">{{ (betAmount * multiplier) | currency:'EUR' }}</span>
         </button>
         } @else if (betPlaced && cashedOut) {
         <button class="bet-button" disabled [style.background]="'#4CAF50'" [style.color]="'white'">

@@ -90,6 +90,10 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
                     this.gameState = state;
 
                     if (state === GameState.FLYING) {
+                        // FORCE SYNC START TIME
+                        this.roundStartTime = Date.now();
+                        this.multiplier = 1.00;
+
                         this.resetAnimationState();
                         this.startDrawing();
                         this.soundService.playTakeoff();
@@ -219,6 +223,7 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         } else {
             this.drawWaiting(now);
         }
+        this.cdr.detectChanges();
     }
 
     updateMultiplier() {
