@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CrashHistoryComponent } from './history';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('CrashHistoryComponent', () => {
     let component: CrashHistoryComponent;
@@ -8,7 +9,11 @@ describe('CrashHistoryComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [CrashHistoryComponent, HttpClientTestingModule]
+            imports: [CrashHistoryComponent],
+            providers: [
+                provideHttpClient(),
+                provideHttpClientTesting()
+            ]
         })
             .compileComponents();
 
