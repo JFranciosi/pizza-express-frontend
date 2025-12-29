@@ -1,6 +1,6 @@
 <div class="history-container">
     <div class="history-scroll">
-        @for (item of history; track $index) {
+        @for (item of gameSocket.history(); track $index) {
         <div class="history-badge"
             [ngClass]="{'high': item.multiplier >= 10, 'medium': item.multiplier >= 2 && item.multiplier < 10, 'low': item.multiplier < 2}"
             (click)="openDetails(item)" [style.cursor]="item.secret ? 'pointer' : 'default'"

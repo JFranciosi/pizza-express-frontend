@@ -1,7 +1,6 @@
-import { Injectable, OnDestroy, NgZone } from '@angular/core';
-import { Subject, BehaviorSubject, Observable, Subscription, timer } from 'rxjs';
+import { Injectable, OnDestroy, NgZone, signal, WritableSignal, computed } from '@angular/core';
+import { timer } from 'rxjs';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
-import { retryWhen, delay, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 export enum GameState {
@@ -32,26 +31,27 @@ export class GameSocketService implements OnDestroy {
     private socket$: WebSocketSubject<any> | undefined;
     private readonly WS_ENDPOINT = `${environment.wsUrl}/game`;
 
-    private gameStateSub = new BehaviorSubject<GameState>(GameState.WAITING);
-    public gameState$ = this.gameStateSub.asObservable();
+    // State Signals
+    private _gameState = signal<GameState>(GameState.WAITING);
+    public readonly gameState = this._gameState.asReadonly();
 
-    private multiplierSub = new BehaviorSubject<number>(1.00);
-    public multiplier$ = this.multiplierSub.asObservable();
+    private _multiplier = signal<number>(1.00);
+    public readonly multiplier = this._multiplier.asReadonly();
 
-    private timeLeftSub = new BehaviorSubject<number>(0);
-    public timeLeft$ = this.timeLeftSub.asObservable();
+    private _timeLeft = signal<number>(0);
+    public readonly timeLeft = this._timeLeft.asReadonly();
 
-    private betsSub = new BehaviorSubject<Bet[]>([]);
-    public bets$ = this.betsSub.asObservable();
+    private _bets = signal<Bet[]>([]);
+    public readonly bets = this._bets.asReadonly();
 
-    private historySub = new BehaviorSubject<HistoryItem[]>([]);
-    public history$ = this.historySub.asObservable();
+    private _history = signal<HistoryItem[]>([]);
+    public readonly history = this._history.asReadonly();
 
-    private currentHashSub = new BehaviorSubject<string>('');
-    public currentHash$ = this.currentHashSub.asObservable();
+    private _currentHash = signal<string>('');
+    public readonly currentHash = this._currentHash.asReadonly();
 
-    private lastSecretSub = new BehaviorSubject<string>('');
-    public lastSecret$ = this.lastSecretSub.asObservable();
+    private _lastSecret = signal<string>('');
+    public readonly lastSecret = this._lastSecret.asReadonly();
 
     constructor(private zone: NgZone) {
         this.connect();
@@ -96,16 +96,16 @@ export class GameSocketService implements OnDestroy {
                     avatarUrl: parts.length > 5 ? parts.slice(5).join(':') : undefined
                 };
 
-                const currentBets = this.betsSub.getValue();
-                const existingIndex = currentBets.findIndex(b => b.userId === bet.userId && b.index === bet.index);
-
-                if (existingIndex === -1) {
-                    this.betsSub.next([...currentBets, bet]);
-                } else {
-                    const updatedBets = [...currentBets];
-                    updatedBets[existingIndex] = { ...updatedBets[existingIndex], ...bet };
-                    this.betsSub.next(updatedBets);
-                }
+                this._bets.update(bets => {
+                    const existingIndex = bets.findIndex(b => b.userId === bet.userId && b.index === bet.index);
+                    if (existingIndex === -1) {
+                        return [...bets, bet];
+                    } else {
+                        const updated = [...bets];
+                        updated[existingIndex] = { ...updated[existingIndex], ...bet };
+                        return updated;
+                    }
+                });
 
             } else if (message.startsWith('CASHOUT:') && !message.startsWith('CASHOUT_OK')) {
                 const parts = message.split(':');
@@ -121,8 +121,7 @@ export class GameSocketService implements OnDestroy {
                 const userId = parts[1];
                 const index = parts.length > 2 ? parseInt(parts[2]) : 0;
 
-                const currentBets = this.betsSub.getValue();
-                this.betsSub.next(currentBets.filter(b => !(b.userId === userId && b.index === index)));
+                this._bets.update(bets => bets.filter(b => !(b.userId === userId && b.index === index)));
 
             } else if (message.startsWith('STATE:')) {
                 const parts = message.split(':');
@@ -130,52 +129,51 @@ export class GameSocketService implements OnDestroy {
                 if (statusStr === 'RUNNING') statusStr = 'FLYING';
 
                 const state = statusStr as GameState;
-                this.gameStateSub.next(state);
+                this._gameState.set(state);
 
                 if (state === GameState.WAITING) {
-                    this.betsSub.next([]);
+                    this._bets.set([]);
                 }
 
                 if (parts.length > 2) {
                     const mult = parseFloat(parts[2]);
                     if (!isNaN(mult)) {
-                        this.multiplierSub.next(mult);
+                        this._multiplier.set(mult);
                     }
                 }
             } else if (message.startsWith('TICK:')) {
                 const mult = parseFloat(message.split(':')[1]);
                 if (!isNaN(mult)) {
-                    this.multiplierSub.next(mult);
+                    this._multiplier.set(mult);
                 }
             } else if (message.startsWith('CRASH:')) {
                 const parts = message.split(':');
                 const mult = parseFloat(parts[1]);
                 const secret = parts.length > 2 ? parts[2] : undefined;
 
-                this.gameStateSub.next(GameState.CRASHED);
-                this.multiplierSub.next(mult);
+                this._gameState.set(GameState.CRASHED);
+                this._multiplier.set(mult);
 
-                const currentHistory = this.historySub.getValue();
                 const newItem: HistoryItem = { multiplier: mult, secret };
-                this.historySub.next([newItem, ...currentHistory].slice(0, 200));
+                this._history.update(history => [newItem, ...history].slice(0, 200));
 
-                this.betsSub.next([]);
+                this._bets.set([]);
 
                 if (secret) {
-                    this.lastSecretSub.next(secret);
+                    this._lastSecret.set(secret);
                 }
 
             } else if (message.startsWith('HASH:')) {
                 const hash = message.split(':')[1];
-                this.currentHashSub.next(hash);
-                this.lastSecretSub.next('');
+                this._currentHash.set(hash);
+                this._lastSecret.set('');
 
             } else if (message.startsWith('TIMER:')) {
                 const seconds = parseInt(message.split(':')[1], 10);
-                this.timeLeftSub.next(seconds);
+                this._timeLeft.set(seconds);
             } else if (message === 'TAKEOFF') {
-                this.gameStateSub.next(GameState.FLYING);
-                this.multiplierSub.next(1.00);
+                this._gameState.set(GameState.FLYING);
+                this._multiplier.set(1.00);
             } else if (message.startsWith('HISTORY:')) {
                 const csv = message.substring(8);
                 if (csv.length > 0) {
@@ -186,7 +184,7 @@ export class GameSocketService implements OnDestroy {
                         }
                         return { multiplier: parseFloat(p[0]) };
                     });
-                    this.historySub.next(items);
+                    this._history.set(items);
                 }
             }
         });
@@ -200,34 +198,34 @@ export class GameSocketService implements OnDestroy {
 
     notifyPlayerWin(userId: string, index: number, multiplier: number, profit: number) {
         this.zone.run(() => {
-            const currentBets = this.betsSub.getValue();
-            const alreadyWon = currentBets.find(b => b.userId === userId && b.index === index && b.profit === profit);
-            if (alreadyWon) return;
+            this._bets.update(bets => {
+                const alreadyWon = bets.find(b => b.userId === userId && b.index === index && b.profit === profit);
+                if (alreadyWon) return bets;
 
-            const updatedBets = currentBets.map(b => {
-                if (b.userId === userId && b.index === index) {
-                    return { ...b, multiplier, profit };
-                }
-                return b;
+                return bets.map(b => {
+                    if (b.userId === userId && b.index === index) {
+                        return { ...b, multiplier, profit };
+                    }
+                    return b;
+                });
             });
-            this.betsSub.next(updatedBets);
         });
     }
 
     addBet(bet: Bet) {
         this.zone.run(() => {
-            const currentBets = this.betsSub.getValue();
-            if (currentBets.some(b => b.userId === bet.userId && b.index === bet.index)) {
-                return;
-            }
-            this.betsSub.next([...currentBets, bet]);
+            this._bets.update(bets => {
+                if (bets.some(b => b.userId === bet.userId && b.index === bet.index)) {
+                    return bets;
+                }
+                return [...bets, bet];
+            });
         });
     }
 
     removeBet(userId: string, index: number) {
         this.zone.run(() => {
-            const currentBets = this.betsSub.getValue();
-            this.betsSub.next(currentBets.filter(b => !(b.userId === userId && b.index === index)));
+            this._bets.update(bets => bets.filter(b => !(b.userId === userId && b.index === index)));
         });
     }
 

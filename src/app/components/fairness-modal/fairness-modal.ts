@@ -4,7 +4,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { GameSocketService } from '../../services/game-socket.service';
 import { FairnessService } from '../../services/fairness.service';
-import { toSignal } from '@angular/core/rxjs-interop';
+
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -26,8 +26,8 @@ export class FairnessModal implements OnInit {
     calculationSteps: string = '';
 
     constructor(private gameSocket: GameSocketService, private fairnessService: FairnessService) {
-        this.currentHash = toSignal(this.gameSocket.currentHash$, { initialValue: '' });
-        this.lastSecret = toSignal(this.gameSocket.lastSecret$, { initialValue: '' });
+        this.currentHash = this.gameSocket.currentHash;
+        this.lastSecret = this.gameSocket.lastSecret;
 
         this.fairnessService.openModal$.subscribe(data => {
             if (data) {

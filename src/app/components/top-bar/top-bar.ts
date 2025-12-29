@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
@@ -51,30 +51,30 @@ export class TopBar implements OnInit, OnDestroy {
             })
         );
 
+        effect(() => {
+            const bets = this.gameSocket.bets();
+            if (!this.user) return;
+
+            const myBets = bets.filter(b => b.userId === this.user.id);
+
+            if (myBets.length > 0) {
+                const totalBet = myBets.reduce((sum, b) => sum + b.amount, 0);
+                if (totalBet > 0) {
+                    this.lastBet = totalBet;
+                }
+                const totalWin = myBets.reduce((sum, b) => sum + (b.profit || 0), 0);
+                if (totalWin > 0) {
+                    this.lastWin = totalWin;
+                }
+            }
+        });
+
 
         this.audio.loop = true;
         this.audio.volume = this.musicVolume / 100;
     }
 
     ngOnInit() {
-        this.subs.push(
-            this.gameSocket.bets$.subscribe(bets => {
-                if (!this.user) return;
-
-                const myBets = bets.filter(b => b.userId === this.user.id);
-
-                if (myBets.length > 0) {
-                    const totalBet = myBets.reduce((sum, b) => sum + b.amount, 0);
-                    if (totalBet > 0) {
-                        this.lastBet = totalBet;
-                    }
-                    const totalWin = myBets.reduce((sum, b) => sum + (b.profit || 0), 0);
-                    if (totalWin > 0) {
-                        this.lastWin = totalWin;
-                    }
-                }
-            })
-        );
     }
 
     onLogout() {
