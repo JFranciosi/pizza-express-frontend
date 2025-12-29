@@ -102,7 +102,6 @@ export class GameSocketService implements OnDestroy {
                 if (existingIndex === -1) {
                     this.betsSub.next([...currentBets, bet]);
                 } else {
-                    // Update existing bet (e.g. from optimistic to confirmed)
                     const updatedBets = [...currentBets];
                     updatedBets[existingIndex] = { ...updatedBets[existingIndex], ...bet };
                     this.betsSub.next(updatedBets);

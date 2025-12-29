@@ -4,7 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-import { GameSocketService, Bet } from '../../services/game-socket.service';
+import { GameSocketService } from '../../services/game-socket.service';
 import { Subscription } from 'rxjs';
 import { SettingsModal } from '../settings-modal/settings-modal';
 import { FairnessModal } from '../fairness-modal/fairness-modal';

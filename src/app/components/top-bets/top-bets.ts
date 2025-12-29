@@ -13,10 +13,8 @@ import { environment } from '../../../environments/environment';
 export class TopBets implements OnInit, OnChanges {
     @Input() forceTab: string | null = null;
 
-    // Internal state, initialized to profit
     private _activeTab = signal('profit');
 
-    // Public signal for template read
     activeTab = this._activeTab.asReadonly();
 
     profitBets = signal<TopBet[]>([]);
@@ -38,8 +36,7 @@ export class TopBets implements OnInit, OnChanges {
 
     ngOnInit() {
         this.loadData();
-        // Refresh every minute
-        setInterval(() => this.loadSilent(), 60000); // Silent refresh
+        setInterval(() => this.loadSilent(), 60000);
     }
 
     loadData() {
@@ -48,12 +45,9 @@ export class TopBets implements OnInit, OnChanges {
     }
 
     loadSilent() {
-        // Load independently to avoid blocking one if other fails, but for initial load wait for both
-        // Simple approach: Parallel calls
         this.gameApi.getTopBets('profit').subscribe({
             next: (data) => {
                 this.profitBets.set(data);
-                // We'll verify loading state logic: we want to show list when we have something.
                 if (this._activeTab() === 'profit') this.isLoading.set(false);
             },
             error: () => this.isLoading.set(false)
@@ -66,9 +60,6 @@ export class TopBets implements OnInit, OnChanges {
             },
             error: () => this.isLoading.set(false)
         });
-
-        // Ensure loading is unset after a short timeout if API is fast, or generally just rely on the active tab data arriving
-        // Better: use forkJoin for the initial load
     }
 
     setTab(tab: string) {
