@@ -1,18 +1,18 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GameSocketService, HistoryItem } from '../../services/game-socket.service';
-import { HistoryModalComponent } from '../history-modal/history-modal';
+import { HistoryModal } from '../history-modal/history-modal';
 import { FairnessService } from '../../services/fairness.service';
 
 @Component({
     selector: 'app-crash-history',
     standalone: true,
-    imports: [CommonModule, HistoryModalComponent],
-    templateUrl: './history.html',
-    styleUrl: './history.css'
+    imports: [CommonModule, HistoryModal],
+    templateUrl: './crash-history.html',
+    styleUrl: './crash-history.css'
 })
-export class CrashHistoryComponent implements OnInit {
-    @ViewChild(HistoryModalComponent) modal!: HistoryModalComponent;
+export class CrashHistory implements OnInit {
+    @ViewChild(HistoryModal) modal!: HistoryModal;
     history: HistoryItem[] = [];
 
     constructor(public gameSocket: GameSocketService, private fairnessService: FairnessService) { }

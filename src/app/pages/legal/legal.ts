@@ -4,16 +4,16 @@ import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 
-import { FooterComponent } from '../../components/footer/footer';
+import { Footer } from '../../components/footer/footer';
 
 @Component({
     selector: 'app-legal',
     standalone: true,
-    imports: [CommonModule, ButtonModule, CardModule, FooterComponent],
+    imports: [CommonModule, ButtonModule, CardModule, Footer],
     templateUrl: './legal.html',
     styleUrl: './legal.css'
 })
-export class LegalComponent {
+export class Legal {
 
     constructor(private router: Router) { }
 

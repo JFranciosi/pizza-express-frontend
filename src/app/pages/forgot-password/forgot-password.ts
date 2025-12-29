@@ -8,17 +8,17 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { CardModule } from 'primeng/card';
 import { ToastModule } from 'primeng/toast';
-import { FooterComponent } from '../../components/footer/footer';
+import { Footer } from '../../components/footer/footer';
 
 @Component({
     selector: 'app-forgot-password',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, RouterLink, ButtonModule, InputTextModule, CardModule, ToastModule, FooterComponent],
+    imports: [CommonModule, ReactiveFormsModule, RouterLink, ButtonModule, InputTextModule, CardModule, ToastModule, Footer],
     templateUrl: './forgot-password.html',
     styleUrls: ['./forgot-password.css'],
     providers: [MessageService]
 })
-export class ForgotPasswordComponent {
+export class ForgotPassword {
     forgotForm: FormGroup;
     loading = false;
     submitted = false;

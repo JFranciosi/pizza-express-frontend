@@ -10,7 +10,7 @@ import { environment } from '../../../environments/environment';
     templateUrl: './top-bets.html',
     styleUrl: './top-bets.css'
 })
-export class TopBetsComponent implements OnInit, OnChanges {
+export class TopBets implements OnInit, OnChanges {
     @Input() forceTab: string | null = null;
 
     // Internal state, initialized to profit

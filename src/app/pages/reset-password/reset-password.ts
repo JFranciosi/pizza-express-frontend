@@ -9,17 +9,17 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { CardModule } from 'primeng/card';
 import { ToastModule } from 'primeng/toast';
-import { FooterComponent } from '../../components/footer/footer';
+import { Footer } from '../../components/footer/footer';
 
 @Component({
     selector: 'app-reset-password',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, RouterLink, ButtonModule, InputTextModule, PasswordModule, CardModule, ToastModule, FooterComponent],
+    imports: [CommonModule, ReactiveFormsModule, RouterLink, ButtonModule, InputTextModule, PasswordModule, CardModule, ToastModule, Footer],
     templateUrl: './reset-password.html',
     styleUrls: ['./reset-password.css'],
     providers: [MessageService]
 })
-export class ResetPasswordComponent implements OnInit {
+export class ResetPassword implements OnInit {
     resetForm: FormGroup;
     loading = false;
     token: string = '';

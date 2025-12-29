@@ -19,7 +19,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
     styleUrl: './bet-panel.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BetPanelComponent {
+export class BetPanel {
     @Input() index: number = 0;
 
     betAmount: number = 5.00;

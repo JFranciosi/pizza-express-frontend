@@ -6,31 +6,32 @@
 > This is the Angular Interface. To run the game engine, you need the Quarkus Backend:
 > 👉 **[CLICCA QUI PER IL REPO DEL BACKEND](https://github.com/JFranciosi/pizza-express-backend)**
 
-Frontend for the **Pizza Express** Crash Game, built with **Angular 20**.
-A premium, responsive, and real-time betting interface.
+Frontend for the **Pizza Express** Crash Game.
+A high-performance, real-time betting interface built with **Angular (Standard Architecture)**.
 
 ## 🌟 Features
 
 - **Dynamic Betting UI**:
   - Single Button Experience: Switches between **BET** (Green), **CANCEL** (Red + Timer), and **CASHOUT** (Orange).
-  - Optimistic locking to prevent double bets.
-- **Real-Time Visualization**:
-  - `GameCanvasComponent`: Renders the flying pizza multiplier curve using HTML5 Canvas.
-  - `GameSocketService`: Manages WebSocket connection for live game updates.
+  - Optimistic locking and instant feedback to prevent double bets.
+- **High-Performance Rendering**:
+  - `GameCanvasComponent`: Renders the flying pizza multiplier curve using **HTML5 Canvas API** (2D Context) for smooth 60FPS animations.
+  - Zero-DOM overhead for the game loop.
+- **Real-Time Data**:
+  - `GameSocketService`: Manages WebSocket connections using **RxJS Observables** for precise state syncing.
 - **Components**:
-  - `CrashHistory`: Live pills and full history table with verification support.
+  - `CrashHistory`: Live pills and full history table.
   - `RoundDetailsModal`: Professional modal for verifying round integrity (Seeds, Hash, breakdown).
   - `PlayerBets`: Live feed of all players' bets and winnings.
-  - `Chat`: Real-time chat for players.
 - **Authentication**: JWT-based Login/Register pages with dark/glassmorphism design.
 
 ## 🛠️ Tech Stack
 
-- **Angular 20+** (Standalone Components, Signals)
-- **PrimeNG**: UI Component Library (Inputs, Buttons, Toast).
-- **RxJS**: Reactive state management.
-- **Socket.io / WebSocket**: Real-time communication.
-- **CSS3**: Custom variables, glassmorphism, animations.
+- **Angular 19/20**: Standard Zone.js-based architecture.
+- **PrimeNG (Aura)**: Modern UI Component Library.
+- **RxJS**: for reactive state management and event streams.
+- **Canvas API**: for high-performance game rendering.
+- **CSS3 / Flexbox**: Custom glassmorphism layout and responsive design.
 
 ## 🚀 Getting Started
 

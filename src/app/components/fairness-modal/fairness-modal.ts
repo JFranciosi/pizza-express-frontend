@@ -1,4 +1,4 @@
-import { Component, Signal } from '@angular/core';
+import { Component, Signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
@@ -14,7 +14,7 @@ import { FormsModule } from '@angular/forms';
     templateUrl: './fairness-modal.html',
     styleUrl: './fairness-modal.css'
 })
-export class FairnessModalComponent {
+export class FairnessModal implements OnInit {
     visible: boolean = false;
 
     currentHash: Signal<string>;
@@ -36,6 +36,9 @@ export class FairnessModalComponent {
                 this.show();
             }
         });
+    }
+
+    ngOnInit() {
     }
 
     show(secret?: string) {

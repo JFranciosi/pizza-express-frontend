@@ -13,7 +13,7 @@ import { FairnessService } from '../../services/fairness.service';
     templateUrl: './round-details-modal.html',
     styleUrl: './round-details-modal.css'
 })
-export class RoundDetailsModalComponent {
+export class RoundDetailsModal {
     visible: boolean = false;
 
     serverSeed: string = '';
