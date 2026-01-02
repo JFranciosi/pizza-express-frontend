@@ -11,6 +11,7 @@ import { PlayerBets } from '../../components/player-bets/player-bets';
 import { BetControls } from '../../components/bet-controls/bet-controls';
 import { TopBar } from '../../components/top-bar/top-bar';
 import { SoundService } from '../../services/sound.service';
+import { ProvablyFairFooter } from '../../components/provably-fair-footer/provably-fair-footer';
 
 @Component({
     selector: 'app-home',
@@ -22,7 +23,8 @@ import { SoundService } from '../../services/sound.service';
         CrashHistory,
         PlayerBets,
         BetControls,
-        TopBar
+        TopBar,
+        ProvablyFairFooter
     ],
     templateUrl: './home.html',
     styleUrl: './home.css',
@@ -31,15 +33,11 @@ import { SoundService } from '../../services/sound.service';
 export class Home implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('gameCanvas') canvasRef!: ElementRef<HTMLCanvasElement>;
     private ctx!: CanvasRenderingContext2D;
-
-    // Use Signals from Service directly where possible, or track locally if needed for animation loop
-    // Multiplier for display is managed by animation loop for smoothness, 
-    // but we can check drift against signal
     multiplier: number = 1.00;
-
     private animationFrameId: number | null = null;
     private crashTimeout: any = null;
     private readonly GROWTH_RATE = 0.00006;
+    private readonly CLIENT_LATENCY_MS = 300;
     private roundStartTime: number = 0;
     private waitingEndTime: number = 0;
     private rocketImage: HTMLImageElement = new Image();
@@ -66,19 +64,16 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
     ) {
         this.rocketImage.src = 'assets/vespa.png';
 
-        // React to Game State Changes
         effect(() => {
             const state = this.gameSocket.gameState();
             this.handleStateChange(state);
         }, { injector: this.injector });
 
-        // React to Server Multiplier for Drift Correction
         effect(() => {
             const serverMultiplier = this.gameSocket.multiplier();
             this.handleMultiplierUpdate(serverMultiplier);
         }, { injector: this.injector });
 
-        // React to Time Left
         effect(() => {
             const t = this.gameSocket.timeLeft();
             const estimatedEnd = Date.now() + t * 1000;
@@ -88,7 +83,6 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
             this.cdr.markForCheck();
         }, { injector: this.injector });
 
-        // React to Bets for Win Toast
         effect(() => {
             const bets = this.gameSocket.bets();
             const user = this.authService.getUser();
@@ -120,7 +114,6 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         if (this.prevState === GameState.CRASHED && state === GameState.WAITING) {
             this.crashTimeout = setTimeout(() => {
                 this.crashTimeout = null;
-                // Transition logic
                 this.resetAnimationState();
                 this.startDrawing();
                 this.soundService.playIdle();
@@ -128,7 +121,7 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
             }, 1000);
         } else {
             if (state === GameState.FLYING) {
-                this.roundStartTime = Date.now();
+                this.roundStartTime = Date.now() + this.CLIENT_LATENCY_MS;
                 this.multiplier = 1.00;
                 this.resetAnimationState();
                 this.startDrawing();
@@ -154,13 +147,13 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
     handleMultiplierUpdate(serverMultiplier: number) {
         if (serverMultiplier > 1.0) {
             const timeElapsed = Math.log(serverMultiplier) / this.GROWTH_RATE;
-            const calculatedStartTime = Date.now() - timeElapsed;
+            const calculatedStartTime = Date.now() - timeElapsed + this.CLIENT_LATENCY_MS;
 
             if (this.roundStartTime === 0 || Math.abs(this.roundStartTime - calculatedStartTime) > 500) {
                 this.roundStartTime = calculatedStartTime;
             }
 
-            if (serverMultiplier > this.multiplier || this.gameSocket.gameState() === GameState.CRASHED) {
+            if (this.gameSocket.gameState() === GameState.CRASHED) {
                 this.multiplier = serverMultiplier;
             }
         } else {
@@ -571,7 +564,6 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
     ngOnDestroy() {
         this.soundService.stopAll();
         if (this.crashTimeout) clearTimeout(this.crashTimeout);
-        // Effects cleanup is automatic
         this.stopDrawing();
         window.removeEventListener('resize', () => this.resizeCanvas());
     }

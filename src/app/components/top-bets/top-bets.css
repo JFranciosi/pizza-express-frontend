@@ -2,10 +2,8 @@
     display: block;
     height: 100%;
     min-height: 0;
-    /* Crucial for nested flex scrolling */
 }
 
-/* Main container inherits from parent now */
 .top-bets-panel {
     height: 100%;
     color: var(--text-primary);
@@ -14,7 +12,6 @@
     overflow: hidden;
 }
 
-/* Hide original header since we use parent's switcher */
 .panel-header {
     display: none;
 }
@@ -34,7 +31,6 @@
     color: #ffd700;
 }
 
-/* Internal Tabs (Profit/Multiplier) */
 .internal-tabs {
     display: flex;
     justify-content: center;
@@ -70,11 +66,8 @@
     flex-direction: column;
     gap: 0.5rem;
     min-height: 0;
-    /* Crucial for nested flex scrolling */
     -webkit-overflow-scrolling: touch;
-    /* Smooth scrolling on iOS */
     padding-bottom: 60px;
-    /* Space for the absolute footer */
 }
 
 .list-container::-webkit-scrollbar {
@@ -98,7 +91,6 @@
     justify-content: center;
     color: var(--text-secondary);
     gap: 2rem;
-    /* Increased gap */
     height: 100%;
     min-height: 200px;
 }
@@ -121,7 +113,6 @@
     background: rgba(255, 255, 255, 0.05);
 }
 
-/* Rank: Simple Black Background / White Text */
 .rank {
     width: 24px;
     height: 24px;
@@ -131,7 +122,6 @@
     font-size: 0.8rem;
     font-weight: 700;
     border-radius: 6px;
-    /* Slightly rounded square or circle? keeping circle for now but maybe square matches 'black background' vibe better? Let's stick to user request 'simple black background' - rounded is fine */
     border-radius: 5px;
     margin-right: 0.8rem;
     color: #fff;
@@ -139,7 +129,6 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Remove old rank specific colors */
 .rank.rank-1,
 .rank.rank-2,
 .rank.rank-3 {
@@ -178,29 +167,23 @@
     text-align: right;
     display: flex;
     flex-direction: row;
-    /* Inline display */
     align-items: center;
     justify-content: flex-end;
-    /* Align to the right */
     gap: 8px;
-    /* Space between values */
 }
 
 .value {
     font-family: var(--font-mono);
     font-weight: 700;
     font-size: 0.85rem;
-    /* Slightly smaller to fit better inline */
     color: #fff;
     white-space: nowrap;
 }
 
 .sub-value {
     font-size: 0.85rem;
-    /* Match value size roughly */
     color: var(--text-secondary);
     margin-top: 0;
-    /* Remove top margin */
 }
 
 .value.profit {
@@ -208,7 +191,6 @@
     text-shadow: 0 0 5px rgba(0, 230, 118, 0.3);
 }
 
-/* Multiplier Colors - Consistent with History */
 .multiplier-badge {
     padding: 1px 6px;
     border-radius: 4px;
@@ -217,19 +199,16 @@
 
 .multiplier-badge.low {
     color: #4caf50;
-    /* background: rgba(0, 140, 69, 0.1); */
     text-shadow: 0 0 5px rgba(0, 140, 69, 0.3);
 }
 
 .multiplier-badge.medium {
     color: #ffffff;
-    /* background: rgba(255, 255, 255, 0.1); */
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
 }
 
 .multiplier-badge.high {
     color: #ff5252;
-    /* background: rgba(227, 27, 35, 0.1); */
     text-shadow: 0 0 5px rgba(227, 27, 35, 0.3);
 }
 
@@ -266,6 +245,18 @@
     .username {
         font-size: 0.8rem;
     }
+
+    :host,
+    .top-bets-panel {
+        height: auto !important;
+        min-height: 0 !important;
+    }
+
+    .list-container {
+        flex: none !important;
+        overflow-y: visible !important;
+        height: auto !important;
+    }
 }
 
 @media (max-width: 576px) {
@@ -292,12 +283,10 @@
     .username {
         font-size: 0.75rem;
         max-width: 80px;
-        /* Force truncation on very small screens */
     }
 
     .stats {
         gap: 4px;
-        /* Reduce gap between profit/multiplier */
     }
 
     .value {
@@ -317,12 +306,10 @@
         font-size: 0.7rem;
     }
 
-    /* Hide internal tabs on mobile because we use the parent header controls */
     .internal-tabs {
         display: none;
     }
 
-    /* Mobile specific loading state - Compact, looks like a row */
     .loading-state {
         min-height: 0;
         height: auto;
@@ -335,9 +322,7 @@
 
     .loading-state i {
         font-size: 1rem;
-        /* Small spinner */
         width: 18px;
-        /* Match rank width approx */
         height: 18px;
         display: flex;
         align-items: center;

@@ -1,15 +1,16 @@
 import { Component, Signal, computed, ChangeDetectionStrategy, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
-import { RouterLink } from '@angular/router';
+
 import { GameSocketService, Bet } from '../../services/game-socket.service';
 import { environment } from '../../../environments/environment';
 import { TopBets } from '../top-bets/top-bets';
+import { ProvablyFairFooter } from '../provably-fair-footer/provably-fair-footer';
 
 @Component({
     selector: 'app-player-bets',
     standalone: true,
-    imports: [CommonModule, CardModule, RouterLink, TopBets],
+    imports: [CommonModule, CardModule, TopBets, ProvablyFairFooter],
     templateUrl: './player-bets.html',
     styleUrl: './player-bets.css',
     changeDetection: ChangeDetectionStrategy.OnPush
