@@ -80,7 +80,7 @@ export class Register {
                     if (msg.includes('Username already in use')) msg = "Username already in use.";
 
                     this.error = 'Registration failed.';
-                    this.messageService.add({ severity: 'error', summary: 'Error', detail: msg });
+                    this.error = 'Registration failed.';
                 }
             });
         } else {

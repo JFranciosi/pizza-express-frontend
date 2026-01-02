@@ -50,8 +50,7 @@ export class ForgotPassword {
                 this.loading = false;
             },
             error: (err) => {
-                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'If the email exists, a reset link has been sent.' });
-                this.submitted = true;
+                this.submitted = false;
                 this.loading = false;
             }
         });

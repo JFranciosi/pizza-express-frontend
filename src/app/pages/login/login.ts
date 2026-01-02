@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpContext } from '@angular/common/http';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CardModule } from 'primeng/card';
@@ -12,6 +13,7 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { AuthService } from '../../services/auth.service';
 import { Footer } from '../../components/footer/footer';
+import { SKIP_ERROR_TOAST } from '../../data/http-context.tokens';
 
 @Component({
     selector: 'app-login',
@@ -86,7 +88,9 @@ export class Login implements OnInit {
                 localStorage.removeItem('saved_password');
             }
 
-            this.authService.login(this.loginForm.value).subscribe({
+            const context = new HttpContext().set(SKIP_ERROR_TOAST, true);
+
+            this.authService.login(this.loginForm.value, context).subscribe({
                 next: (response) => {
                     console.log('Login successful', response);
                     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Login successful' });
@@ -97,14 +101,8 @@ export class Login implements OnInit {
                 },
                 error: (err) => {
                     console.error('Login error', err);
-                    let msg = err.error?.error || 'Invalid credentials';
-
-                    if (msg.includes('Invalid credentials') || msg.includes('User not found')) {
-                        msg = "Invalid email or password.";
-                    }
-
                     this.error = 'Login failed.';
-                    this.messageService.add({ severity: 'error', summary: 'Error', detail: msg });
+                    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Login failed' });
                     this.loading = false;
                 }
             });
