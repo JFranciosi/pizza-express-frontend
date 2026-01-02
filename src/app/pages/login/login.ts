@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpContext } from '@angular/common/http';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
@@ -55,6 +55,7 @@ export class Login implements OnInit {
     }
 
     ngOnInit() {
+        this.updateToastPosition();
         const savedEmail = localStorage.getItem('saved_email');
         const savedPassword = localStorage.getItem('saved_password');
 
@@ -72,6 +73,13 @@ export class Login implements OnInit {
             this.loginForm.patchValue(patchData);
             this.rememberMe = true;
         }
+    }
+
+    toastPosition: 'top-center' | 'top-right' = 'top-center';
+
+    @HostListener('window:resize')
+    updateToastPosition() {
+        this.toastPosition = window.innerWidth > 768 ? 'top-right' : 'top-center';
     }
 
     onSubmit() {
