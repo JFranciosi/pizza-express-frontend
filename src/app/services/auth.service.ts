@@ -33,7 +33,6 @@ export class AuthService {
     }
 
     private saveSession(response: AuthResponse): void {
-        localStorage.setItem('accessToken', response.accessToken);
         const user = {
             id: response.userId,
             username: response.username,
@@ -46,7 +45,7 @@ export class AuthService {
     }
 
     getToken(): string | null {
-        return localStorage.getItem('accessToken');
+        return null;
     }
 
     private getUserFromStorage(): any | null {
@@ -59,7 +58,7 @@ export class AuthService {
     }
 
     logout(): void {
-        localStorage.removeItem('accessToken');
+        this.http.post(`${this.apiUrl}/logout`, {}).subscribe(); // Trigger backend cookie clear
         localStorage.removeItem('user_data');
         this.userSubject.next(null);
     }
