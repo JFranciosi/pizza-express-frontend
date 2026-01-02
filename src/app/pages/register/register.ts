@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -31,7 +31,7 @@ import { Footer } from '../../components/footer/footer';
     templateUrl: './register.html',
     styleUrl: './register.css'
 })
-export class Register {
+export class Register implements OnInit {
     registerForm: FormGroup;
     loading = false;
     error = '';
@@ -53,6 +53,17 @@ export class Register {
     passwordMatchValidator(g: FormGroup) {
         return g.get('password')?.value === g.get('confirmPassword')?.value
             ? null : { mismatch: true };
+    }
+
+    toastPosition: 'top-center' | 'top-right' = 'top-center';
+
+    ngOnInit() {
+        this.updateToastPosition();
+    }
+
+    @HostListener('window:resize')
+    updateToastPosition() {
+        this.toastPosition = window.innerWidth > 768 ? 'top-right' : 'top-center';
     }
 
     onSubmit() {
@@ -80,7 +91,7 @@ export class Register {
                     if (msg.includes('Username already in use')) msg = "Username already in use.";
 
                     this.error = 'Registration failed.';
-                    this.messageService.add({ severity: 'error', summary: 'Error', detail: msg });
+                    this.error = 'Registration failed.';
                 }
             });
         } else {

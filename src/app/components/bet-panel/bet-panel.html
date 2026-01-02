@@ -98,17 +98,3 @@
     </div>
 
 </div>
-
-<p-dialog header="Error" [(visible)]="errorVisible" [modal]="true" [style]="{width: '320px'}" [draggable]="false"
-    [resizable]="false" appendTo="body">
-    <div class="error-content">
-        <i class="pi pi-exclamation-circle error-icon"></i>
-        <p style="font-size: 1.1rem; color: white; margin: 0;">{{ errorMessage }}</p>
-    </div>
-    <ng-template pTemplate="footer">
-        <div style="display: flex; justify-content: center; width: 100%;">
-            <button pButton type="button" label="CLOSE" class="p-button-rounded p-button-danger"
-                style="width: 100%; font-weight: bold;" (click)="errorVisible = false"></button>
-        </div>
-    </ng-template>
-</p-dialog>

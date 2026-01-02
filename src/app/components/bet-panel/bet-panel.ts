@@ -1,7 +1,6 @@
 import { Component, effect, computed, Signal, Input, ChangeDetectionStrategy, ChangeDetectorRef, Injector } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
@@ -14,7 +13,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 @Component({
     selector: 'app-bet-panel',
     standalone: true,
-    imports: [CommonModule, FormsModule, ButtonModule, InputNumberModule, ToggleSwitchModule, DialogModule],
+    imports: [CommonModule, FormsModule, ButtonModule, InputNumberModule, ToggleSwitchModule],
     templateUrl: './bet-panel.html',
     styleUrl: './bet-panel.css',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -27,11 +26,8 @@ export class BetPanel {
     autoCashout: number = 2.00;
     isAutoCashoutEnabled: boolean = false;
 
-    errorVisible: boolean = false;
-    errorMessage: string = '';
-
     gameState: Signal<GameState>;
-    currentMultiplier: Signal<number>; // Note: We use @Input for smooth display, this is server state
+    currentMultiplier: Signal<number>;
     timeLeft: Signal<number>;
 
     betPlaced: boolean = false;
@@ -50,7 +46,6 @@ export class BetPanel {
         this.gameState = this.gameSocket.gameState;
         this.currentMultiplier = this.gameSocket.multiplier;
         this.timeLeft = this.gameSocket.timeLeft;
-        // Track bets to update local state
         effect(() => {
             const bets = this.gameSocket.bets();
             const user = this.authService.getUser();
@@ -80,8 +75,6 @@ export class BetPanel {
             }
 
             if (state === GameState.FLYING && this.betPlaced && !this.cashedOut && this.isAutoCashoutEnabled) {
-                // Use input multiplier for smooth check, or server for safety?
-                // Server multiplier is safer for auto-cashout trigger
                 if (this.currentMultiplier() >= this.autoCashout) {
                     this.cashedOut = true;
                 }
@@ -100,7 +93,7 @@ export class BetPanel {
 
     addToBet(amount: number) {
         this.betAmount = Math.min(this.betAmount + amount, 100);
-        this.cdr.markForCheck(); // Update UI
+        this.cdr.markForCheck();
     }
 
     setBet(amount: number) {
@@ -117,7 +110,7 @@ export class BetPanel {
         }
 
         if (this.betAmount > 100) {
-            this.showError('Max bet is 100€');
+            console.warn('Max bet is 100€');
             return;
         }
         if (this.betPlaced) return;
@@ -151,7 +144,9 @@ export class BetPanel {
             error: (err: any) => {
                 console.error('Bet failed', err);
                 this.betPlaced = false;
-                this.showError((err.error?.error || 'Bet Failed'));
+                console.error('Bet failed', err);
+                this.betPlaced = false;
+                this.cdr.markForCheck();
                 this.cdr.markForCheck();
             }
         });
@@ -181,7 +176,8 @@ export class BetPanel {
             error: (err: any) => {
                 console.error('Cancel bet failed', err);
                 this.betPlaced = true;
-                this.showError('Check failed');
+                console.error('Cancel bet failed', err);
+                this.betPlaced = true;
             }
         });
     }
@@ -214,7 +210,8 @@ export class BetPanel {
             error: (err: any) => {
                 console.error('Cashout failed', err);
                 this.cashedOut = false;
-                this.showError('Cashout failed');
+                console.error('Cashout failed', err);
+                this.cashedOut = false;
                 this.cdr.markForCheck();
             }
         });
@@ -224,11 +221,7 @@ export class BetPanel {
         return this.gameState() !== GameState.WAITING || this.betPlaced;
     }
 
-    showError(msg: string) {
-        this.errorMessage = msg;
-        this.errorVisible = true;
-        this.cdr.markForCheck();
-    }
+
 
     get isCashoutDisabled(): boolean {
         return this.gameState() !== GameState.FLYING || !this.betPlaced || this.cashedOut;
