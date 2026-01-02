@@ -34,7 +34,6 @@ export class AuthService {
 
     private saveSession(response: AuthResponse): void {
         localStorage.setItem('accessToken', response.accessToken);
-        localStorage.setItem('refreshToken', response.refreshToken);
         const user = {
             id: response.userId,
             username: response.username,
@@ -61,7 +60,6 @@ export class AuthService {
 
     logout(): void {
         localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
         localStorage.removeItem('user_data');
         this.userSubject.next(null);
     }
@@ -111,5 +109,13 @@ export class AuthService {
 
     resetPassword(token: string, newPassword: string): Observable<any> {
         return this.http.post(`${this.apiUrl}/reset-password`, { token, newPassword });
+    }
+
+    refreshToken(): Observable<AuthResponse> {
+        return this.http.post<AuthResponse>(`${this.apiUrl}/refresh`, {}).pipe(
+            tap(response => {
+                this.saveSession(response);
+            })
+        );
     }
 }
