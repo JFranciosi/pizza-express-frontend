@@ -91,14 +91,19 @@ canvas {
 }
 
 @media (max-width: 992px) {
+    .main-container {
+        height: auto !important;
+        overflow-y: auto !important;
+    }
+
     .dashboard-layout {
         display: flex !important;
         flex-direction: column !important;
-        height: 100dvh !important;
-        max-height: 100dvh !important;
-        overflow: hidden !important;
-        padding: 0.5rem !important;
-        gap: 0.5rem !important;
+        height: auto !important;
+        min-height: 100dvh !important;
+        overflow: visible !important;
+        padding: 0.25rem !important;
+        gap: 0.25rem !important;
     }
 
     .column {
@@ -109,12 +114,14 @@ canvas {
 
     .left-col {
         display: block !important;
-        height: 15vh !important;
-        min-height: 120px !important;
+        height: auto !important;
+        min-height: 0 !important;
         overflow-y: auto !important;
-        order: -1 !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        padding-bottom: 0.5rem;
+        order: 2 !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        border-bottom: none !important;
+        padding-top: 0.5rem;
+        padding-bottom: 0;
         flex: 0 0 auto !important;
     }
 
@@ -123,7 +130,7 @@ canvas {
         flex: 1 !important;
         display: flex !important;
         flex-direction: column !important;
-        overflow: hidden !important;
+        overflow: visible !important;
         height: auto !important;
     }
 
@@ -132,12 +139,11 @@ canvas {
     }
 
     .canvas-wrapper {
-        flex: 1 !important;
+        flex: 1 0 auto !important;
         height: auto !important;
-        min-height: 0 !important;
+        min-height: 300px !important;
         border-radius: 12px;
         padding: 0.5rem;
-        margin-bottom: 0.5rem;
     }
 
     app-bet-controls {
@@ -195,5 +201,16 @@ canvas {
     100% {
         opacity: 1;
         transform: translate(-50%, 0);
+    }
+}
+
+/* Mobile footer visibility logic */
+.mobile-footer-canvas {
+    display: none;
+}
+
+@media (max-width: 576px) {
+    .mobile-footer-canvas {
+        display: block;
     }
 }

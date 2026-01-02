@@ -30,8 +30,6 @@
     </div>
 
     @if (view() === 'live') {
-    <!-- Stats removed from here, moved to header -->
-
 
     <div class="players-list">
         @for (bet of bets(); track bet.userId) {
@@ -64,14 +62,5 @@
     <app-top-bets [forceTab]="activeTopBetTab()"></app-top-bets>
     }
 
-    <div class="provably-fair-footer">
-        <div class="footer-group">
-            <i class="pi pi-check-circle"></i>
-            <span>Provably Fair</span>
-        </div>
-        <div class="footer-group" routerLink="/legal">
-            <i class="pi pi-info-circle"></i>
-            <span>Legal Info</span>
-        </div>
-    </div>
+    <app-provably-fair-footer class="desktop-footer"></app-provably-fair-footer>
 </p-card>

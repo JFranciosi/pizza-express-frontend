@@ -1,0 +1,45 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
+.provably-fair-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px 8px;
+    width: 92%;
+    margin: 0 auto;
+
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.footer-group {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text-secondary);
+    font-size: 0.65rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.footer-group:hover {
+    color: white;
+}
+
+.footer-group i {
+    font-size: 0.8rem;
+}
+
+.footer-group .pi-check-circle {
+    color: var(--success-green);
+}
+
+.footer-group .pi-info-circle {
+    color: #fff;
+}

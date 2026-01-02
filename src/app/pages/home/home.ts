@@ -11,6 +11,7 @@ import { PlayerBets } from '../../components/player-bets/player-bets';
 import { BetControls } from '../../components/bet-controls/bet-controls';
 import { TopBar } from '../../components/top-bar/top-bar';
 import { SoundService } from '../../services/sound.service';
+import { ProvablyFairFooter } from '../../components/provably-fair-footer/provably-fair-footer';
 
 @Component({
     selector: 'app-home',
@@ -22,7 +23,8 @@ import { SoundService } from '../../services/sound.service';
         CrashHistory,
         PlayerBets,
         BetControls,
-        TopBar
+        TopBar,
+        ProvablyFairFooter
     ],
     templateUrl: './home.html',
     styleUrl: './home.css',
