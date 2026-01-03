@@ -41,7 +41,8 @@ export class GameApiService {
     }
 
     placeBet(amount: number, autoCashout: number, index: number = 0): Observable<any> {
-        return this.http.post(`${this.BASE_URL}/bet/place`, { amount, autoCashout, index });
+        const nonce = crypto.randomUUID();
+        return this.http.post(`${this.BASE_URL}/bet/place`, { amount, autoCashout, index, nonce });
     }
 
     cancelBet(index: number = 0): Observable<any> {
