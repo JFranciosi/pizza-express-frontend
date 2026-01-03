@@ -7,6 +7,8 @@ import { FairnessService } from '../../services/fairness.service';
 
 import { FormsModule } from '@angular/forms';
 
+import { GameApiService } from '../../services/game-api.service';
+
 @Component({
     selector: 'app-fairness-modal',
     standalone: true,
@@ -25,7 +27,14 @@ export class FairnessModal implements OnInit {
     verifyResult: number | null = null;
     calculationSteps: string = '';
 
-    constructor(private gameSocket: GameSocketService, private fairnessService: FairnessService) {
+    activeCommitment: string | null = null;
+    remainingGames: number | null = null;
+
+    constructor(
+        private gameSocket: GameSocketService,
+        private fairnessService: FairnessService,
+        private gameApi: GameApiService
+    ) {
         this.currentHash = this.gameSocket.currentHash;
         this.lastSecret = this.gameSocket.lastSecret;
 
@@ -43,10 +52,21 @@ export class FairnessModal implements OnInit {
 
     show(secret?: string) {
         this.visible = true;
+        this.loadFairnessData();
         if (secret) {
             this.verifySecret = secret;
             this.verify(); // Auto verify
         }
+    }
+
+    loadFairnessData() {
+        this.gameApi.getFairness().subscribe({
+            next: (data) => {
+                this.activeCommitment = data.activeCommitment;
+                this.remainingGames = data.remainingGames;
+            },
+            error: (err) => console.error('Failed to load fairness data', err)
+        });
     }
 
     copyToClipboard(text: string) {

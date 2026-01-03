@@ -57,4 +57,8 @@ export class GameApiService {
     getTopBets(type: 'profit' | 'multiplier'): Observable<TopBet[]> {
         return this.http.get<TopBet[]>(`${this.BASE_URL}/bet/top?type=${type}`);
     }
+
+    getFairness(): Observable<{ activeCommitment: string, remainingGames: number }> {
+        return this.http.get<any>(`${this.API_URL}/fairness`);
+    }
 }
