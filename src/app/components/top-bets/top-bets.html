@@ -18,7 +18,7 @@
             <div class="rank">{{ $index + 1 }}</div>
 
             <div class="user-info">
-                <img [src]="getAvatarUrl(bet.avatarUrl)" class="avatar" (error)="bet.avatarUrl = ''">
+                <img [src]="getAvatarUrl(bet)" class="avatar" (error)="bet.avatarUrl = ''">
                 <span class="username">{{ bet.username }}</span>
             </div>
 

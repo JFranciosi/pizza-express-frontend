@@ -10,6 +10,7 @@ import { AuthService } from '../../services/auth.service';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { TooltipModule } from 'primeng/tooltip';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'app-settings-modal',
@@ -152,6 +153,10 @@ export class SettingsModal implements OnInit {
     getAvatarUrl(url: string): string {
         if (this.previewAvatarUrl) return this.previewAvatarUrl;
         if (!url) return '/assets/default-avatar.png';
+        if (url.startsWith('data:')) return url;
+        if (this.user?.id) {
+            return `${environment.apiUrl}/users/${this.user.id}/avatar`;
+        }
         return url;
     }
 

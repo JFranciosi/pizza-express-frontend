@@ -9,7 +9,7 @@
         <div class="user-info mr-3">
             <div class="user-bar">
                 <div class="user-avatar-wrapper">
-                    <img [src]="getAvatarUrl(user.avatarUrl)" class="user-avatar" (error)="onAvatarError($event)">
+                    <img [src]="getAvatarUrl(user)" class="user-avatar" (error)="onAvatarError($event)">
                 </div>
                 <div class="user-details ml-2">
                     <span class="username">{{ user.username }}</span>

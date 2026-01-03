@@ -8,6 +8,7 @@ import { HistoryItem } from './game-socket.service';
 
 export interface TopBet {
     id: string;
+    userId: string;
     username: string;
     avatarUrl?: string;
     betAmount: number;
