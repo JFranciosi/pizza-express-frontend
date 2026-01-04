@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpContext } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, BehaviorSubject, of } from 'rxjs';
+import { tap, map, catchError } from 'rxjs/operators';
 import { LoginRequest, AuthResponse, RegisterRequest } from '../models/auth.models';
 
 import { environment } from '../../environments/environment';
@@ -13,6 +13,7 @@ export class AuthService {
     private apiUrl = `${environment.apiUrl}/auth`;
     private userSubject = new BehaviorSubject<any | null>(this.getUserFromStorage());
     public user$ = this.userSubject.asObservable();
+    private authenticated = false;
 
     constructor(private http: HttpClient) { }
 
@@ -42,6 +43,7 @@ export class AuthService {
         };
         localStorage.setItem('user_data', JSON.stringify(user));
         this.userSubject.next(user);
+        this.authenticated = true;
     }
 
     getToken(): string | null {
@@ -58,9 +60,10 @@ export class AuthService {
     }
 
     logout(): void {
-        this.http.post(`${this.apiUrl}/logout`, {}).subscribe(); // Trigger backend cookie clear
+        this.http.post(`${this.apiUrl}/logout`, {}).subscribe();
         localStorage.removeItem('user_data');
         this.userSubject.next(null);
+        this.authenticated = false;
     }
 
     updateBalance(newBalance: number): void {
@@ -114,6 +117,24 @@ export class AuthService {
         return this.http.post<AuthResponse>(`${this.apiUrl}/refresh`, {}).pipe(
             tap(response => {
                 this.saveSession(response);
+            })
+        );
+    }
+
+    verifySession(): Observable<boolean> {
+        if (this.authenticated) {
+            return of(true);
+        }
+        return this.http.get<any>(`${this.apiUrl}/me`).pipe(
+            tap(user => {
+                this.userSubject.next(user);
+                localStorage.setItem('user_data', JSON.stringify(user));
+                this.authenticated = true;
+            }),
+            map(() => true),
+            catchError(() => {
+                this.logout();
+                return of(false);
             })
         );
     }
