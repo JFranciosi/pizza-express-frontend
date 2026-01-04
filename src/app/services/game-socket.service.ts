@@ -140,6 +140,8 @@ export class GameSocketService implements OnDestroy {
                     if (!isNaN(mult)) {
                         this._multiplier.set(mult);
                     }
+                } else if (state === GameState.FLYING) {
+                    this._multiplier.set(1.00);
                 }
             } else if (message.startsWith('TICK:')) {
                 const mult = parseFloat(message.split(':')[1]);

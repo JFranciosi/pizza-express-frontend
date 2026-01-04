@@ -37,8 +37,9 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
     private animationFrameId: number | null = null;
     private crashTimeout: any = null;
     private readonly GROWTH_RATE = 0.00006;
-    private readonly CLIENT_LATENCY_MS = 300;
+    private readonly CLIENT_LATENCY_MS = 600;
     private roundStartTime: number = 0;
+    private visualStartTime: number = 0;
     private waitingEndTime: number = 0;
     private rocketImage: HTMLImageElement = new Image();
 
@@ -121,13 +122,16 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
             }, 1000);
         } else {
             if (state === GameState.FLYING) {
-                this.roundStartTime = Date.now() + this.CLIENT_LATENCY_MS;
+                const now = Date.now();
+                this.roundStartTime = now + this.CLIENT_LATENCY_MS;
+                this.visualStartTime = now;
                 this.multiplier = 1.00;
                 this.resetAnimationState();
                 this.startDrawing();
                 this.soundService.playTakeoff();
             } else if (state === GameState.CRASHED) {
                 this.crashStartTime = Date.now();
+                this.multiplier = this.gameSocket.multiplier();
                 this.soundService.playCrash();
             } else if (state === GameState.WAITING) {
                 this.winToastVisible = false;
@@ -256,8 +260,8 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         const w = this.canvasRef.nativeElement.width;
         const h = this.canvasRef.nativeElement.height;
 
-        const elapsed = Math.max(0, now - this.roundStartTime);
-        let t = Math.min(1, elapsed / this.RAMP_TIME);
+        const visualElapsed = Math.max(0, now - this.visualStartTime);
+        let t = Math.min(1, visualElapsed / this.RAMP_TIME);
 
         const p0 = { x: 0.05, y: 0.1 };
         const p1 = { x: 0.4, y: 0.1 };

@@ -190,7 +190,8 @@ export class BetPanel {
 
         const user = this.authService.getUser();
         if (user) {
-            const currentMult = this.currentMultiplier();
+            // Use visual multiplier for consistency with UI
+            const currentMult = this.multiplier;
             const estimatedWin = this.betAmount * currentMult;
             this.gameSocket.notifyPlayerWin(user.id, this.index, currentMult, estimatedWin);
         }
@@ -199,12 +200,13 @@ export class BetPanel {
             next: (response: any) => {
                 const winAmount = response.winAmount;
                 const newBalance = response.newBalance;
+                const actualMultiplier = response.multiplier;
 
                 this.authService.updateBalance(newBalance);
 
                 if (user) {
-                    const currentMult = this.currentMultiplier();
-                    this.gameSocket.notifyPlayerWin(user.id, this.index, currentMult, winAmount);
+                    // Update with authoritative server values
+                    this.gameSocket.notifyPlayerWin(user.id, this.index, actualMultiplier, winAmount);
                 }
             },
             error: (err: any) => {
