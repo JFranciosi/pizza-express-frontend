@@ -32,12 +32,11 @@
     @if (view() === 'live') {
 
     <div class="players-list">
-        @for (bet of bets(); track bet.userId) {
+        @for (bet of bets(); track bet.username) {
         <div class="player-row" [class.cashed-out]="bet.multiplier">
             <div class="player-info">
                 <div class="player-avatar">
-                    <img [src]="getAvatarUrl(bet.avatarUrl)" alt="Avatar" class="avatar-img"
-                        (error)="bet.avatarUrl = ''">
+                    <img [src]="getAvatarUrl(bet)" alt="Avatar" class="avatar-img" (error)="bet.avatarUrl = ''">
                 </div>
                 <span class="player-name">{{ bet.username }}</span>
             </div>

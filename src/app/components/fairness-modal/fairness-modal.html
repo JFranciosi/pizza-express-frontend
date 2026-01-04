@@ -1,6 +1,22 @@
 <p-dialog header="Provably Fair" [(visible)]="visible" [modal]="true" [style]="{ width: '400px' }"
     [breakpoints]="{'960px': '75vw', '640px': 'calc(100vw - 1rem)'}" [draggable]="false" [resizable]="false">
     <div class="fairness-content">
+        @if (activeCommitment) {
+        <div class="info-block highlight-block">
+            <h3>Active Chain (Commitment)</h3>
+            <p class="desc">The SHA256 hash of the final element in the chain. Use this to verify the chain integrity.
+            </p>
+            <div class="code-box">
+                <code class="small">{{ activeCommitment }}</code>
+                <button pButton icon="pi pi-copy" class="p-button-text p-button-sm"
+                    (click)="copyToClipboard(activeCommitment!)"></button>
+            </div>
+            <div class="params-row">
+                <span>Remaining: <strong>{{ remainingGames }}</strong></span>
+            </div>
+        </div>
+        }
+
         <div class="info-block">
             <h3>Current Round Hash (SHA256)</h3>
             <p class="desc">Commitment generated before the round starts.</p>

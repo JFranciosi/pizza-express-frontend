@@ -163,7 +163,7 @@ export class BetPanel {
         this.betPlaced = false;
         const user = this.authService.getUser();
         if (user) {
-            this.gameSocket.removeBet(user.id, this.index);
+            this.gameSocket.removeBet(user.username, this.index);
         }
 
         this.gameApi.cancelBet(this.index).subscribe({
@@ -190,21 +190,21 @@ export class BetPanel {
 
         const user = this.authService.getUser();
         if (user) {
-            const currentMult = this.currentMultiplier();
+            const currentMult = this.multiplier;
             const estimatedWin = this.betAmount * currentMult;
-            this.gameSocket.notifyPlayerWin(user.id, this.index, currentMult, estimatedWin);
+            this.gameSocket.notifyPlayerWin(user.username, this.index, currentMult, estimatedWin);
         }
 
         this.gameApi.cashOut(this.index).subscribe({
             next: (response: any) => {
                 const winAmount = response.winAmount;
                 const newBalance = response.newBalance;
+                const actualMultiplier = response.multiplier;
 
                 this.authService.updateBalance(newBalance);
 
                 if (user) {
-                    const currentMult = this.currentMultiplier();
-                    this.gameSocket.notifyPlayerWin(user.id, this.index, currentMult, winAmount);
+                    this.gameSocket.notifyPlayerWin(user.username, this.index, actualMultiplier, winAmount);
                 }
             },
             error: (err: any) => {

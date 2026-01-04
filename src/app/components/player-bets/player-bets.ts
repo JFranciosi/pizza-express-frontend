@@ -38,11 +38,15 @@ export class PlayerBets {
         }
     }
 
-    getAvatarUrl(url: string | undefined): string {
-        if (!url) return '/assets/default-avatar.png';
-        if (url.startsWith('/users/')) {
-            return `${environment.apiUrl}${url}`;
+    getAvatarUrl(bet: Bet): string {
+        if (!bet || !bet.avatarUrl) return '/assets/default-avatar.png';
+        if (bet.avatarUrl.startsWith('data:')) return bet.avatarUrl;
+        if (bet.avatarUrl.startsWith('/users/')) {
+            return `${environment.apiUrl}${bet.avatarUrl}`;
         }
-        return url;
+        if (bet.userId) {
+            return `${environment.apiUrl}/users/${bet.userId}/avatar`;
+        }
+        return '/assets/default-avatar.png';
     }
 }

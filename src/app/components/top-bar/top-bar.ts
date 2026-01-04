@@ -12,6 +12,7 @@ import { SoundService } from '../../services/sound.service';
 import { ToolbarModule } from 'primeng/toolbar';
 import { AvatarModule } from 'primeng/avatar';
 import { MenuModule } from 'primeng/menu';
+import { environment } from '../../../environments/environment';
 
 
 @Component({
@@ -117,12 +118,12 @@ export class TopBar implements OnInit, OnDestroy {
         event.target.src = 'assets/default-avatar.png';
     }
 
-    getAvatarUrl(url: string | undefined): string {
-        if (!url) return 'assets/default-avatar.png';
-        if (url.startsWith('/uploads/')) {
-            return `http://localhost:8080${url}`;
+    getAvatarUrl(user: any): string {
+        if (!user || !user.avatarUrl) return 'assets/default-avatar.png';
+        if (user.avatarUrl.startsWith('data:')) {
+            return user.avatarUrl;
         }
-        return url;
+        return `${environment.apiUrl}/users/${user.id}/avatar`;
     }
 
     ngOnDestroy() {
