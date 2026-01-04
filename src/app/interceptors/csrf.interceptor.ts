@@ -1,14 +1,15 @@
 import { HttpInterceptorFn } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
+import { inject } from '@angular/core';
+import { CsrfService } from '../services/csrf.service';
 
-const CSRF_HEADER_NAME = 'X-XSRF-TOKEN';
+export const CSRF_HEADER_NAME = 'X-XSRF-TOKEN';
 const CSRF_COOKIE_NAME = 'XSRF-TOKEN';
 
 export const csrfInterceptor: HttpInterceptorFn = (req, next) => {
     let requestToForward = req;
 
-    // Read token from cookie
-    const token = document.cookie.split('; ')
+    const csrfService = inject(CsrfService);
+    const token = csrfService.getToken() || document.cookie.split('; ')
         .find(row => row.startsWith(CSRF_COOKIE_NAME + '='))
         ?.split('=')[1];
 

@@ -3,6 +3,7 @@ import { HttpClient, HttpContext } from '@angular/common/http';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { tap, map, catchError } from 'rxjs/operators';
 import { LoginRequest, AuthResponse, RegisterRequest } from '../models/auth.models';
+import { CsrfService } from './csrf.service';
 
 import { environment } from '../../environments/environment';
 
@@ -15,7 +16,7 @@ export class AuthService {
     public user$ = this.userSubject.asObservable();
     private authenticated = false;
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient, private csrfService: CsrfService) { }
 
     login(request: LoginRequest, context?: HttpContext): Observable<AuthResponse> {
         return this.http.post<AuthResponse>(`${this.apiUrl}/login`, request, { context }).pipe(
@@ -147,8 +148,7 @@ export class AuthService {
             }),
             map(() => true),
             catchError(() => {
-                this.logout(true); // Server already rejected us (401), so just clear local state
-                // If session is invalid, perform handshake to ensure CSRF cookie is present
+                this.logout(true);
                 this.getCsrfToken().subscribe();
                 return of(false);
             })
@@ -156,6 +156,13 @@ export class AuthService {
     }
 
     getCsrfToken(): Observable<void> {
-        return this.http.get<void>(`${this.apiUrl}/csrf`);
+        return this.http.get<void>(`${this.apiUrl}/csrf`, { observe: 'response' }).pipe(
+            map(response => {
+                const token = response.headers.get('X-XSRF-TOKEN');
+                if (token) {
+                    this.csrfService.setToken(token);
+                }
+            })
+        );
     }
 }
