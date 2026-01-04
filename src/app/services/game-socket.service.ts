@@ -31,7 +31,6 @@ export class GameSocketService implements OnDestroy {
     private socket$: WebSocketSubject<any> | undefined;
     private readonly WS_ENDPOINT = `${environment.wsUrl}/game`;
 
-    // State Signals
     private _gameState = signal<GameState>(GameState.WAITING);
     public readonly gameState = this._gameState.asReadonly();
 
@@ -72,14 +71,16 @@ export class GameSocketService implements OnDestroy {
             }
         });
 
-        this.socket$.subscribe(
-            (message: string) => this.handleMessage(message),
-            err => console.error('WebSocket error:', err)
-        );
+        this.socket$.subscribe({
+            next: (message: string) => this.handleMessage(message),
+            error: (err) => console.error('WebSocket error:', err)
+        });
     }
 
     private reconnect() {
-        timer(3000).subscribe(() => this.connect());
+        timer(3000).subscribe({
+            next: () => this.connect()
+        });
     }
 
     private handleMessage(message: string) {
