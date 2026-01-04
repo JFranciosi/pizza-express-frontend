@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { MessageService } from 'primeng/api';
@@ -33,20 +33,34 @@ export class ResetPassword implements OnInit {
         private router: Router
     ) {
         this.resetForm = this.fb.group({
-            password: ['', [Validators.required, Validators.minLength(6)]],
+            password: ['', [Validators.required, Validators.minLength(8)]],
             confirmPassword: ['', Validators.required]
         }, { validators: this.passwordMatchValidator });
     }
 
+    private redirectTimeout: any;
+
     ngOnInit() {
-        this.token = this.route.snapshot.queryParamMap.get('token') || '';
-        if (!this.token) {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Invalid or missing token.' });
-            setTimeout(() => this.router.navigate(['/login']), 2000);
-        }
+        this.route.queryParamMap.subscribe(params => {
+            const token = params.get('token');
+            if (token) {
+                this.token = token;
+                if (this.redirectTimeout) {
+                    clearTimeout(this.redirectTimeout);
+                    this.redirectTimeout = null;
+                }
+            } else {
+                if (!this.token) {
+                    this.redirectTimeout = setTimeout(() => {
+                        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Invalid or missing token.' });
+                        this.router.navigate(['/login']);
+                    }, 500);
+                }
+            }
+        });
     }
 
-    passwordMatchValidator(g: FormGroup) {
+    passwordMatchValidator(g: AbstractControl): ValidationErrors | null {
         return g.get('password')?.value === g.get('confirmPassword')?.value
             ? null : { mismatch: true };
     }

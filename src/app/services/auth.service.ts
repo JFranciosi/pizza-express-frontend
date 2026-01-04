@@ -4,6 +4,7 @@ import { Observable, BehaviorSubject, of } from 'rxjs';
 import { tap, map, catchError, switchMap } from 'rxjs/operators';
 import { LoginRequest, AuthResponse, RegisterRequest } from '../models/auth.models';
 import { CsrfService } from './csrf.service';
+import { SKIP_ERROR_TOAST } from '../data/http-context.tokens';
 
 import { environment } from '../../environments/environment';
 
@@ -142,7 +143,9 @@ export class AuthService {
                 if (this.authenticated) {
                     return of(true);
                 }
-                return this.http.get<any>(`${this.apiUrl}/me`);
+                return this.http.get<any>(`${this.apiUrl}/me`, {
+                    context: new HttpContext().set(SKIP_ERROR_TOAST, true)
+                });
             }),
             tap(user => {
                 if (user !== true && user) {
