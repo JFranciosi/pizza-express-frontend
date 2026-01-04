@@ -30,6 +30,7 @@ export interface HistoryItem {
 export class GameSocketService implements OnDestroy {
     private socket$: WebSocketSubject<any> | undefined;
     private readonly WS_ENDPOINT = `${environment.wsUrl}/game`;
+    private reconnectAttempts = 0;
 
     private _gameState = signal<GameState>(GameState.WAITING);
     public readonly gameState = this._gameState.asReadonly();
@@ -61,7 +62,10 @@ export class GameSocketService implements OnDestroy {
             url: this.WS_ENDPOINT,
             deserializer: msg => msg.data,
             openObserver: {
-                next: () => console.log('WebSocket connected')
+                next: () => {
+                    console.log('WebSocket connected');
+                    this.reconnectAttempts = 0;
+                }
             },
             closeObserver: {
                 next: () => {
@@ -78,7 +82,15 @@ export class GameSocketService implements OnDestroy {
     }
 
     private reconnect() {
-        timer(3000).subscribe({
+        const baseDelay = Math.min(1000 * Math.pow(2, this.reconnectAttempts), 30000);
+        const jitter = Math.random() * 1000;
+        const delayMs = baseDelay + jitter;
+
+        this.reconnectAttempts++;
+
+        console.log(`Reconnecting in ${Math.round(delayMs)}ms (Attempt ${this.reconnectAttempts})`);
+
+        timer(delayMs).subscribe({
             next: () => this.connect()
         });
     }
