@@ -38,11 +38,16 @@ export class AuthService {
             id: response.userId,
             username: response.username,
             email: response.email,
-            balance: response.balance,
+            // Balance is NOT stored in local storage to prevent manipulation
             avatarUrl: response.avatarUrl
         };
         localStorage.setItem('user_data', JSON.stringify(user));
-        this.userSubject.next(user);
+
+        // We update the subject with the full response including balance
+        this.userSubject.next({
+            ...user,
+            balance: response.balance
+        });
         this.authenticated = true;
     }
 
@@ -52,7 +57,13 @@ export class AuthService {
 
     private getUserFromStorage(): any | null {
         const userStr = localStorage.getItem('user_data');
-        return userStr ? JSON.parse(userStr) : null;
+        if (userStr) {
+            const user = JSON.parse(userStr);
+            // Ensure balance is not read from storage, defaulting to 0 or undefined until verified
+            user.balance = undefined;
+            return user;
+        }
+        return null;
     }
 
     getUser(): any | null {
@@ -70,7 +81,8 @@ export class AuthService {
         const user = this.getUser();
         if (user) {
             user.balance = newBalance;
-            localStorage.setItem('user_data', JSON.stringify(user));
+            // distinct update: we do NOT update local storage with balance
+            // localStorage.setItem('user_data', JSON.stringify(user)); <--- REMOVED
             this.userSubject.next({ ...user });
         }
     }
@@ -79,13 +91,19 @@ export class AuthService {
         return this.http.post(`${this.apiUrl}/change-password`, { oldPass, newPass });
     }
 
+    private persistUserToStorage(user: any) {
+        // Create a copy and remove sensitive/dynamic fields that shouldn't be in local storage
+        const { balance, ...safeUser } = user;
+        localStorage.setItem('user_data', JSON.stringify(safeUser));
+    }
+
     updateEmail(email: string, password: string): Observable<any> {
         return this.http.post(`${this.apiUrl}/update-profile`, { email, password }).pipe(
             tap((response: any) => {
                 const user = this.getUser();
                 if (user) {
                     user.email = email;
-                    localStorage.setItem('user_data', JSON.stringify(user));
+                    this.persistUserToStorage(user);
                     this.userSubject.next({ ...user });
                 }
             })
@@ -98,7 +116,7 @@ export class AuthService {
                 const user = this.getUser();
                 if (user && response.avatarUrl) {
                     user.avatarUrl = response.avatarUrl;
-                    localStorage.setItem('user_data', JSON.stringify(user));
+                    this.persistUserToStorage(user);
                     this.userSubject.next({ ...user });
                 }
             })
@@ -128,7 +146,7 @@ export class AuthService {
         return this.http.get<any>(`${this.apiUrl}/me`).pipe(
             tap(user => {
                 this.userSubject.next(user);
-                localStorage.setItem('user_data', JSON.stringify(user));
+                this.persistUserToStorage(user);
                 this.authenticated = true;
             }),
             map(() => true),
