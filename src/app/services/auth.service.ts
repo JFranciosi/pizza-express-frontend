@@ -38,12 +38,10 @@ export class AuthService {
             id: response.userId,
             username: response.username,
             email: response.email,
-            // Balance is NOT stored in local storage to prevent manipulation
             avatarUrl: response.avatarUrl
         };
         localStorage.setItem('user_data', JSON.stringify(user));
 
-        // We update the subject with the full response including balance
         this.userSubject.next({
             ...user,
             balance: response.balance
@@ -59,7 +57,6 @@ export class AuthService {
         const userStr = localStorage.getItem('user_data');
         if (userStr) {
             const user = JSON.parse(userStr);
-            // Ensure balance is not read from storage, defaulting to 0 or undefined until verified
             user.balance = undefined;
             return user;
         }
@@ -81,8 +78,6 @@ export class AuthService {
         const user = this.getUser();
         if (user) {
             user.balance = newBalance;
-            // distinct update: we do NOT update local storage with balance
-            // localStorage.setItem('user_data', JSON.stringify(user)); <--- REMOVED
             this.userSubject.next({ ...user });
         }
     }
@@ -92,7 +87,6 @@ export class AuthService {
     }
 
     private persistUserToStorage(user: any) {
-        // Create a copy and remove sensitive/dynamic fields that shouldn't be in local storage
         const { balance, ...safeUser } = user;
         localStorage.setItem('user_data', JSON.stringify(safeUser));
     }
