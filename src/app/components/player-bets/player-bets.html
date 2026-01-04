@@ -32,7 +32,7 @@
     @if (view() === 'live') {
 
     <div class="players-list">
-        @for (bet of bets(); track bet.userId) {
+        @for (bet of bets(); track bet.username) {
         <div class="player-row" [class.cashed-out]="bet.multiplier">
             <div class="player-info">
                 <div class="player-avatar">

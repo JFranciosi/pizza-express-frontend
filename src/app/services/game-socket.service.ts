@@ -10,7 +10,7 @@ export enum GameState {
 }
 
 export interface Bet {
-    userId: string;
+    userId?: string;
     username: string;
     amount: number;
     multiplier?: number | null;
@@ -88,17 +88,17 @@ export class GameSocketService implements OnDestroy {
             if (message.startsWith('BET:') && !message.startsWith('BET_OK')) {
                 const parts = message.split(':');
                 const bet: Bet = {
-                    userId: parts[1],
-                    username: parts[2],
-                    amount: parseFloat(parts[3]),
+                    userId: undefined,
+                    username: parts[1],
+                    amount: parseFloat(parts[2]),
                     multiplier: null,
                     profit: null,
-                    index: parts.length > 4 ? parseInt(parts[4]) : 0,
-                    avatarUrl: parts.length > 5 ? parts.slice(5).join(':') : undefined
+                    index: parts.length > 3 ? parseInt(parts[3]) : 0,
+                    avatarUrl: parts.length > 4 ? parts.slice(4).join(':') : undefined
                 };
 
                 this._bets.update(bets => {
-                    const existingIndex = bets.findIndex(b => b.userId === bet.userId && b.index === bet.index);
+                    const existingIndex = bets.findIndex(b => b.username === bet.username && b.index === bet.index);
                     if (existingIndex === -1) {
                         return [...bets, bet];
                     } else {
@@ -110,19 +110,19 @@ export class GameSocketService implements OnDestroy {
 
             } else if (message.startsWith('CASHOUT:') && !message.startsWith('CASHOUT_OK')) {
                 const parts = message.split(':');
-                const userId = parts[1];
+                const username = parts[1];
                 const multiplier = parseFloat(parts[2]);
                 const profit = parseFloat(parts[3]);
                 const index = parts.length > 4 ? parseInt(parts[4]) : 0;
 
-                this.notifyPlayerWin(userId, index, multiplier, profit);
+                this.notifyPlayerWin(username, index, multiplier, profit);
 
             } else if (message.startsWith('CANCEL_BET:')) {
                 const parts = message.split(':');
-                const userId = parts[1];
+                const username = parts[1];
                 const index = parts.length > 2 ? parseInt(parts[2]) : 0;
 
-                this._bets.update(bets => bets.filter(b => !(b.userId === userId && b.index === index)));
+                this._bets.update(bets => bets.filter(b => !(b.username === username && b.index === index)));
 
             } else if (message.startsWith('STATE:')) {
                 const parts = message.split(':');
@@ -199,14 +199,14 @@ export class GameSocketService implements OnDestroy {
         }
     }
 
-    notifyPlayerWin(userId: string, index: number, multiplier: number, profit: number) {
+    notifyPlayerWin(username: string, index: number, multiplier: number, profit: number) {
         this.zone.run(() => {
             this._bets.update(bets => {
-                const alreadyWon = bets.find(b => b.userId === userId && b.index === index && b.profit === profit);
+                const alreadyWon = bets.find(b => b.username === username && b.index === index && b.profit === profit);
                 if (alreadyWon) return bets;
 
                 return bets.map(b => {
-                    if (b.userId === userId && b.index === index) {
+                    if (b.username === username && b.index === index) {
                         return { ...b, multiplier, profit };
                     }
                     return b;
@@ -218,7 +218,7 @@ export class GameSocketService implements OnDestroy {
     addBet(bet: Bet) {
         this.zone.run(() => {
             this._bets.update(bets => {
-                if (bets.some(b => b.userId === bet.userId && b.index === bet.index)) {
+                if (bets.some(b => b.username === bet.username && b.index === bet.index)) {
                     return bets;
                 }
                 return [...bets, bet];
@@ -226,9 +226,9 @@ export class GameSocketService implements OnDestroy {
         });
     }
 
-    removeBet(userId: string, index: number) {
+    removeBet(username: string, index: number) {
         this.zone.run(() => {
-            this._bets.update(bets => bets.filter(b => !(b.userId === userId && b.index === index)));
+            this._bets.update(bets => bets.filter(b => !(b.username === username && b.index === index)));
         });
     }
 

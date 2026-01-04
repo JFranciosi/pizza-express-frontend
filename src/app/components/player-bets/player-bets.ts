@@ -44,6 +44,9 @@ export class PlayerBets {
         if (bet.avatarUrl.startsWith('/users/')) {
             return `${environment.apiUrl}${bet.avatarUrl}`;
         }
-        return `${environment.apiUrl}/users/${bet.userId}/avatar`;
+        if (bet.userId) {
+            return `${environment.apiUrl}/users/${bet.userId}/avatar`;
+        }
+        return '/assets/default-avatar.png';
     }
 }
