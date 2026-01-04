@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpContext } from '@angular/common/http';
 import { Observable, BehaviorSubject, of } from 'rxjs';
-import { tap, map, catchError } from 'rxjs/operators';
+import { tap, map, catchError, switchMap } from 'rxjs/operators';
 import { LoginRequest, AuthResponse, RegisterRequest } from '../models/auth.models';
 import { CsrfService } from './csrf.service';
 
@@ -137,19 +137,23 @@ export class AuthService {
     }
 
     verifySession(): Observable<boolean> {
-        if (this.authenticated) {
-            return of(true);
-        }
-        return this.http.get<any>(`${this.apiUrl}/me`).pipe(
+        return this.getCsrfToken().pipe(
+            switchMap(() => {
+                if (this.authenticated) {
+                    return of(true);
+                }
+                return this.http.get<any>(`${this.apiUrl}/me`);
+            }),
             tap(user => {
-                this.userSubject.next(user);
-                this.persistUserToStorage(user);
-                this.authenticated = true;
+                if (user !== true && user) {
+                    this.userSubject.next(user);
+                    this.persistUserToStorage(user);
+                    this.authenticated = true;
+                }
             }),
             map(() => true),
-            catchError(() => {
+            catchError((err) => {
                 this.logout(true);
-                this.getCsrfToken().subscribe();
                 return of(false);
             })
         );
@@ -162,6 +166,10 @@ export class AuthService {
                 if (token) {
                     this.csrfService.setToken(token);
                 }
+            }),
+            catchError(err => {
+                console.error('CSRF handshake failed', err);
+                return of(void 0);
             })
         );
     }
