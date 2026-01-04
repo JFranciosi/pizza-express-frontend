@@ -67,8 +67,10 @@ export class AuthService {
         return this.userSubject.value;
     }
 
-    logout(): void {
-        this.http.post(`${this.apiUrl}/logout`, {}).subscribe();
+    logout(skipServerCall = false): void {
+        if (!skipServerCall) {
+            this.http.post(`${this.apiUrl}/logout`, {}).subscribe();
+        }
         localStorage.removeItem('user_data');
         this.userSubject.next(null);
         this.authenticated = false;
@@ -145,7 +147,8 @@ export class AuthService {
             }),
             map(() => true),
             catchError(() => {
-                this.logout();
+                this.logout(true); // Server already rejected us (401), so just clear local state
+                // If session is invalid, perform handshake to ensure CSRF cookie is present
                 this.getCsrfToken().subscribe();
                 return of(false);
             })
