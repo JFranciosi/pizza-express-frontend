@@ -105,14 +105,13 @@ export class SettingsModal implements OnInit {
     onFileSelected(event: any) {
         const file: File = event.target.files[0];
         if (file) {
-            if (file.size > 2 * 1024 * 1024) { // 2MB Check
+            if (file.size > 2 * 1024 * 1024) {
                 this.messageService.add({ severity: 'error', summary: 'Errore', detail: 'Immagine troppo grande (Max 2MB)' });
                 return;
             }
 
             this.pendingAvatarFile = file;
 
-            // Create preview
             const reader = new FileReader();
             reader.onload = (e: any) => {
                 this.previewAvatarUrl = e.target.result;
@@ -153,7 +152,10 @@ export class SettingsModal implements OnInit {
     getAvatarUrl(url: string): string {
         if (this.previewAvatarUrl) return this.previewAvatarUrl;
         if (!url) return '/assets/default-avatar.png';
-        if (url.startsWith('data:')) return url;
+        if (url.startsWith('data:') || url.startsWith('http')) return url;
+        if (url.startsWith('/')) {
+            return `${environment.apiUrl}${url}`;
+        }
         if (this.user?.id) {
             return `${environment.apiUrl}/users/${this.user.id}/avatar`;
         }

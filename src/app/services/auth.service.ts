@@ -112,7 +112,7 @@ export class AuthService {
             tap((response: any) => {
                 const user = this.getUser();
                 if (user && response.avatarUrl) {
-                    user.avatarUrl = response.avatarUrl;
+                    user.avatarUrl = `${response.avatarUrl}?t=${new Date().getTime()}`;
                     this.persistUserToStorage(user);
                     this.userSubject.next({ ...user });
                 }
