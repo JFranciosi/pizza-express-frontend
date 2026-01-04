@@ -14,8 +14,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     return next(authReq).pipe(
         catchError((error: HttpErrorResponse) => {
             if (error.status === 401) {
-                // Ignore login/refresh endpoints to avoid loops if they fail
-                if (!req.url.includes('/auth/login') && !req.url.includes('/auth/refresh')) {
+                if (!req.url.includes('/auth/login') &&
+                    !req.url.includes('/auth/refresh') &&
+                    !req.url.includes('/auth/me') &&
+                    !req.url.includes('/auth/csrf')) {
                     router.navigate(['/login']);
                 }
             }
