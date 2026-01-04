@@ -38,14 +38,24 @@ export class ResetPassword implements OnInit {
         }, { validators: this.passwordMatchValidator });
     }
 
+    private redirectTimeout: any;
+
     ngOnInit() {
         this.route.queryParamMap.subscribe(params => {
-            this.token = params.get('token') || '';
-            if (!this.token) {
-                setTimeout(() => {
-                    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Invalid or missing token.' });
-                    this.router.navigate(['/login']);
-                }, 500);
+            const token = params.get('token');
+            if (token) {
+                this.token = token;
+                if (this.redirectTimeout) {
+                    clearTimeout(this.redirectTimeout);
+                    this.redirectTimeout = null;
+                }
+            } else {
+                if (!this.token) {
+                    this.redirectTimeout = setTimeout(() => {
+                        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Invalid or missing token.' });
+                        this.router.navigate(['/login']);
+                    }, 500);
+                }
             }
         });
     }
