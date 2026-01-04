@@ -120,8 +120,11 @@ export class TopBar implements OnInit, OnDestroy {
 
     getAvatarUrl(user: any): string {
         if (!user || !user.avatarUrl) return 'assets/default-avatar.png';
-        if (user.avatarUrl.startsWith('data:')) {
+        if (user.avatarUrl.startsWith('data:') || user.avatarUrl.startsWith('http')) {
             return user.avatarUrl;
+        }
+        if (user.avatarUrl.startsWith('/')) {
+            return `${environment.apiUrl}${user.avatarUrl}`;
         }
         return `${environment.apiUrl}/users/${user.id}/avatar`;
     }
