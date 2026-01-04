@@ -146,8 +146,13 @@ export class AuthService {
             map(() => true),
             catchError(() => {
                 this.logout();
+                this.getCsrfToken().subscribe();
                 return of(false);
             })
         );
+    }
+
+    getCsrfToken(): Observable<void> {
+        return this.http.get<void>(`${this.apiUrl}/csrf`);
     }
 }
