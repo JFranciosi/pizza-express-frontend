@@ -83,6 +83,14 @@
                 <label>Current Balance</label>
                 <div class="balance-display">{{ user.balance | currency:'EUR' }}</div>
             </div>
+            <div class="field-group">
+                <label>Show Latency (Ping)</label>
+                <div class="flex align-items-center">
+                    <button pButton [icon]="gameSocketService.showPing() ? 'pi pi-check' : 'pi pi-times'"
+                        [class]="gameSocketService.showPing() ? 'p-button-success' : 'p-button-secondary'"
+                        (click)="gameSocketService.togglePing()" label="Show Ping on Canvas"></button>
+                </div>
+            </div>
         </div>
 
         <div class="divider"></div>
