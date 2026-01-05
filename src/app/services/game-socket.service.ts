@@ -65,6 +65,7 @@ export class GameSocketService implements OnDestroy {
                 next: () => {
                     console.log('WebSocket connected');
                     this.reconnectAttempts = 0;
+                    this.startPingLoop();
                 }
             },
             closeObserver: {
@@ -201,8 +202,42 @@ export class GameSocketService implements OnDestroy {
                     });
                     this._history.set(items);
                 }
+            } else if (message === 'PONG') {
+                const latency = Date.now() - this.pingStart;
+                this._ping.set(latency);
             }
         });
+    }
+
+    private _ping = signal<number>(0);
+    public readonly ping = this._ping.asReadonly();
+    private pingStart: number = 0;
+    private pingSubscription: any;
+
+    private _showPing = signal<boolean>(localStorage.getItem('showPing') === 'true');
+    public readonly showPing = this._showPing.asReadonly();
+
+    togglePing() {
+        const newValue = !this._showPing();
+        this._showPing.set(newValue);
+        localStorage.setItem('showPing', String(newValue));
+    }
+
+    private startPingLoop() {
+        if (this.pingSubscription) return;
+        this.pingSubscription = timer(0, 2000).subscribe(() => {
+            if (this.socket$ && !this.socket$.closed) {
+                this.pingStart = Date.now();
+                this.sendMessage('PING');
+            }
+        });
+    }
+
+    private stopPingLoop() {
+        if (this.pingSubscription) {
+            this.pingSubscription.unsubscribe();
+            this.pingSubscription = null;
+        }
     }
 
     sendMessage(msg: string) {
@@ -245,6 +280,7 @@ export class GameSocketService implements OnDestroy {
     }
 
     ngOnDestroy() {
+        this.stopPingLoop();
         if (this.socket$) {
             this.socket$.complete();
         }

@@ -11,6 +11,7 @@ import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { TooltipModule } from 'primeng/tooltip';
 import { environment } from '../../../environments/environment';
+import { GameSocketService } from '../../services/game-socket.service';
 
 @Component({
     selector: 'app-settings-modal',
@@ -43,7 +44,7 @@ export class SettingsModal implements OnInit {
         this.fileInput?.nativeElement.click();
     }
 
-    constructor(private authService: AuthService, private router: Router, private messageService: MessageService) { }
+    constructor(private authService: AuthService, private router: Router, private messageService: MessageService, public gameSocketService: GameSocketService) { }
 
     ngOnInit() {
         this.authService.user$.subscribe(user => {

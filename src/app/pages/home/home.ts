@@ -507,6 +507,14 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
             this.ctx.fillText('DELIVERING...', w / 2, h / 2 + (20 * scale));
             this.ctx.shadowBlur = 0;
         }
+
+        if (this.gameSocket.showPing()) {
+            const ping = this.gameSocket.ping();
+            this.ctx.font = `600 ${16 * scale}px "Outfit", sans-serif`;
+            this.ctx.fillStyle = ping > 200 ? '#f44336' : '#b0b0b0';
+            this.ctx.textAlign = 'right';
+            this.ctx.fillText(`PING: ${ping}ms`, w - (20 * scale), (30 * scale));
+        }
     }
 
     drawCrashUI(w: number, h: number) {
